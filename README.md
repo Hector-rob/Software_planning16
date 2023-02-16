@@ -2,7 +2,9 @@
 
 Vision
 - 
+- 
 Mission
+- 
 - 
 Values
 -
@@ -11,3 +13,6 @@ Values
 - Dedication
 - Organization
 - Commitment
+- Punctuality
+- Cooperation
+- Solidarity
