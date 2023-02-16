@@ -3,7 +3,12 @@
 
 
 Vision
-
+  -
 Mission
-
+  -
 Values
+  - Responsibility
+  - Honesty
+  - Dedication
+  - Organization
+  - Commitment
