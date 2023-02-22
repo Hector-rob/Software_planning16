@@ -1,6 +1,6 @@
-# Software Solutions Inc.
+# S O L U T I O
 
-
+![Brand initial Simple Logo](https://user-images.githubusercontent.com/90808735/220741171-94b31b4e-2a53-47de-8ee2-ea6ca361f8d8.png)
 
 Vision
 - 
