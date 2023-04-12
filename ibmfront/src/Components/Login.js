@@ -2,15 +2,15 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import "@fontsource/ibm-plex-sans"
-import './Login.css'
+import { Link } from 'react-router-dom'
 
-export default function () {
+
+
+export default function Login () {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -62,7 +62,7 @@ export default function () {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          <Button
+          <Button component={Link} to="/mainPage"
             type="submit"
             fullWidth
             variant="contained"
