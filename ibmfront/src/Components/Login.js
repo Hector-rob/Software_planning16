@@ -8,9 +8,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link } from 'react-router-dom'
 
-
-
-export default function Login () {
+export default function Login() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -24,8 +22,8 @@ export default function Login () {
     <Container component="main" maxWidth="sm">
       <Box
         sx={{
-          boxShadow: 3,
-          borderRadius: 2,
+          boxShadow: 7,
+          borderRadius: 5,
           px: 4,
           py: 6,
           marginTop: 8,
@@ -34,12 +32,13 @@ export default function Login () {
           alignItems: "center",
         }}
       >
-        <Typography component="h1" variant="h5">
-          Sign in
+        <Typography component="h1" variant="h5" fontWeight={800}>
+          Sign In
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
+            variant="filled"
             required
             fullWidth
             id="email"
@@ -50,6 +49,7 @@ export default function Login () {
           />
           <TextField
             margin="normal"
+            variant="filled"
             required
             fullWidth
             name="password"
@@ -64,15 +64,15 @@ export default function Login () {
           />
           <Button component={Link} to="/mainPage"
             type="submit"
-            fullWidth
             variant="contained"
+            fullWidth
             sx={{ mt: 3, mb: 2 }}
           >
             Sign In
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link href="#" variant="body2" >
                 Forgot password?
               </Link>
             </Grid>
