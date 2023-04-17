@@ -9,6 +9,8 @@ import Container from "@mui/material/Container";
 import { Link } from 'react-router-dom'
 import { IconButton, InputAdornment } from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { useState } from "react";
 
 export default function Login() {
   const handleSubmit = (event) => {
@@ -19,6 +21,9 @@ export default function Login() {
       password: data.get("password"),
     });
   };
+
+  const [visiblePassword, toggleVisibility] = useState(false);
+  const clickHandler = () => toggleVisibility(!visiblePassword);
 
   return (
     <Container component="main" maxWidth="sm">
@@ -56,15 +61,17 @@ export default function Login() {
             fullWidth
             name="password"
             label="Password"
-            type="password"
+            type={visiblePassword ? "text" : "password"}
             id="password"
             autoComplete="current-password"
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
-                    aria-label="toggle password visibility">
-                  <VisibilityIcon/>
+                    aria-label="toggle visibility"
+                    onClick={clickHandler}
+                  >
+                    {visiblePassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                   </IconButton>
                 </InputAdornment>
               )
