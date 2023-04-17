@@ -99,7 +99,7 @@ export default function Login() {
             label="Remember me"
           />
           <Button component={Link} to="/mainPage"
-            type="submit"
+            type="register"
             variant="contained"
             fullWidth
             sx={{ mt: 3, mb: 2, borderRadius: 0 }}
@@ -116,7 +116,7 @@ export default function Login() {
             </Grid>
             <Grid item>
               <Typography>
-                <Link href="#" underline="hover">
+                <Link href="#" underline="hover" to={"/register"}>
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Typography>
