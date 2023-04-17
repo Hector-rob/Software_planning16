@@ -7,6 +7,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link } from 'react-router-dom'
+import { IconButton, InputAdornment } from "@mui/material";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 export default function Login() {
   const handleSubmit = (event) => {
@@ -57,6 +59,16 @@ export default function Login() {
             type="password"
             id="password"
             autoComplete="current-password"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility">
+                  <VisibilityIcon/>
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -72,8 +84,8 @@ export default function Login() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2" >
-                Forgot password?
+              <Link href="#" variant="body2">
+                {"Forgot password?"}
               </Link>
             </Grid>
             <Grid item>
