@@ -33,16 +33,33 @@ export default function Login() {
           borderRadius: 5,
           px: 4,
           py: 6,
-          marginTop: 8,
+          marginTop: 12,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-        }}
-      >
-        <Typography component="h1" variant="h5" fontWeight={800}>
-          Sign In
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        }}>
+        <Box display="flex" sx={{
+          position: "relative",
+          bottom: 65,
+          borderRadius: 5,
+          width: 525,
+          height: 200,
+          backgroundColor: "#0F62FE",
+          alignItems: "center",
+          justifyContent: "center",
+        }}>
+          <Grid container spacing={3} textAlign={"center"}>
+            <Grid item xs={12}>
+              <Typography component="h1" variant="h4" fontWeight={800} color="white">
+                Sign In
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <img src="./Assets/images/IBMWhite.png" alt="Logo" width={200}></img>
+            </Grid>
+          </Grid>
+        </Box>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: -5 }}>
           <TextField
             margin="normal"
             variant="filled"
@@ -85,20 +102,24 @@ export default function Login() {
             type="submit"
             variant="contained"
             fullWidth
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 3, mb: 2, borderRadius: 0 }}
           >
             Sign In
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
-                {"Forgot password?"}
-              </Link>
+              <Typography>
+                <Link href="#" underline="hover">
+                  {"Forgot password?"}
+                </Link>
+              </Typography>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
+              <Typography>
+                <Link href="#" underline="hover">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Typography>
             </Grid>
           </Grid>
         </Box>
