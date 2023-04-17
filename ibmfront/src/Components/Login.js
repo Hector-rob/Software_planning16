@@ -7,10 +7,12 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link } from 'react-router-dom'
+import { IconButton, InputAdornment } from "@mui/material";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { useState } from "react";
 
-
-
-export default function Login () {
+export default function Login() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -20,26 +22,47 @@ export default function Login () {
     });
   };
 
+  const [visiblePassword, toggleVisibility] = useState(false);
+  const clickHandler = () => toggleVisibility(!visiblePassword);
+
   return (
     <Container component="main" maxWidth="sm">
       <Box
         sx={{
-          boxShadow: 3,
-          borderRadius: 2,
+          boxShadow: 7,
+          borderRadius: 5,
           px: 4,
           py: 6,
-          marginTop: 8,
+          marginTop: 12,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-        }}
-      >
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        }}>
+        <Box display="flex" sx={{
+          position: "relative",
+          bottom: 65,
+          borderRadius: 5,
+          width: 525,
+          height: 200,
+          backgroundColor: "#0F62FE",
+          alignItems: "center",
+          justifyContent: "center",
+        }}>
+          <Grid container spacing={3} textAlign={"center"}>
+            <Grid item xs={12}>
+              <Typography component="h1" variant="h4" fontWeight={800} color="white">
+                Sign In
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <img src="./Assets/images/IBMWhite.png" alt="Logo" width={200}></img>
+            </Grid>
+          </Grid>
+        </Box>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: -5 }}>
           <TextField
             margin="normal"
+            variant="filled"
             required
             fullWidth
             id="email"
@@ -50,13 +73,26 @@ export default function Login () {
           />
           <TextField
             margin="normal"
+            variant="filled"
             required
             fullWidth
             name="password"
             label="Password"
-            type="password"
+            type={visiblePassword ? "text" : "password"}
             id="password"
             autoComplete="current-password"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle visibility"
+                    onClick={clickHandler}
+                  >
+                    {visiblePassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -64,22 +100,26 @@ export default function Login () {
           />
           <Button component={Link} to="/mainPage"
             type="submit"
-            fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            fullWidth
+            sx={{ mt: 3, mb: 2, borderRadius: 0 }}
           >
             Sign In
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
+              <Typography>
+                <Link href="#" underline="hover">
+                  {"Forgot password?"}
+                </Link>
+              </Typography>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
+              <Typography>
+                <Link href="#" underline="hover">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Typography>
             </Grid>
           </Grid>
         </Box>
