@@ -1,7 +1,7 @@
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 import Login from './Components/Login'
 import PageNotFound from './Components/PageNotFound'
-import MainPage from './Components/MainPage'
+import MainPage from '../pages/MainPage'
 import Register from './Components/Register'
 import "@fontsource/ibm-plex-sans"
 

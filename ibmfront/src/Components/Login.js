@@ -109,14 +109,14 @@ export default function Login() {
           <Grid container>
             <Grid item xs>
               <Typography>
-                <Link href="#" underline="hover">
+                <Link href="/PageNotFound" underline="hover">
                   {"Forgot password?"}
                 </Link>
               </Typography>
             </Grid>
             <Grid item>
               <Typography>
-                <Link href="#" underline="hover" to={"/register"}>
+                <Link href="/Register" underline="hover" to={"Register"}>
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Typography>
