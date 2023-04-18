@@ -3,7 +3,7 @@ import Login from './Components/Login'
 import PageNotFound from './Components/PageNotFound'
 import MainPage from '../pages/MainPage'
 import Register from './Components/Register'
-import Test from './Components/Test'
+import Test from '../pages/Test'
 import "@fontsource/ibm-plex-sans"
 
 
