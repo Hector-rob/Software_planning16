@@ -21,6 +21,8 @@ const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
+  background: "black",
+  borderRadius: '0 30px 30px 0',
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
@@ -33,6 +35,8 @@ const closedMixin = (theme) => ({
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  background: "black",
+  borderRadius: '0 30px 30px 0',
   overflowX: 'hidden',
   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up('sm')]: {
@@ -86,23 +90,25 @@ export default function MiniDrawer() {
           <IconButton onClick={handleDrawerClose} sx={{
               marginRight: 0,
               ...(!open && { display: 'none' }),
+              color: "white",
             }}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
           <IconButton
-            color="inherit"
+            color="white"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
             sx={{
               marginRight: 0,
               ...(open && { display: 'none' }),
+              color: "white",
             }}
           >
             <MenuIcon />
           </IconButton>
         </DrawerHeader>
-        <Divider />
+        <Divider color="white" variant="middle"/>
         <List>
           {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
@@ -111,6 +117,7 @@ export default function MiniDrawer() {
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
+                  color: "white",
                 }}
               >
                 <ListItemIcon
@@ -118,6 +125,7 @@ export default function MiniDrawer() {
                     minWidth: 0,
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
+                    color: "white",
                   }}
                 >
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
@@ -127,7 +135,7 @@ export default function MiniDrawer() {
             </ListItem>
           ))}
         </List>
-        <Divider />
+        <Divider color="white" variant="middle"/>
         <List>
           {['All mail', 'Trash', 'Spam'].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
@@ -136,6 +144,7 @@ export default function MiniDrawer() {
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
+                  color: "white",
                 }}
               >
                 <ListItemIcon
@@ -143,6 +152,7 @@ export default function MiniDrawer() {
                     minWidth: 0,
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
+                    color: "white",
                   }}
                 >
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
