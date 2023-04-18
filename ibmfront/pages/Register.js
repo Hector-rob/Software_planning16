@@ -31,12 +31,13 @@ export default function Register() {
     const [country, selectCountry] = useState("");
     const selectCountryHandler = (val) => selectCountry(val.target.value);
 
-    return <Container maxWidth="false" disableGutters="false">
+    return (
+    <Container maxWidth="false" disableGutters="false">
         <Grid container sx={{ minHeight: "100%", position: "absolute" }}>
             <Grid item xs={6} md={6} lg={6} xl={6} sx={{ bgcolor: "#F2F2F2" }}>
-                <Button variant="outlined" color="secondary" startIcon={<ArrowBackIcon />} sx={{ mt: 3, ml: 2 }} component={Link} to={"/"}>
+                <Button variant="outlined" color="secondary" startIcon={<ArrowBackIcon />} sx={{ mt: 3, ml: 2 }} href="/Login">
                     Back
-                </Button>
+                </Button> 
                 <Typography fontSize={50} sx={{ mt: 3, ml: 2 }}>Create a new <Box fontWeight={800} display='inline'>account</Box></Typography>
                 <Typography fontSize={30} sx={{ mt: 3, ml: 3, mb: 6 }}>Exclusive to <Box fontWeight={800} display='inline'>IBM Managers</Box></Typography>
                 <img style={{ height: "50%", width: "50%", position: "absolute", bottom: 0 }} src="./Assets/images/pixelBG.webp" alt="Art"></img>
@@ -147,4 +148,5 @@ export default function Register() {
             </Grid>
         </Grid>
     </Container >
+    );
 }

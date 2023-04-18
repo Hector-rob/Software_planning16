@@ -98,7 +98,7 @@ export default function Login() {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          <Button href="/"
+          <Button href="/MainPage"
             type="register"
             variant="contained"
             fullWidth
@@ -113,7 +113,7 @@ export default function Login() {
                   "Forgot password?"
                 </Link>} */} 
                 <br></br>
-                <Button href="PageNotFound" variant="text" underline="hover">Forgot password?</Button>
+                <Button href="/PageNotFound" variant="text" underline="hover">Forgot password?</Button>
               </Typography>
                
               
@@ -124,7 +124,7 @@ export default function Login() {
                   {"Don't have an account? Sign Up"}
                 </Link> */}
                 <br></br>
-                <Button href="PageNotFound" variant="text" underline="hover">Don't have an account? Sign Up</Button>
+                <Button href="/PageNotFound" variant="text" underline="hover">Don't have an account? Sign Up</Button>
               </Typography>
             </Grid>
           </Grid>
