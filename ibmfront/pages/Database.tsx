@@ -6,11 +6,39 @@ import * as XLSX from "xlsx";
 import { useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded';
+import CloudDownloadRoundedIcon from '@mui/icons-material/CloudDownloadRounded';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import { styled } from '@mui/material/styles';
+import { Grid } from '@mui/material';
+import TextField from '@mui/material/TextField';
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#0F62FE",
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 
 export default function Database(props) {
   const [fileName, setFileName] = useState(null);
@@ -42,9 +70,6 @@ export default function Database(props) {
     console.log("esto", jsonData[0]);
   }
 
-  
-  
-
     return( 
         <>
                 
@@ -58,12 +83,76 @@ export default function Database(props) {
         <Input type="file"  inputProps={{accept: '.xlsx,.xls'}} onChange={e => handleFile(e)}></Input>
         </div>
 
+
+        <Grid
+          item
+          sx={{
+            height: 100,
+            width: '1000%',
+            maxWidth: 'md'
+            }}
+          container
+          direction="row"
+          alignItems="center"
+          justifyContent="flex-end"
+        >
+          <br></br>
+
+            <Stack direction="row" spacing={2}>
+
+            <Grid
+          item
+          
+          container
+          direction="row"
+          alignItems="center"
+          justifyContent="flex-start"
+        >
+          <TextField id="standard-basic" label="Search" variant="standard" fullWidth />
+
+        </Grid>
+            
+              <Button variant="contained" size="large" 
+                style={{
+                  backgroundColor: "#000000",
+                  padding: "18px 36px"
+                }}
+                
+                endIcon={<CloudUploadRoundedIcon />}>
+                Import      
+              </Button>
+
+              <Button variant="contained" size="large" 
+                style={{
+                  backgroundColor: "#000000",
+                  padding: "18px 36px"
+                }}
+                
+                endIcon={<CloudDownloadRoundedIcon />}>
+                Export      
+              </Button>
+
+              <Button variant="contained" size="large" 
+                style={{
+                  backgroundColor: "#000000",
+                  padding: "18px 36px"
+                }}
+                
+                endIcon={<EditRoundedIcon />}>
+                Edit      
+              </Button>
+
+            </Stack>
+
+            </Grid>
+
         <br></br>
        
         <div className='center'>
         {fileName && (
           <React.Fragment> 
         <Typography variant="h4" align="center">File Name: <span>{fileName}</span></Typography>
+        <div>espera un poquis a que cargue</div>
           </React.Fragment>
         ) }
 
@@ -76,7 +165,7 @@ export default function Database(props) {
         <TableHead>
             <TableRow>
               {allData[0].map(
-                  (h:any) => <TableCell key={h}> <Typography variant="h6">{h}</Typography>  </TableCell>
+                  (h:any) => <StyledTableCell key={h}> <Typography variant="h6"><strong>{h}</strong></Typography>  </StyledTableCell>
               )}
           
             </TableRow>
@@ -84,9 +173,9 @@ export default function Database(props) {
 
           <TableBody>
               {allData.slice(1).map((row:any) => (
-                <TableRow>
-                    {row.map((c: any) => <TableCell key={c}> <Typography variant="subtitle1">{c}</Typography>  </TableCell>)}
-                  </TableRow>
+                <StyledTableRow>
+                    {row.map((c: any) => <StyledTableCell key={c}> <Typography variant="subtitle1">{c}</Typography>  </StyledTableCell>)}
+                  </StyledTableRow>
               )
                   )}
             
@@ -96,19 +185,10 @@ export default function Database(props) {
             </TableContainer>
             </React.Fragment>
           }
-
-
-        
         
         </div>
 
         <br></br>
-
-        
-
-        
-        
-        
 
     </Container>
         
