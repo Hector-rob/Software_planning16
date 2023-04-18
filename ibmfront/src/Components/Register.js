@@ -31,25 +31,25 @@ export default function Register() {
     const [country, selectCountry] = useState("");
     const selectCountryHandler = (val) => selectCountry(val.target.value);
 
-    return <Container maxWidth disableGutters="true">
-        <Grid container>
-            <Grid item xs={6} sx={{ bgcolor: "#F2F2F2" }}>
+    return <Container maxWidth="false" disableGutters="false">
+        <Grid container sx={{ minHeight: "100%", position: "absolute" }}>
+            <Grid item xs={6} md={6} lg={6} xl={6} sx={{ bgcolor: "#F2F2F2" }}>
                 <Button variant="outlined" color="secondary" startIcon={<ArrowBackIcon />} sx={{ mt: 3, ml: 2 }} component={Link} to={"/"}>
                     Back
                 </Button>
                 <Typography fontSize={50} sx={{ mt: 3, ml: 2 }}>Create a new <Box fontWeight={800} display='inline'>account</Box></Typography>
-                <Typography fontSize={30} sx={{ mt: 3, ml: 3, mb: 6}}>Exclusive to <Box fontWeight={800} display='inline'>IBM Managers</Box></Typography>
-                <img style={{height: 470}} src="./Assets/images/pixelBG.webp" alt="Art"></img>
+                <Typography fontSize={30} sx={{ mt: 3, ml: 3, mb: 6 }}>Exclusive to <Box fontWeight={800} display='inline'>IBM Managers</Box></Typography>
+                <img style={{ height: "50%", width: "50%", position: "absolute", bottom: 0 }} src="./Assets/images/pixelBG.webp" alt="Art"></img>
             </Grid>
-            <Grid item xs={6} sx={{ bgcolor: "white", mt: 5 }} textAlign={"center"}>
-                <Typography fontSize={30} sx={{ mt: 2 }}>Create a new <Box fontWeight={800} display='inline'>IBM Dashboard Manager</Box> account</Typography>
-                <Box margin="auto" display="flex" sx={{ height: 10, width: 631, backgroundColor: "#0F62FE", mt: 3 }}></Box>
-                <Typography fontSize={25} sx={{ mt: 5, ml: 10 }} textAlign={"left"}>1. General Information</Typography>
+            <Grid item xs={6} md={6} lg={6} xl={6} sx={{ bgcolor: "white", mt: 5 }} textAlign={"center"}>
+                <Typography fontSize={30} sx={{ mt: 2, }}>Create a new <Box fontWeight={800} display='inline'>IBM Dashboard Manager</Box> account</Typography>
+                <Box margin="auto" display="flex" sx={{ height: 10, width: 0.9, backgroundColor: "#0F62FE", mt: 3 }}></Box>
+                <Typography fontSize={25} sx={{ mt: 5 }} textAlign={"center"}>1. General Information</Typography>
                 <Box component="registerForm" noValidate>
                     <Grid container sx={{ mt: 4 }} rowSpacing={2}>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} md={12} lg={12} xl={12} >
                             <TextField
-                                sx={{ width: 650 }}
+                                sx={{ width: 0.95 }}
                                 variant="filled"
                                 required
                                 id="email"
@@ -58,9 +58,9 @@ export default function Register() {
                                 autoComplete="email"
                                 autoFocus />
                         </Grid>
-                        <Grid item xs={6} sx={{ mt: 3 }}>
+                        <Grid item xs={6} md={6} lg={6} xl={6} sx={{ mt: 3 }}>
                             <TextField
-                                sx={{ width: 275 }}
+                                sx={{ width: 0.9 }}
                                 variant="filled"
                                 required
                                 id="name"
@@ -69,9 +69,9 @@ export default function Register() {
                                 autoComplete="name"
                                 autoFocus />
                         </Grid>
-                        <Grid item xs={6} sx={{ mt: 3 }}>
+                        <Grid item xs={6} md={6} lg={6} xl={6} sx={{ mt: 3 }}>
                             <TextField
-                                sx={{ width: 275 }}
+                                sx={{ width: 0.9 }}
                                 variant="filled"
                                 required
                                 id="lastName"
@@ -80,9 +80,9 @@ export default function Register() {
                                 autoComplete="lastName"
                                 autoFocus />
                         </Grid>
-                        <Grid item xs={12} sx={{ mt: 3 }}>
+                        <Grid item xs={12} md={12} lg={12} xl={12} sx={{ mt: 3 }}>
                             <TextField
-                                sx={{ width: 650 }}
+                                sx={{ width: 0.95 }}
                                 variant="filled"
                                 required
                                 name="password"
@@ -103,13 +103,11 @@ export default function Register() {
                                     )
                                 }} />
                         </Grid>
-                        <Grid item xs={6} sx={{ mt: 3 }}>
-                            <FormControl required>
+                        <Grid item xs={6} md={6} lg={6} xl={6} sx={{ mt: 3 }}>
+                            <FormControl required sx={{ width: 0.9 }}>
                                 <InputLabel id="countryLabel">Country</InputLabel>
                                 <Select
-                                    sx={{ width: 275 }}
                                     variant="filled"
-                                    
                                     labelId="countryLabel"
                                     id="selectCountry"
                                     value={country}
@@ -126,9 +124,9 @@ export default function Register() {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6} sx={{ mt: 3 }}>
+                        <Grid item xs={6} md={6} lg={6} xl={6} sx={{ mt: 3 }}>
                             <TextField
-                                sx={{ width: 275 }}
+                                sx={{ width: 0.9 }}
                                 variant="filled"
                                 required
                                 id="department"
