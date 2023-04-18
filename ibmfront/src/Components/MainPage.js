@@ -14,8 +14,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import HomeIcon from '@mui/icons-material/Home';
+import LogoutIcon from '@mui/icons-material/Logout';
+import PeopleIcon from '@mui/icons-material/People';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
+import { ListSubheader } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -74,6 +77,8 @@ export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
+  const menuIcons = [<HomeIcon />, <PeopleIcon />, <WorkspacePremiumIcon />];
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -88,10 +93,10 @@ export default function MiniDrawer() {
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose} sx={{
-              marginRight: 0,
-              ...(!open && { display: 'none' }),
-              color: "white",
-            }}>
+            marginRight: 0,
+            ...(!open && { display: 'none' }),
+            color: "white",
+          }}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
           <IconButton
@@ -108,15 +113,17 @@ export default function MiniDrawer() {
             <MenuIcon />
           </IconButton>
         </DrawerHeader>
-        <Divider color="white" variant="middle"/>
+        <Divider color="white" variant="middle" />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+          {['Home', 'Employees', 'Certifications'].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
+                  mt: 2,
+                  mb: 2,
                   color: "white",
                 }}
               >
@@ -128,40 +135,36 @@ export default function MiniDrawer() {
                     color: "white",
                   }}
                 >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  {menuIcons[index]}
                 </ListItemIcon>
                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
           ))}
         </List>
-        <Divider color="white" variant="middle"/>
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                  color: "white",
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                    color: "white",
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        <Divider color="white" variant="middle" />
+        <ListItem key={"Sign Out"} disablePadding sx={{ display: 'block' }}>
+          <ListItemButton
+            sx={{
+              justifyContent: open ? 'initial' : 'center',
+              px: 2.5,
+              color: "white",
+              mt: 2,
+            }}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: open ? 3 : 'auto',
+                justifyContent: 'center',
+                color: "white",
+              }}
+            >
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Sign Out"} sx={{ opacity: open ? 1 : 0 }} />
+          </ListItemButton>
+        </ListItem>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
