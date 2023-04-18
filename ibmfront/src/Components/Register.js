@@ -17,22 +17,22 @@ export default function Register() {
     return <Container maxWidth disableGutters="true">
         <Grid container>
             <Grid item xs={6} sx={{ bgcolor: "#F2F2F2" }}>
-                <Button variant="outlined" color="secondary" startIcon={<ArrowBackIcon />} sx={{ mt: 1, ml: 1 }} component={Link} to={"/"}>
+                <Button variant="outlined" color="secondary" startIcon={<ArrowBackIcon />} sx={{ mt: 3, ml: 2 }} component={Link} to={"/"}>
                     Back
                 </Button>
                 <Typography fontSize={50} sx={{ mt: 3, ml: 2 }}>Create a new <Box fontWeight={800} display='inline'>account</Box></Typography>
-                <Typography fontSize={30} sx={{ mt: 4, ml: 3, mb: 6}}>Exclusive to <Box fontWeight={800} display='inline'>IBM Managers</Box></Typography>
-                <img src="./Assets/images/pixelBG.webp" alt="Art" sx={{bottom: 0}}></img>
+                <Typography fontSize={30} sx={{ mt: 3, ml: 3, mb: 16}}>Exclusive to <Box fontWeight={800} display='inline'>IBM Managers</Box></Typography>
+                <img style={{ width: 620, height: 340}} src="./Assets/images/pixelBG.webp" alt="Art"></img>
             </Grid>
             <Grid item xs={6} sx={{ bgcolor: "white", mt: 5 }} textAlign={"center"}>
-                <Typography fontSize={30} sx={{ mt: 5 }}>Create a new <Box fontWeight={800} display='inline'>IBM Dashboard Manager</Box> account</Typography>
-                <Box margin="auto" display="flex" sx={{ height: 10, width: 650, backgroundColor: "#0F62FE", mt: 3 }}></Box>
+                <Typography fontSize={30} sx={{ mt: 0 }}>Create a new <Box fontWeight={800} display='inline'>IBM Dashboard Manager</Box> account</Typography>
+                <Box margin="auto" display="flex" sx={{ height: 10, width: 631, backgroundColor: "#0F62FE", mt: 3 }}></Box>
                 <Typography fontSize={25} sx={{ mt: 3, ml: 10 }} textAlign={"left"}>1. General Information</Typography>
                 <Box component="registerForm" noValidate>
                     <Grid container sx={{ mt: 3 }} rowSpacing={2}>
                         <Grid item xs={12}>
                             <TextField
-                                sx={{ width: 650 }}
+                                sx={{ width: 586 }}
                                 variant="filled"
                                 required
                                 id="email"
@@ -65,7 +65,7 @@ export default function Register() {
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 3 }}>
                             <TextField
-                                sx={{ width: 650 }}
+                                sx={{ width: 586 }}
                                 variant="filled"
                                 required
                                 name="password"
