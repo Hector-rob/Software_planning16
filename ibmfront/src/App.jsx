@@ -3,6 +3,7 @@ import Login from './Components/Login'
 import PageNotFound from './Components/PageNotFound'
 import MainPage from '../pages/MainPage'
 import Register from './Components/Register'
+import Test from './Components/Test'
 import "@fontsource/ibm-plex-sans"
 
 
@@ -14,6 +15,7 @@ export default function App(){
                 <Route path = '/mainPage' element = {<MainPage/>} ></Route>
                 <Route path = '*' element = {<PageNotFound/>}></Route>
                 <Route path = '/register'element = {<Register/>}> </Route>
+                <Route path = '/test'element = {<Test/>}> </Route>
             </Routes>
         </Router> 
     )
