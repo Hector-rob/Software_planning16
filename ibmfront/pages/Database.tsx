@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import Input from '@mui/material/Input';
 import Container from '@mui/material/Container';
 import * as XLSX from "xlsx";
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -19,8 +19,7 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
 import { Box, Grid } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import Checkbox from '@mui/material/Checkbox';
-
+import AddBoxRoundedIcon from '@mui/icons-material/AddBoxRounded';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -42,27 +41,29 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function Database(props) {
+export default function Database(props:any) {
+
+  const inputRef = useRef(null);
+
   const [fileName, setFileName] = useState(null);
   const [allData, setData] = useState("");
-  const [selectedRows, setSelectedRows] = useState<number[]>([]);
-
   
   const handleFile = async (e:any) =>{
+
+    const fileInput = inputRef.current;
     
     const file = e.target.files[0];
     setFileName(file.name);
     const data = await file.arrayBuffer();
-    const workbook = XLSX.read(data);
+
+    //todo el archivo
+    //const workbook = XLSX.read(data);
+
+    //primeras 10 filas
+    const workbook = XLSX.read(data, {sheetRows:10});
 
     //esto da la primera página del excel
     const worksheet = workbook.Sheets[workbook.SheetNames[0]]
-
-    //convierte a array de arrays
-    /* const jsonData = XLSX.utils.sheet_to_json(worksheet, {
-      header: 1,
-      defval:"",
-    }); */
 
     //leer como json
     const jsonData = XLSX.utils.sheet_to_json(worksheet, {
@@ -72,8 +73,16 @@ export default function Database(props) {
     setData(jsonData);
 
     console.log("esto", jsonData[0]);
+
+    e.target.value = null;
   }
-  
+
+  const handleClick = () => {
+    // 👇️ open file input box on click of another element
+    inputRef.current.click();
+  };
+
+
     return( 
         <>
                 
@@ -81,11 +90,9 @@ export default function Database(props) {
           <br />
           <Typography fontSize={30} sx={{ mt: 2, }}>Employee's Database</Typography>
           <Box display="flex-start" sx={{ height: 10, width: 0.2, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 0 }}></Box>
-
-
           <br></br>
         
-          <Input type="file"  inputProps={{accept: '.xlsx,.xls'}} onChange={e => handleFile(e)}></Input>
+          {/* <Input id="contained-button-file2" type="file" inputProps={{accept: '.xlsx,.xls'}} onChange={e => handleFile(e)} ref={inputRef} style={{display: 'none'}} ></Input> */}
 
             <br></br>
  
@@ -98,16 +105,25 @@ export default function Database(props) {
               <Stack direction="row" spacing={3} sx={{ width: "100%", boxSizing:'border-box'}}>        
 
               <TextField id="standard-basic" label="Search" variant="standard" sx={{ width: "100%" }} />
-
-                <Button variant="contained" size="large" 
-                  style={{
-                    backgroundColor: "#000000",
-                    padding: "18px 36px"
-                  }}
-                  
-                  endIcon={<CloudUploadRoundedIcon />}>
-                  Import      
+              
+              <input
+                type="file"
+                accept=".xlsx, .xls"
+                style={{ display: 'none' }}
+                id="contained-button-file"
+                onChange={e => handleFile(e)}
+              />
+              <label htmlFor="contained-button-file">
+                <Button variant="contained" component="span"
+                          style={{
+                            backgroundColor: "#000000",
+                            padding: "18px 36px"
+                          }}
+                          endIcon={<CloudUploadRoundedIcon />}>
+                  Upload
                 </Button>
+              </label>
+              
 
                 <Button variant="contained" size="large" 
                   style={{
@@ -128,8 +144,7 @@ export default function Database(props) {
                   endIcon={<EditRoundedIcon />}>
                   Edit      
                 </Button>
-                
-
+              
               </Stack>
               </Grid>
 
@@ -146,7 +161,7 @@ export default function Database(props) {
 
             {allData && 
 
-            <React.Fragment>
+             <React.Fragment>
             <TableContainer component={Paper}>
               <Table aria-label="collapsible table">
               <TableHead>
@@ -154,15 +169,26 @@ export default function Database(props) {
                     {allData[0].map(
                         (h:any) => <StyledTableCell key={h}> <Typography variant="h6"><strong>{h}</strong></Typography>  </StyledTableCell>
                     )}
+                    <StyledTableCell> </StyledTableCell>
                 
                   </TableRow>
+                  
                 </TableHead>
 
                 <TableBody>
                     {allData.slice(1).map((row:any) => (
                       <StyledTableRow>
-                          {row.map((c: any) => <StyledTableCell key={c}> <Typography variant="subtitle1">{c}</Typography>  </StyledTableCell>)}
-                        </StyledTableRow>
+                        {row.map((c: any) => (
+                          <StyledTableCell key={c}>
+                            <Typography variant="subtitle1">{c}</Typography>
+                          </StyledTableCell>
+                        ))}
+                        <StyledTableCell>
+                        
+                              <AddBoxRoundedIcon />
+                        
+                        </StyledTableCell>
+                    </StyledTableRow>
                     )
                         )}
                   
@@ -170,9 +196,11 @@ export default function Database(props) {
 
                     </Table> 
                   </TableContainer>
-                  </React.Fragment>
+                  </React.Fragment> 
+                  
             }
-          
+
+           
           </div>
 
           <br></br>
