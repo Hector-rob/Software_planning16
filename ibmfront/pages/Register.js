@@ -32,6 +32,7 @@ export default function Register() {
     const selectCountryHandler = (val) => selectCountry(val.target.value);
 
     return (
+        <>
     <Container maxWidth="false" disableGutters="false">
         <Grid container sx={{ minHeight: "100%", position: "absolute" }}>
             <Grid item xs={6} md={6} lg={6} xl={6} sx={{ bgcolor: "#F2F2F2" }}>
@@ -148,5 +149,6 @@ export default function Register() {
             </Grid>
         </Grid>
     </Container >
+    </>
     );
 }

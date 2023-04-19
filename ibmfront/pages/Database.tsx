@@ -17,8 +17,10 @@ import CloudDownloadRoundedIcon from '@mui/icons-material/CloudDownloadRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import TextField from '@mui/material/TextField';
+import Checkbox from '@mui/material/Checkbox';
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -43,6 +45,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function Database(props) {
   const [fileName, setFileName] = useState(null);
   const [allData, setData] = useState("");
+  const [selectedRows, setSelectedRows] = useState<number[]>([]);
+
   
   const handleFile = async (e:any) =>{
     
@@ -69,128 +73,111 @@ export default function Database(props) {
 
     console.log("esto", jsonData[0]);
   }
-
+  
     return( 
         <>
                 
-        <Container>
-        <br />
-
-        <Typography variant="h3" align="center">Employee's Database</Typography>
-        <br></br>
-
-        <div className='center'>
-        <Input type="file"  inputProps={{accept: '.xlsx,.xls'}} onChange={e => handleFile(e)}></Input>
-        </div>
+        <Container maxWidth={false} sx={{ width: "100%" }}>
+          <br />
+          <Typography fontSize={30} sx={{ mt: 2, }}>Employee's Database</Typography>
+          <Box display="flex-start" sx={{ height: 10, width: 0.2, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 0 }}></Box>
 
 
-        <Grid
-          item
-          sx={{
-            height: 100,
-            width: '1000%',
-            maxWidth: 'md'
-            }}
-          container
-          direction="row"
-          alignItems="center"
-          justifyContent="flex-end"
-        >
+          <br></br>
+        
+          <Input type="file"  inputProps={{accept: '.xlsx,.xls'}} onChange={e => handleFile(e)}></Input>
+
+            <br></br>
+ 
+              <Grid
+                direction="row"
+                alignItems="center"
+                justifyContent="flex-start"
+                sx={{ width: '100%' }}
+              >    
+              <Stack direction="row" spacing={3} sx={{ width: "100%", boxSizing:'border-box'}}>        
+
+              <TextField id="standard-basic" label="Search" variant="standard" sx={{ width: "100%" }} />
+
+                <Button variant="contained" size="large" 
+                  style={{
+                    backgroundColor: "#000000",
+                    padding: "18px 36px"
+                  }}
+                  
+                  endIcon={<CloudUploadRoundedIcon />}>
+                  Import      
+                </Button>
+
+                <Button variant="contained" size="large" 
+                  style={{
+                    backgroundColor: "#000000",
+                    padding: "18px 36px"
+                  }}
+                  
+                  endIcon={<CloudDownloadRoundedIcon />}>
+                  Export      
+                </Button>
+
+                <Button variant="contained" size="large" 
+                  style={{
+                    backgroundColor: "#000000",
+                    padding: "18px 36px"
+                  }}
+                  
+                  endIcon={<EditRoundedIcon />}>
+                  Edit      
+                </Button>
+                
+
+              </Stack>
+              </Grid>
+
+              <br></br>
+            
+              <div className='center'>
+              {fileName && (
+                <React.Fragment> 
+              <Typography variant="h4" align="center">File Name: <span>{fileName}</span></Typography>
+              <div>espera un poquis a que cargue</div>
+                </React.Fragment>
+              ) }
+
+
+            {allData && 
+
+            <React.Fragment>
+            <TableContainer component={Paper}>
+              <Table aria-label="collapsible table">
+              <TableHead>
+                  <TableRow>
+                    {allData[0].map(
+                        (h:any) => <StyledTableCell key={h}> <Typography variant="h6"><strong>{h}</strong></Typography>  </StyledTableCell>
+                    )}
+                
+                  </TableRow>
+                </TableHead>
+
+                <TableBody>
+                    {allData.slice(1).map((row:any) => (
+                      <StyledTableRow>
+                          {row.map((c: any) => <StyledTableCell key={c}> <Typography variant="subtitle1">{c}</Typography>  </StyledTableCell>)}
+                        </StyledTableRow>
+                    )
+                        )}
+                  
+                    </TableBody>
+
+                    </Table> 
+                  </TableContainer>
+                  </React.Fragment>
+            }
+          
+          </div>
+
           <br></br>
 
-            <Stack direction="row" spacing={2}>
-
-            <Grid
-          item
-          
-          container
-          direction="row"
-          alignItems="center"
-          justifyContent="flex-start"
-        >
-          <TextField id="standard-basic" label="Search" variant="standard" fullWidth />
-
-        </Grid>
-            
-              <Button variant="contained" size="large" 
-                style={{
-                  backgroundColor: "#000000",
-                  padding: "18px 36px"
-                }}
-                
-                endIcon={<CloudUploadRoundedIcon />}>
-                Import      
-              </Button>
-
-              <Button variant="contained" size="large" 
-                style={{
-                  backgroundColor: "#000000",
-                  padding: "18px 36px"
-                }}
-                
-                endIcon={<CloudDownloadRoundedIcon />}>
-                Export      
-              </Button>
-
-              <Button variant="contained" size="large" 
-                style={{
-                  backgroundColor: "#000000",
-                  padding: "18px 36px"
-                }}
-                
-                endIcon={<EditRoundedIcon />}>
-                Edit      
-              </Button>
-
-            </Stack>
-
-            </Grid>
-
-        <br></br>
-       
-        <div className='center'>
-        {fileName && (
-          <React.Fragment> 
-        <Typography variant="h4" align="center">File Name: <span>{fileName}</span></Typography>
-        <div>espera un poquis a que cargue</div>
-          </React.Fragment>
-        ) }
-
-
-      {allData && 
-
-      <React.Fragment>
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-        <TableHead>
-            <TableRow>
-              {allData[0].map(
-                  (h:any) => <StyledTableCell key={h}> <Typography variant="h6"><strong>{h}</strong></Typography>  </StyledTableCell>
-              )}
-          
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-              {allData.slice(1).map((row:any) => (
-                <StyledTableRow>
-                    {row.map((c: any) => <StyledTableCell key={c}> <Typography variant="subtitle1">{c}</Typography>  </StyledTableCell>)}
-                  </StyledTableRow>
-              )
-                  )}
-            
-              </TableBody>
-
-              </Table> 
-            </TableContainer>
-            </React.Fragment>
-          }
-        
-        </div>
-
-        <br></br>
-
-    </Container>
+        </Container>
         
         
         </>
