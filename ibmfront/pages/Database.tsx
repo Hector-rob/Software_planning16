@@ -77,23 +77,15 @@ export default function Database(props:any) {
     e.target.value = null;
   }
 
-  const handleClick = () => {
-    // 👇️ open file input box on click of another element
-    inputRef.current.click();
-  };
-
-
     return( 
         <>
                 
         <Container maxWidth={false} sx={{ width: "100%" }}>
           <br />
           <Typography fontSize={30} sx={{ mt: 2, }}>Employee's Database</Typography>
-          <Box display="flex-start" sx={{ height: 10, width: 0.2, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 0 }}></Box>
+          <Box display="flex-start" sx={{ height: 10, width: 0.4, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 0 }}></Box>
           <br></br>
-        
-          {/* <Input id="contained-button-file2" type="file" inputProps={{accept: '.xlsx,.xls'}} onChange={e => handleFile(e)} ref={inputRef} style={{display: 'none'}} ></Input> */}
-
+    
             <br></br>
  
               <Grid
@@ -125,7 +117,7 @@ export default function Database(props:any) {
               </label>
               
 
-                <Button variant="contained" size="large" 
+                <Button variant="contained" component="span" 
                   style={{
                     backgroundColor: "#000000",
                     padding: "18px 36px"
@@ -135,7 +127,7 @@ export default function Database(props:any) {
                   Export      
                 </Button>
 
-                <Button variant="contained" size="large" 
+                <Button variant="contained" component="span" 
                   style={{
                     backgroundColor: "#000000",
                     padding: "18px 36px"
