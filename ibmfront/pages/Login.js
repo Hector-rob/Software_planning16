@@ -124,7 +124,7 @@ export default function Login() {
                   {"Don't have an account? Sign Up"}
                 </Link> */}
                 <br></br>
-                <Button href="/PageNotFound" variant="text" underline="hover">Don't have an account? Sign Up</Button>
+                <Button href="/Register" variant="text" underline="hover">Don't have an account? Sign Up</Button>
               </Typography>
             </Grid>
           </Grid>
