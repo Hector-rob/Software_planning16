@@ -2,8 +2,5 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/PageNotFound": "pages/PageNotFound.js",
-  "/": "pages/index.js",
-  "/MainPage": "pages/MainPage.js",
-  "/Login": "pages/Login.js"
+  "/Certifications": "pages/Certifications.js"
 }
