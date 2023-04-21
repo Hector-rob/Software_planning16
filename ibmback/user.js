@@ -3,17 +3,20 @@ const express = require("express");
 const userSchema = require('./models/user.js');
 const router = express.Router();
 
+
+//FILTER AND PARAMS ARE JUST BY NAME IMPORTANT NOTE
+
 //create user
 router.post("/user", (req, res) => {
     const user = userSchema(req.body);
-    user
+    user 
     .save()
     .then((data) => res.json(data))
     .catch((error) => res.json({message: error}))
 });
 
 
-//get all users
+//get all cusers
 
 router.get("/user", (req, res) => {
     userSchema
@@ -24,30 +27,30 @@ router.get("/user", (req, res) => {
 
 //get a user
 
-router.get("/user/:uid", (req, res) => {
+router.get("/user/:name", (req, res) => {
     userSchema
-    .findOne({"uid": req.params.uid}, {_id: 0, __v: 0}) //Sin _id ni __v de mongo
+    .findOne({"name": req.params.name}, {_id: 0, __v: 0}) //Sin _id ni __v de mongo
     .then((data) => res.json(data))
     .catch((error) => res.json({message: error}))
 });
 
 //Update a user
-router.put("/user/:uid", (req, res) => {
-    const {uid, 
-        department,
-        work_location,
-        certification_name,
-        issue_date,
-        type} = req.body;
+router.put("/user/:name", (req, res) => {
+    const {email, 
+        name,
+        last_name,
+        password,
+        country,
+        department} = req.body;
     userSchema
-    .updateOne({"uid": req.params.uid}, //Update through the use of uid
+    .updateOne({"name": req.params.name}, //Update through the use of uid
     {$set: {
-        uid, 
-        department,
-        work_location,
-        certification_name,
-        issue_date,
-        type
+        email, 
+        name,
+        last_name,
+        password,
+        country,
+        department
     }})
     .then((data) => res.json(data))
     .catch((error) => res.json({message: error}))
@@ -55,9 +58,9 @@ router.put("/user/:uid", (req, res) => {
 
 //delete a user
 
-router.delete("/user/:uid", (req, res) => {
+router.delete("/user/:name", (req, res) => {
     userSchema
-    .deleteOne({"uid": req.params.uid}) //Sin _id ni __v de mongo
+    .deleteOne({"name": req.params.name}) //Sin _id ni __v de mongo
     .then((data) => res.json(data))
     .catch((error) => res.json({message: error}))
 });
