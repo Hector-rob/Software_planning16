@@ -8,8 +8,38 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Suspense, useState } from "react";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
+import Axios from "axios";
 
 export default function Register() {
+
+
+    const [employeeEmail, setEmployeeEmail] = useState("");
+    const [employeeName, setEmployeeName] = useState("");
+    const [employeeLastName, setEmployeeLastName] = useState("");
+    const [employeePassword, setEmployeePassword] = useState("");
+    const [employeeCountry, setEmployeeCountry] = useState("");
+    const [employeeDepartment, setEmployeeDepartment] = useState("");
+
+    const submitEmployee = () => {
+        Axios.post("http://localhost:5000/user", {
+          email:employeeEmail, 
+          name: employeeName,
+          last_name: employeeLastName,
+          password: employeePassword,
+          country: employeeCountry,
+          department: employeeDepartment
+          }).then(()=>{
+            window.alert("Register was succesful");
+    
+          })
+      };
+
+
+
+
+
+
+
     const countries = ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia', 'Austria',
         'Azerbaijan', 'The Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina',
         'Botswana', 'Brazil', 'Brunei', 'Bulgaria', 'Burkina Faso', 'Burundi', 'Cabo Verde', 'Cambodia', 'Cameroon', 'Canada', 'Central African Republic', 'Chad',
@@ -57,7 +87,9 @@ export default function Register() {
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
-                                    autoFocus />
+                                    autoFocus
+                                    onChange= {(e) => {
+                                        setEmployeeEmail(e.target.value)}} />
                             </Grid>
                             <Grid item xs={6} sm={6} md={6} lg={6} xl={6} sx={{ mt: 3 }}>
                                 <TextField
@@ -68,7 +100,9 @@ export default function Register() {
                                     label="Name"
                                     name="name"
                                     autoComplete="name"
-                                    autoFocus />
+                                    autoFocus
+                                    onChange= {(e) => {
+                                        setEmployeeName(e.target.value)}} />
                             </Grid>
                             <Grid item xs={6} sm={6} md={6} lg={6} xl={6} sx={{ mt: 3 }}>
                                 <TextField
@@ -79,7 +113,9 @@ export default function Register() {
                                     label="Last Name"
                                     name="lastName"
                                     autoComplete="lastName"
-                                    autoFocus />
+                                    autoFocus
+                                    onChange= {(e) => {
+                                        setEmployeeLastName(e.target.value)}} />
                             </Grid>
                             <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mt: 3 }}>
                                 <TextField
@@ -102,11 +138,15 @@ export default function Register() {
                                                 </IconButton>
                                             </InputAdornment>
                                         )
-                                    }} />
+                                    }}
+                                    onChange= {(e) => {
+                                        setEmployeePassword(e.target.value)}} />
                             </Grid>
                             <Grid item xs={6} sm={6} md={6} lg={6} xl={6} sx={{ mt: 3 }}>
                                 <FormControl required sx={{ width: 0.9 }}>
-                                    <InputLabel id="countryLabel">Country</InputLabel>
+                                    <InputLabel id="countryLabel" onChange= {(e) => {
+                                        setEmployeeCountry(e.target.value)}}
+                                        >Country </InputLabel>
                                     <Select
                                         variant="filled"
                                         labelId="countryLabel"
@@ -114,14 +154,21 @@ export default function Register() {
                                         value={country}
                                         label="Country"
                                         onChange={selectCountryHandler}
+                                        onClose= {(e) => {
+                                            setEmployeeCountry(e.target.value)}}
+                                        
+                                        
 
                                     >
+                                        
                                         {countries.map((countryName) => (
                                             <MenuItem
                                                 key={countryName}
                                                 value={countryName}
                                             >{countryName}</MenuItem>
                                         ))}
+                                       
+                                        
                                     </Select>
                                 </FormControl>
                             </Grid>
@@ -134,12 +181,15 @@ export default function Register() {
                                     label="Department"
                                     name="department"
                                     autoComplete="department"
-                                    autoFocus />
+                                    autoFocus
+                                    onChange= {(e) => {
+                                        setEmployeeDepartment(e.target.value)}} />
                             </Grid>
                         </Grid>
                         <Button component="a" to="/mainPage"
                             type="submit"
                             variant="contained"
+                            onClick={submitEmployee}
                             sx={{ mt: 5, mb: 2, borderRadius: 0, width: 350 }}
                         >
                             Create Account

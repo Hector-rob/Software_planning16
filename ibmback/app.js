@@ -1,6 +1,7 @@
 const express = require('express'); //Line 1
 const app = express(); //Line 2
 const mongoose = require('mongoose');
+const cors = require("cors");
 const port = process.env.PORT || 5000; //Line 3
 const certificationRoutes = require("./certification.js");
 const userRoutes = require("./user.js");
@@ -9,6 +10,7 @@ const userRoutes = require("./user.js");
 const uri = "mongodb+srv://team16:team16database@solutio.l6ersza.mongodb.net/?retryWrites=true&w=majority";
 
 app.use(express.json());
+app.use(cors());
 app.use(certificationRoutes);
 app.use(userRoutes);
 
