@@ -144,7 +144,9 @@ export default function Register() {
                             </Grid>
                             <Grid item xs={6} sm={6} md={6} lg={6} xl={6} sx={{ mt: 3 }}>
                                 <FormControl required sx={{ width: 0.9 }}>
-                                    <InputLabel id="countryLabel">Country</InputLabel>
+                                    <InputLabel id="countryLabel" onChange= {(e) => {
+                                        setEmployeeCountry(e.target.value)}}
+                                        >Country </InputLabel>
                                     <Select
                                         variant="filled"
                                         labelId="countryLabel"
@@ -152,16 +154,21 @@ export default function Register() {
                                         value={country}
                                         label="Country"
                                         onChange={selectCountryHandler}
+                                        onClose= {(e) => {
+                                            setEmployeeCountry(e.target.value)}}
+                                        
+                                        
 
                                     >
+                                        
                                         {countries.map((countryName) => (
                                             <MenuItem
                                                 key={countryName}
                                                 value={countryName}
                                             >{countryName}</MenuItem>
                                         ))}
-                                        onChange= {(e) => {
-                                        setEmployeeCountry(e.target.value)}}
+                                       
+                                        
                                     </Select>
                                 </FormControl>
                             </Grid>
