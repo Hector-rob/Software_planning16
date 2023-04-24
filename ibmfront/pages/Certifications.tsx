@@ -17,6 +17,7 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import { alignProperty } from '@mui/material/styles/cssUtils';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -38,104 +39,97 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function Certifications(props:any) {
+export default function Certifications(props: any) {
   //luego tenemos que cambiar esto por info real
-const data = [["name", "department", "certification_name"], 
-  ["persona1", "Department", "Certification Name"], 
+  const data = [["name", "department", "certification_name"],
+  ["persona1", "Department", "Certification Name"],
+  ["persona2", "Department", "Certification Name"],
   ["persona2", "Department", "Certification Name"],
   ["persona2", "Department", "Certification Name"]]
-  
-    return( 
-        <>
-                
-        <Container maxWidth={false} sx={{ width: "100%" }}>
-          <br />
-          <Typography fontSize={30} sx={{ mt: 2, }}>Pending Certifications</Typography>
-          <Box display="flex-start" sx={{ height: 10, width: 0.3, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 0 }}></Box>
-          <br></br>
-        
-            <br></br>
-            <br></br>
-           
-             <React.Fragment>
-            <TableContainer component={Paper}>
-              <Table aria-label="collapsible table">
-              <TableHead>
-                  </TableHead>
 
-                <TableBody>
-                    {data.slice(1).map((row:any) => (
-                      <StyledTableRow key={row[0]}>
-                      <StyledTableCell>
-                        <AccountCircleRoundedIcon sx={{ fontSize: 100 }}></AccountCircleRoundedIcon>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        
-                        <Typography variant="subtitle1" fontWeight={'bold'}>{row[0]} </Typography> 
-                        <Typography variant="subtitle1" >{row[1]} </Typography>  
-                        
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <Typography variant="subtitle1" style={{color: 'blue'}}>
-                          {row[2]}
-                        </Typography>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <img src="./Assets/images/IBMblue.png" alt="Logo" width={100}></img>
-                          </StyledTableCell>
-                        <StyledTableCell>
+  return (
+    <>
+      <Container maxWidth={false} sx={{ width: "100%" }}>
+        <br />
+        <Typography fontSize={30} fontWeight={600} sx={{ mt: 2, }}>Pending Certifications</Typography>
+        <Box display="flex-start" sx={{ height: 10, width: 0.3, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
+        <br></br>
+        <br></br>
+        <br></br>
 
-                          <Grid
-                            direction="row"
-                            alignItems="center"
-                            justifyContent="flex-start"
-                            sx={{ width: '100%' }}
-                          >    
-                        <Stack direction="row" spacing={3} sx={{ width: "100%", boxSizing:'border-box'}}>        
-                      
-                          <Button variant="contained" component="span" 
-                                    style={{
-                                      backgroundColor: "#198038",
-                                      padding: "9px 18px"
-                                    }}
-                                    endIcon={<CheckRoundedIcon />}>
+        <React.Fragment>
+          <TableContainer component={Paper}>
+            <Table aria-label="collapsible table">
+              <TableHead></TableHead>
+              <TableBody>
+                {data.slice(1).map((row: any) => (
+                  <StyledTableRow key={row[0]}>
+                    <StyledTableCell width={"10%"} align="center">
+                      <AccountCircleRoundedIcon sx={{ fontSize: 100 }}></AccountCircleRoundedIcon>
+                    </StyledTableCell>
+                    <StyledTableCell width={"15%"} align="center">
+                      <Typography variant="subtitle1" fontWeight={'bold'}>{row[0]} </Typography>
+                      <Typography variant="subtitle1" >{row[1]} </Typography>
+
+                    </StyledTableCell>
+                    <StyledTableCell width={"20%"} align="center">
+                      <Typography variant="subtitle1" style={{ color: '#0F62FE' }}>
+                        {row[2]}
+                      </Typography>
+                    </StyledTableCell>
+                    <StyledTableCell width={"15%"} align="center">
+                      <img src="./Assets/images/IBMblue.png" alt="Logo" width={120}></img>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <Grid
+                        direction="row"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Stack direction="row" spacing={4} sx={{ ml: 5, boxSizing: 'border-box' }}>
+                          <Button variant="contained" component="span"
+                            style={{
+                              backgroundColor: "#198038",
+                              padding: "9px 18px",
+                            }}
+                            endIcon={<CheckRoundedIcon />}>
                             Accept
-                          </Button>              
+                          </Button>
 
-                          <Button variant="contained" component="span" 
+                          <Button variant="contained" component="span"
                             style={{
                               backgroundColor: "#DA1E28",
                               padding: "9px 18px"
                             }}
-                            
-                            endIcon={<ClearRoundedIcon/>}>
-                            Decline      
+
+                            endIcon={<ClearRoundedIcon />}>
+                            Decline
                           </Button>
 
-                          <Button variant="contained" 
+                          <Button variant="contained"
                             style={{
                               backgroundColor: "#0F62FE",
                               padding: "9px 18px"
                             }}
-                            
-                            endIcon={<SendRoundedIcon />}>
-                            Send comment     
-                          </Button>
-                        
-                        </Stack>
-                  </Grid>
-                        
-                        </StyledTableCell>
-                    </StyledTableRow>
-                    )
-                    )}
-                  
-                    </TableBody>
 
-                    </Table> 
-                  </TableContainer>
-                  </React.Fragment>  
-        </Container>
-        </>
-    );
+                            endIcon={<SendRoundedIcon />}>
+                            Send comment
+                          </Button>
+
+                        </Stack>
+                      </Grid>
+
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )
+                )}
+
+              </TableBody>
+
+            </Table>
+          </TableContainer>
+        </React.Fragment>
+      </Container>
+    </>
+  );
 }
