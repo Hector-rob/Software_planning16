@@ -5,13 +5,11 @@ import { IconButton, InputAdornment } from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
 import Axios from "axios";
 
 export default function Register() {
-
 
     const [employeeEmail, setEmployeeEmail] = useState("");
     const [employeeName, setEmployeeName] = useState("");
@@ -22,23 +20,17 @@ export default function Register() {
 
     const submitEmployee = () => {
         Axios.post("http://localhost:5000/user", {
-          email:employeeEmail, 
-          name: employeeName,
-          last_name: employeeLastName,
-          password: employeePassword,
-          country: employeeCountry,
-          department: employeeDepartment
-          }).then(()=>{
+            email: employeeEmail,
+            name: employeeName,
+            last_name: employeeLastName,
+            password: employeePassword,
+            country: employeeCountry,
+            department: employeeDepartment
+        }).then(() => {
             window.alert("Register was succesful");
-    
-          })
-      };
 
-
-
-
-
-
+        })
+    };
 
     const countries = ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia', 'Austria',
         'Azerbaijan', 'The Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina',
@@ -56,6 +48,7 @@ export default function Register() {
         'Singapore', 'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa', 'Spain', 'Sri Lanka', 'Sudan', 'Sudan, South', 'Suriname', 'Sweden', 'Switzerland',
         'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', 'Togo', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Tuvalu', 'Uganda',
         'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican City', 'Venezuela', 'Vietnam', 'Yemen', 'Zambia', 'Zimbabwe']
+
     const [visiblePassword, toggleVisibility] = useState(false);
     const clickHandler = () => toggleVisibility(!visiblePassword);
     const [country, selectCountry] = useState("");
@@ -88,8 +81,9 @@ export default function Register() {
                                     name="email"
                                     autoComplete="email"
                                     autoFocus
-                                    onChange= {(e) => {
-                                        setEmployeeEmail(e.target.value)}} />
+                                    onChange={(e) => {
+                                        setEmployeeEmail(e.target.value)
+                                    }} />
                             </Grid>
                             <Grid item xs={6} sm={6} md={6} lg={6} xl={6} sx={{ mt: 3 }}>
                                 <TextField
@@ -101,8 +95,9 @@ export default function Register() {
                                     name="name"
                                     autoComplete="name"
                                     autoFocus
-                                    onChange= {(e) => {
-                                        setEmployeeName(e.target.value)}} />
+                                    onChange={(e) => {
+                                        setEmployeeName(e.target.value)
+                                    }} />
                             </Grid>
                             <Grid item xs={6} sm={6} md={6} lg={6} xl={6} sx={{ mt: 3 }}>
                                 <TextField
@@ -114,8 +109,9 @@ export default function Register() {
                                     name="lastName"
                                     autoComplete="lastName"
                                     autoFocus
-                                    onChange= {(e) => {
-                                        setEmployeeLastName(e.target.value)}} />
+                                    onChange={(e) => {
+                                        setEmployeeLastName(e.target.value)
+                                    }} />
                             </Grid>
                             <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mt: 3 }}>
                                 <TextField
@@ -139,14 +135,16 @@ export default function Register() {
                                             </InputAdornment>
                                         )
                                     }}
-                                    onChange= {(e) => {
-                                        setEmployeePassword(e.target.value)}} />
+                                    onChange={(e) => {
+                                        setEmployeePassword(e.target.value)
+                                    }} />
                             </Grid>
                             <Grid item xs={6} sm={6} md={6} lg={6} xl={6} sx={{ mt: 3 }}>
                                 <FormControl required sx={{ width: 0.9 }}>
-                                    <InputLabel id="countryLabel" onChange= {(e) => {
-                                        setEmployeeCountry(e.target.value)}}
-                                        >Country </InputLabel>
+                                    <InputLabel id="countryLabel" onChange={(e) => {
+                                        setEmployeeCountry(e.target.value)
+                                    }}
+                                    >Country </InputLabel>
                                     <Select
                                         variant="filled"
                                         labelId="countryLabel"
@@ -154,21 +152,22 @@ export default function Register() {
                                         value={country}
                                         label="Country"
                                         onChange={selectCountryHandler}
-                                        onClose= {(e) => {
-                                            setEmployeeCountry(e.target.value)}}
-                                        
-                                        
+                                        onClose={(e) => {
+                                            setEmployeeCountry(e.target.value)
+                                        }}
+
+
 
                                     >
-                                        
+
                                         {countries.map((countryName) => (
                                             <MenuItem
                                                 key={countryName}
                                                 value={countryName}
                                             >{countryName}</MenuItem>
                                         ))}
-                                       
-                                        
+
+
                                     </Select>
                                 </FormControl>
                             </Grid>
@@ -182,8 +181,9 @@ export default function Register() {
                                     name="department"
                                     autoComplete="department"
                                     autoFocus
-                                    onChange= {(e) => {
-                                        setEmployeeDepartment(e.target.value)}} />
+                                    onChange={(e) => {
+                                        setEmployeeDepartment(e.target.value)
+                                    }} />
                             </Grid>
                         </Grid>
                         <Button component="a" to="/mainPage"
