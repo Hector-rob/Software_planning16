@@ -18,7 +18,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PeopleIcon from '@mui/icons-material/People';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
-import { ListSubheader } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -78,6 +77,7 @@ export default function MiniDrawer() {
   const [open, setOpen] = React.useState(false);
 
   const menuIcons = [<HomeIcon />, <PeopleIcon />, <WorkspacePremiumIcon />];
+  const menuRefs = ["/MainPage", "/Database", "/Certifications"];
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -118,6 +118,7 @@ export default function MiniDrawer() {
           {['Home', 'Employees', 'Certifications'].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
+                href={menuRefs[index]}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',
