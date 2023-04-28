@@ -141,7 +141,7 @@ export default function Database(props: any) {
     //const workbook = XLSX.read(data);
 
     //primeras 10 filas
-    const workbook = XLSX.read(data, { sheetRows: 10 });
+    const workbook = XLSX.read(data, { sheetRows: 50 });
 
     //esto da la primera página del excel
     const worksheet = workbook.Sheets[workbook.SheetNames[0]]
@@ -306,7 +306,7 @@ export default function Database(props: any) {
             {fileName && (
               <React.Fragment>
                 <Typography variant="h4" align="center">File Name: <span>{fileName}</span></Typography>
-                <div>espera un poquis a que cargue</div>
+                {/* <div>espera un poquis a que cargue</div> */}
               </React.Fragment>
             )}
 
