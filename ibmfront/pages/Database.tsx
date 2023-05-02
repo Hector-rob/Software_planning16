@@ -148,7 +148,7 @@ export default function Database(props: any) {
 
     //leer como json
     const jsonData = XLSX.utils.sheet_to_json(worksheet, {
-      //blankrows: "",
+      defval: "-",
       header: 1
     });
 
