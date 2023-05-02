@@ -18,7 +18,6 @@ import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { Box, Grid } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import AddBoxRoundedIcon from '@mui/icons-material/AddBoxRounded';
 import { styled, useTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
@@ -36,6 +35,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import List from '@mui/material/List';
 import MuiDrawer from '@mui/material/Drawer';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -305,7 +305,7 @@ export default function Database(props: any) {
           <div className='center'>
             {fileName && (
               <React.Fragment>
-                <Typography variant="h4" align="center">File Name: <span>{fileName}</span></Typography>
+                <Typography component='div' variant="h5" align="center" sx={{ mb: 3, mt: 2 }}><Box fontWeight={600} display='inline'>File Name:</Box> <span>{fileName}</span></Typography>
                 {/* <div>espera un poquis a que cargue</div> */}
               </React.Fragment>
             )}
@@ -336,9 +336,9 @@ export default function Database(props: any) {
                             </StyledTableCell>
                           ))}
                           <StyledTableCell>
-
-                            <AddBoxRoundedIcon />
-
+                            <Button href="/Employee">
+                              <NavigateNextIcon />
+                            </Button>
                           </StyledTableCell>
                         </StyledTableRow>
                       )
