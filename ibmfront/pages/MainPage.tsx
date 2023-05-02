@@ -25,7 +25,6 @@ import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded';
 import Button from '@mui/material/Button';
 
 
-
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -79,7 +78,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function MiniDrawer() {
+export default function MainPage() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -189,7 +188,7 @@ export default function MiniDrawer() {
           <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
           
             <Container sx={{ marginLeft:3, width: "60%", maxHeight:"25%", backgroundColor:"grey.300"}}>
-              <Typography fontSize={30} fontWeight={600} sx={{ mt: 2, }}>Certifications</Typography>
+              <Typography fontSize={30} fontWeight={600} sx={{ mt: 2, }}>All Certifications</Typography>
               <Box display="flex-start" sx={{ height: 10, width: 0.9, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
               <br />
               
