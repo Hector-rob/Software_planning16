@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import { Box, Grid } from '@mui/material';
+import { TextField, Box, Grid, Modal } from '@mui/material';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
@@ -33,6 +33,8 @@ import PeopleIcon from '@mui/icons-material/People';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import List from '@mui/material/List';
 import MuiDrawer from '@mui/material/Drawer';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CloseIcon from '@mui/icons-material/Close';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -117,6 +119,8 @@ export default function Certifications(props: any) {
 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [commentOpen, setCommentOpen] = React.useState(false);
   const menuIcons = [<HomeIcon />, <PeopleIcon />, <WorkspacePremiumIcon />];
   const menuRefs = ["/MainPage", "/Database", "/Certifications"];
 
@@ -127,6 +131,22 @@ export default function Certifications(props: any) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  }
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+  }
+
+  const handleMessageOpen = () => {
+    setCommentOpen(true);
+  }
+
+  const handleMessageClose = () => {
+    setCommentOpen(false);
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -259,20 +279,61 @@ export default function Certifications(props: any) {
                                 backgroundColor: "#DA1E28",
                                 padding: "9px 18px"
                               }}
-
-                              endIcon={<ClearRoundedIcon />}>
+                              endIcon={<ClearRoundedIcon />}
+                              onClick={handleModalOpen}>
                               Decline
                             </Button>
+                            <Modal open={modalOpen} onClose={handleModalClose} sx={{ backgroundColor: "none", opacity: 0.6, backdropFilter: "blur(1px)" }}>
+                              <Box sx={{
+                                position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'white', border: '2px solid #000',
+                                boxShadow: 24, p: 2, borderRadius: 2
+                              }}>
+                                <Box display="flex" justifyContent="flex-end" alignItems="flex-end" sx={{mb:1}}>
+                                  <IconButton color={"error"} onClick={handleModalClose} children={<CloseIcon />} />
+                                </Box>
+                                <Typography variant="h6" fontWeight={700} align={"center"}>
+                                  Are you sure you want to decline the certification?
+                                </Typography>
+                                <Typography align={"center"} sx={{ mt: 2 }} color={"error"} fontWeight={700}>
+                                  This cannot be undone.
+                                </Typography>
+                                <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
+                                  <Button variant="contained" sx={{ width: "50%" }} color={"primary"} onClick={handleModalClose} startIcon={<ArrowBackIcon />}><Typography>Cancel</Typography></Button>
+                                  <Button variant="contained" sx={{ width: "50%" }} color={"error"} endIcon={<ClearRoundedIcon />}><Typography fontWeight={700}>Decline</Typography></Button>
+                                </Stack>
+                              </Box>
+                            </Modal>
 
                             <Button variant="contained"
                               style={{
                                 backgroundColor: "#0F62FE",
                                 padding: "9px 18px"
                               }}
-
+                              onClick={handleMessageOpen}
                               endIcon={<SendRoundedIcon />}>
                               Send comment
                             </Button>
+                            <Modal open={commentOpen} onClose={handleMessageClose} sx={{ backgroundColor: "none", opacity: 1, backdropFilter: "blur(1px)" }}>
+                              <Box sx={{
+                                position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 600, bgcolor: 'white', border: '2px solid #000',
+                                boxShadow: 24, p: 2, borderRadius: 2
+                              }}>
+                                <Box display="flex" justifyContent="flex-end" alignItems="flex-end">
+                                  <IconButton color={"error"} onClick={handleMessageClose} children={<CloseIcon />} />
+                                </Box>
+                                <Stack direction="column" spacing={2}>
+                                  <Typography fontSize={14}>Send Message</Typography>
+                                  <Typography fontSize={24} fontWeight={600}>Custom Message</Typography>
+                                  <Typography fontSize={14} >Message will be sent to: user@email.com</Typography>
+                                </Stack>
+                                <TextField minRows={3} label="Message" defaultValue={""} variant="filled" multiline sx={{ mt: 3, mb: 3, width: "100%" }} />
+                                <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+                                  <Button variant="contained" sx={{ width: "50%" }} color={"error"} onClick={handleMessageClose} startIcon={<ArrowBackIcon />}><Typography>Cancel</Typography></Button>
+                                  <Button variant="contained" sx={{ width: "50%" }} color={"primary"} endIcon={<SendRoundedIcon />}><Typography fontWeight={700}>Send</Typography></Button>
+
+                                </Stack>
+                              </Box>
+                            </Modal>
 
                           </Stack>
                         </Grid>
