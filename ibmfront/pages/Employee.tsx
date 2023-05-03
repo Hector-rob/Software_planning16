@@ -85,6 +85,8 @@ export default function Employee() {
     const menuIcons = [<HomeIcon />, <PeopleIcon />, <WorkspacePremiumIcon />];
     const menuRefs = ["/MainPage", "/Database", "/Certifications"];
 
+    const data = { "uid": "078763781IBM", "name": "Derek", "lastName": "Morgan", "email": "derek.morgan@email.com", "joinDate": "29 / 08 / 2001", "projects": 223 };
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -94,7 +96,7 @@ export default function Employee() {
     };
 
     return (
-        <Box sx={{ display: 'flex', width:"100%", height:"100%", position:"absolute"}}>
+        <Box sx={{ display: 'flex', width: "100%", height: "100%", position: "absolute" }}>
             <CssBaseline />
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
@@ -173,29 +175,30 @@ export default function Employee() {
                     </ListItemButton>
                 </ListItem>
             </Drawer>
-            <Box component="main" sx={{ width: "100%"}} bgcolor={"#F2F2F2"} >
-            <Container maxWidth={false} sx={{ mt: -5 }}>
+            <Box component="main" sx={{ width: "100%" }} bgcolor={"#F2F2F2"} >
+                <Container maxWidth={false} sx={{ mt: -5 }}>
                     <DrawerHeader />
                     <Button variant="outlined" color="primary" startIcon={<ArrowBackIcon />} href="/Database">
                         Back
                     </Button>
                     <Stack justifyContent="center" alignItems="center">
                         <AccountCircleRoundedIcon sx={{ fontSize: 150 }} />
-                        <Typography fontSize={35} fontWeight={700}>Employee Name</Typography>
+                        <Typography fontSize={35} fontWeight={700}>{data.name + " " + data.lastName}</Typography>
+                        <Typography fontSize={14}>{data.email}</Typography>
                         <Box display="flex-start" sx={{ height: 10, width: 0.25, backgroundColor: "#0F62FE", mt: 1 }}></Box>
                     </Stack>
-                    <Grid container columnSpacing={3} sx={{ mb: 2, mt: 5, height: "100%" }} >
+                    <Grid container columnSpacing={3} sx={{ mb: 2, mt: 4, height: "100%" }} >
                         <Grid item container xs={6} sm={6} md={6} lg={6} xl={6}>
                             <Grid container spacing={2} sx={{ height: "100%" }}>
                                 <Grid item container xs={6} sm={6} md={6} lg={6} xl={6}>
                                     <Box display="flex" sx={{ width: "100%" }}>
                                         <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
-                                            <Stack justifyContent="center" alignItems="center" sx={{ mt: 3, mb:3}} spacing={2}>
+                                            <Stack justifyContent="center" alignItems="center" sx={{ mt: 3, mb: 3 }} spacing={2}>
                                                 <Stack direction="row" spacing={2} divider={<Divider orientation="vertical" flexItem color="#0F62FE" sx={{ width: 7, height: 30 }} />}>
-                                                    <Typography fontSize={25} fontWeight={700}>Position</Typography>
-                                                    <Typography fontSize={25}>Department</Typography>
+                                                    <Typography fontSize={20} fontWeight={700}>{data.uid}</Typography>
+                                                    <Typography fontSize={20}>Department</Typography>
                                                 </Stack>
-                                                <Typography component='div' fontSize={24}>Joined: MM/DD/YYYY</Typography>
+                                                <Typography component='div' fontSize={24}><Box fontWeight={700} display='inline'>Joined</Box>: {data.joinDate}</Typography>
                                             </Stack>
                                         </Container>
                                     </Box>
@@ -214,14 +217,14 @@ export default function Employee() {
                                     <Box display="flex" sx={{ width: "100%" }}>
                                         <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
                                             <Stack justifyContent="center" alignItems="center" sx={{ mt: 2 }}>
-                                                <Typography component='div' fontSize={50} fontWeight={800} color={"#198038"}>XX</Typography>
+                                                <Typography component='div' fontSize={50} fontWeight={800} color={"#198038"}>{data.projects}</Typography>
                                                 <Typography component='div' fontSize={20}>Projects</Typography>
                                             </Stack>
                                         </Container>
                                     </Box>
                                 </Grid>
                                 <Grid item container xs={12} sm={12} md={12} lg={12} xl={12}>
-                                    <Box display="flex" sx={{ width: "100%", height:"400%"}}>
+                                    <Box display="flex" sx={{ width: "100%", height: "400%" }}>
                                         <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
                                             <Stack justifyContent="center" alignItems="center" sx={{ mt: 2 }}>
                                                 <Typography component='div' fontSize={24}><Box fontWeight={700} display='inline'>Skills</Box> & Areas of Opportunity</Typography>
@@ -233,7 +236,7 @@ export default function Employee() {
                             </Grid>
                         </Grid>
                         <Grid item container xs={6} sm={6} md={6} lg={6} xl={6}>
-                            <Box display="flex" sx={{ width: "100%", height:"190%"}}>
+                            <Box display="flex" sx={{ width: "100%", height: "190%" }}>
                                 <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
                                     <Stack justifyContent="center" alignItems="center" sx={{ mt: 2 }}>
                                         <Typography component='div' fontSize={30}>Certification <Box fontWeight={700} display='inline'>History</Box></Typography>

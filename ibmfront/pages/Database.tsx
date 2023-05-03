@@ -158,7 +158,6 @@ export default function Database(props: any) {
 
     e.target.value = null;
 
-
   }
 
   return (
