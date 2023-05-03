@@ -120,6 +120,7 @@ export default function Database(props: any) {
   const [open, setOpen] = React.useState(false);
   const menuIcons = [<HomeIcon />, <PeopleIcon />, <WorkspacePremiumIcon />];
   const menuRefs = ["/MainPage", "/Database", "/Certifications"];
+  const rowHeaders = ["ID", "Department", "Location", "Certification Name", "Date", "Type"];
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -318,7 +319,7 @@ export default function Database(props: any) {
                     <TableHead>
                       <TableRow>
                         {allData[0].map(
-                          (h: any) => <StyledTableCell key={h}> <Typography variant="h6"><strong>{h}</strong></Typography>  </StyledTableCell>
+                          (h: any, index) => <StyledTableCell key={h}> <Typography variant="h6"><strong>{rowHeaders[index]}</strong></Typography>  </StyledTableCell>
                         )}
                         <StyledTableCell> </StyledTableCell>
 
@@ -327,7 +328,7 @@ export default function Database(props: any) {
                     </TableHead>
 
                     <TableBody>
-                      {allData.slice(1).map((row: any) => (
+                      {allData.slice(1).map((row: any, rowIndex: any) => (
                         <StyledTableRow>
                           {row.map((c: any) => (
                             <StyledTableCell key={c}>
@@ -335,7 +336,7 @@ export default function Database(props: any) {
                             </StyledTableCell>
                           ))}
                           <StyledTableCell>
-                            <Button href="/Employee">
+                            <Button href="/Employee" onClick={() => { console.log(allData.slice(1)[rowIndex][0]) }}>
                               <NavigateNextIcon />
                             </Button>
                           </StyledTableCell>

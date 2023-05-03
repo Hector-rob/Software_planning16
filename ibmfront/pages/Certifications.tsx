@@ -111,11 +111,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function Certifications(props: any) {
   //luego tenemos que cambiar esto por info real
-  const data = [["name", "department", "certification_name"],
-  ["persona1", "Department", "Certification Name"],
-  ["persona2", "Department", "Certification Name"],
-  ["persona2", "Department", "Certification Name"],
-  ["persona2", "Department", "Certification Name"]]
+  const data = [["name", "department", "certification_name", "type"],
+  ["persona1", "Department", "Certification Name", "badge"],
+  ["persona2", "Department", "Certification Name", "external certification"],
+  ["persona2", "Department", "Certification Name", "badge"],
+  ["persona2", "Department", "Certification Name", "external certification"]]
 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -256,7 +256,7 @@ export default function Certifications(props: any) {
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell width={"15%"} align="center">
-                        <img src="./Assets/images/IBMblue.png" alt="Logo" width={120}></img>
+                        <img src= {row[3] == "badge" ? "./Assets/images/IBMblue.png" : "./Assets/images/ExternalCert.png"} alt="Logo" width={120} ></img>
                       </StyledTableCell>
                       <StyledTableCell>
                         <Grid
