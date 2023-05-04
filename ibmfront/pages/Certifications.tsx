@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -35,6 +35,12 @@ import List from '@mui/material/List';
 import MuiDrawer from '@mui/material/Drawer';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
+import Axios from "axios";
+
+
+
+
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -110,6 +116,18 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 export default function Certifications(props: any) {
+
+  const [pendingCertificationsList, setPendingCertificationsList] = useState([]);
+
+  useEffect(() => {
+    Axios.get("http://localhost:5000/exportPendingCertifications").then((response) => {
+      console.log(response.data);
+      setPendingCertificationsList(response.data);
+    });
+
+  }, []);
+
+  console.log(pendingCertificationsList);
   //luego tenemos que cambiar esto por info real
   const data = [["name", "department", "certification_name", "type"],
   ["persona1", "Department", "Certification Name", "badge"],
@@ -232,9 +250,26 @@ export default function Certifications(props: any) {
           <br />
           <Typography fontSize={30} fontWeight={600} sx={{ mt: 2, }}>Pending Certifications</Typography>
           <Box display="flex-start" sx={{ height: 10, width: 0.3, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
+
           <br></br>
           <br></br>
           <br></br>
+        
+       <br></br>
+
+       
+
+
+
+       {pendingCertificationsList.map((val)=> {
+
+
+         return <div> <h3> UID: {val.uid} | Department: {val.department} | Work Location : {val.work_location} | Certification Name : {val.certification_name} | Issue Date: {val.issue_date} | Type: {val.type} </h3>
+    
+         </div>
+         
+         
+       })}
           <React.Fragment>
             <TableContainer component={Paper}>
               <Table aria-label="collapsible table">
