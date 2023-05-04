@@ -25,8 +25,11 @@ var storage = multer.diskStorage({
 var upload = multer({storage: storage});
 
 const certificationController = require('./controllers/certificationController.js')
+const pendingCertificationController = require('./controllers/pendingCertificationController.js')
+
 
 router.post("/importCertifications", upload.single('file'),certificationController.importCertification)
+router.post("/importPendingCertifications", upload.single('file'),pendingCertificationController.importPendingCertification)
 
 //create certification
 router.post("/certification", (req, res) => {
