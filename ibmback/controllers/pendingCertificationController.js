@@ -51,14 +51,17 @@ const exportPendingCertification= async(req,res) =>{
             pendingCertificationsArr.push({uid, department,work_location, certification_name, issue_date, type});
 
         }));
+        console.log(pendingCertificationsArr);
+        res.send(pendingCertificationsArr)
+        
+        // const csvFields = ['uid', 'department','work_location','certification_name','issue_date','type'];
+        // const csvParser = new CsvParser({ csvFields});
+        // const csvData = csvParser.parse(pendingCertificationsArr);
+        
 
-        const csvFields = ['uid', 'department','work_location','certification_name','issue_date','type'];
-        const csvParser = new CsvParser({ csvFields});
-        const csvData = csvParser.parse(pendingCertificationsArr);
-
-        res.setHeader("Content-Type","text/csv");
-        res.setHeader("Content-Disposition","text/attatchment: filename=pendingCertificationsData.csv");
-        res.status(200).end(csvData);
+        // res.setHeader("Content-Type","text/csv");
+        // res.setHeader("Content-Disposition","text/attatchment: filename=pendingCertificationsData.csv");
+        // res.status(200).end(csvData);
 
 
 
