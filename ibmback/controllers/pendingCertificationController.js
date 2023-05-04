@@ -3,6 +3,8 @@ var pendingCertifications = require('../models/pendingCertification');
 
 var csv = require('csvtojson');
 
+const CsvParser = require('json2csv').Parser;
+
 
 const importPendingCertification = async(req,res) =>{
     try{
@@ -36,7 +38,39 @@ const importPendingCertification = async(req,res) =>{
     }
 }
 
+const exportPendingCertification= async(req,res) =>{
+    try{
+
+        let pendingCertificationsArr = [];
+
+        var pendingCertificationsData = await pendingCertifications.find({})
+
+        pendingCertificationsData.forEach((pendingCertification => {
+            const {id,uid, department,work_location, certification_name, issue_date, type} = pendingCertification;
+
+            pendingCertificationsArr.push({uid, department,work_location, certification_name, issue_date, type});
+
+        }));
+
+        const csvFields = ['uid', 'department','work_location','certification_name','issue_date','type'];
+        const csvParser = new CsvParser({ csvFields});
+        const csvData = csvParser.parse(pendingCertificationsArr);
+
+        res.setHeader("Content-Type","text/csv");
+        res.setHeader("Content-Disposition","text/attatchment: filename=pendingCertificationsData.csv");
+        res.status(200).end(csvData);
+
+
+
+    } catch(error){
+        res.send({status: 400, success:false, msg:error.message })
+
+
+    }
+}
+
 module.exports = {
-    importPendingCertification
+    importPendingCertification,
+    exportPendingCertification
 
 }

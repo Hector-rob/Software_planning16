@@ -31,6 +31,9 @@ const pendingCertificationController = require('./controllers/pendingCertificati
 router.post("/importCertifications", upload.single('file'),certificationController.importCertification)
 router.post("/importPendingCertifications", upload.single('file'),pendingCertificationController.importPendingCertification)
 
+
+router.get("/exportPendingCertifications", pendingCertificationController.exportPendingCertification)
+
 //create certification
 router.post("/certification", (req, res) => {
     const certification = certificationsSchema(req.body);
