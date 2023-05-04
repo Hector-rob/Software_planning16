@@ -1,7 +1,31 @@
 const express = require("express");
-
+const multer = require("multer");
+const path = require("path");
+const bodyParser = require("body-parser");
 const userSchema = require('./models/user.js');
 const router = express.Router();
+
+router.use(bodyParser.urlencoded({extended: true}));
+router.use(express.static(path.resolve(__dirname,'public')));
+
+var storage = multer.diskStorage({
+    destination:(req,file,cb) => {
+        cb(null,'./public/uploads')
+
+    },
+    filename:(req,file,cb) => {
+        cb(null,file.originalname)
+
+    }
+
+
+});
+
+var upload = multer({storage: storage});
+
+const userController = require('./controllers/userController')
+
+router.post("/importFile", upload.single('file'),userController.importCertification)
 
 
 //FILTER AND PARAMS ARE JUST BY NAME IMPORTANT NOTE
@@ -64,6 +88,8 @@ router.delete("/user/:name", (req, res) => {
     .then((data) => res.json(data))
     .catch((error) => res.json({message: error}))
 });
+
+
 
 
 module.exports = router;
