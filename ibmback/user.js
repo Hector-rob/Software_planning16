@@ -4,6 +4,10 @@ const userSchema = require('./models/user.js');
 const router = express.Router();
 
 
+
+
+
+
 //FILTER AND PARAMS ARE JUST BY NAME IMPORTANT NOTE
 
 //create user
@@ -64,6 +68,8 @@ router.delete("/user/:name", (req, res) => {
     .then((data) => res.json(data))
     .catch((error) => res.json({message: error}))
 });
+
+
 
 
 module.exports = router;

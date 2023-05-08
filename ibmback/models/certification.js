@@ -12,7 +12,7 @@ const certificationsSchema = mongoose.Schema({
     },
     work_location: {
         type: String,
-        required: true
+        required: false
     },
     certification_name: {
         type: String,
@@ -20,7 +20,7 @@ const certificationsSchema = mongoose.Schema({
     },
     issue_date: {
         type: String,
-        required: true
+        required: false
     },
     type: {
         type: String,
