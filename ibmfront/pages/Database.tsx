@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import Input from '@mui/material/Input';
 import Container from '@mui/material/Container';
 import * as XLSX from "xlsx";
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -36,6 +36,9 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import List from '@mui/material/List';
 import MuiDrawer from '@mui/material/Drawer';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import Axios from "axios";
+
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -112,6 +115,20 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function Database(props: any) {
 
+
+  const [certificationsList, setCertificationsList] = useState([]);
+
+  useEffect(() => {
+    Axios.get("http://localhost:5000/certification").then((response) => {
+      console.log(response.data);
+      setCertificationsList(response.data);
+    });
+
+  }, []);
+
+  console.log(certificationsList);
+
+
   const inputRef = useRef(null);
 
   const [fileName, setFileName] = useState(null);
@@ -153,7 +170,7 @@ export default function Database(props: any) {
       header: 1
     });
 
-    setData(jsonData);
+    setData(certificationsList);
 
     console.log("esto", jsonData[0]);
 
@@ -309,6 +326,16 @@ export default function Database(props: any) {
                 {/* <div>espera un poquis a que cargue</div> */}
               </React.Fragment>
             )}
+
+          {certificationsList.map((val)=> {
+
+
+          return <div> <h3> UID: {val.uid} | Department: {val.department} | Work Location : {val.work_location} | Certification Name : {val.certification_name} | Issue Date: {val.issue_date} | Type: {val.type} </h3>
+
+          </div>
+
+
+          })}
 
 
             {allData &&
