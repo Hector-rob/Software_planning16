@@ -126,7 +126,7 @@ export default function Database(props: any) {
 
   }, []);
 
-  console.log(certificationsList);
+  //console.log(certificationsList);
 
 
   const inputRef = useRef(null);
@@ -323,29 +323,23 @@ export default function Database(props: any) {
             {fileName && (
               <React.Fragment>
                 <Typography component='div' variant="h5" align="center" sx={{ mb: 3, mt: 2 }}><Box fontWeight={600} display='inline'>File Name:</Box> <span>{fileName}</span></Typography>
-                {/* <div>espera un poquis a que cargue</div> */}
               </React.Fragment>
             )}
 
-          {certificationsList.map((val)=> {
-
-
-          return <div> <h3> UID: {val.uid} | Department: {val.department} | Work Location : {val.work_location} | Certification Name : {val.certification_name} | Issue Date: {val.issue_date} | Type: {val.type} </h3>
+          {/* {certificationsList.map((val)=> {
+            return <div> 
+              <h3> UID: {val.uid} | Department: {val.department} | Work Location : {val.work_location} | Certification Name : {val.certification_name} | Issue Date: {val.issue_date} | Type: {val.type} </h3>
 
           </div>
 
-
-          })}
-
-
-            {allData &&
+          })} */}
 
               <React.Fragment>
                 <TableContainer component={Paper}>
                   <Table aria-label="collapsible table">
                     <TableHead>
                       <TableRow>
-                        {allData[0].map(
+                        {rowHeaders.map(
                           (h: any, index) => <StyledTableCell key={h}> <Typography variant="h6"><strong>{rowHeaders[index]}</strong></Typography>  </StyledTableCell>
                         )}
                         <StyledTableCell> </StyledTableCell>
@@ -355,30 +349,25 @@ export default function Database(props: any) {
                     </TableHead>
 
                     <TableBody>
-                      {allData.slice(1).map((row: any, rowIndex: any) => (
-                        <StyledTableRow>
-                          {row.map((c: any) => (
-                            <StyledTableCell key={c}>
-                              <Typography variant="subtitle1">{c}</Typography>
+                      {certificationsList.map((row: any, rowIndex: any) => (
+                        <StyledTableRow key={rowIndex}>
+                          {Object.values(row).slice(1, -1).map((cell: any, cellIndex: any) => (
+                            <StyledTableCell key={cellIndex}>
+                              <Typography variant="subtitle1">{cell}</Typography>
                             </StyledTableCell>
                           ))}
                           <StyledTableCell>
-                            <Button href="/Employee" onClick={() => { console.log(allData.slice(1)[rowIndex][0]) }}>
+                            {/* <Button href="/Employee" onClick={() => { console.log(allData.slice(1)[rowIndex][0]) }}>
                               <NavigateNextIcon />
-                            </Button>
+                            </Button> */}
                           </StyledTableCell>
                         </StyledTableRow>
-                      )
-                      )}
-
+                      ))}
                     </TableBody>
 
                   </Table>
                 </TableContainer>
               </React.Fragment>
-
-            }
-
 
           </div>
 
