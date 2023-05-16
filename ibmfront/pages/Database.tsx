@@ -123,6 +123,35 @@ export default function Database(props: any) {
   const [certificationsList, setCertificationsList] = useState([]);
   const [certificationsDoc, setCertificationsDoc] = useState([]);
   var [csvData, setCsvData] = useState([]);
+  const [file2, setFile2] = useState();
+  const [fileName2, setFileName2] = useState("");
+
+
+  const saveFile = (e) => {
+    setFile2(e.target.files[0]);
+    setFileName2(e.target.files[0].name);
+    console.log(e);
+    console.log(fileName2);
+
+  };
+
+  const uploadFile = async (e) => {
+    const formData = new FormData();
+    formData.append("file", file2);
+    formData.append("fileName", fileName2);
+    try {
+      const res = await Axios.post(
+        "http://localhost:5000/importCertifications",
+        formData
+      );
+      console.log(res);
+      console.log("gg");
+
+    } catch (ex) {
+      console.log(ex);
+      console.log("error");
+    }
+  };
 
   useEffect(() => {
     Axios.get("http://localhost:5000/certification").then((response) => {
@@ -234,6 +263,7 @@ export default function Database(props: any) {
   }
 
   return (
+   
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <Drawer variant="permanent" open={open}>
@@ -332,10 +362,12 @@ export default function Database(props: any) {
 
               <input
                 type="file"
-                accept=".xlsx, .xls"
+                accept=".xlsx, .xls, .csv"
                 style={{ display: 'none' }}
                 id="contained-button-file"
-                onChange={e => handleFile(e)}
+                onChange={e => saveFile(e)}
+                // onChange={e => handleFile(e)}
+               
               />
               <label htmlFor="contained-button-file">
                 <Button variant="contained" component="span"
@@ -343,10 +375,15 @@ export default function Database(props: any) {
                     backgroundColor: "#000000",
                     padding: "18px 36px"
                   }}
+                  
+                   onClick={uploadFile}
                   endIcon={<CloudUploadRoundedIcon />}>
                   Upload
                 </Button>
               </label>
+
+              <input type="file" onChange={saveFile} />
+          <button onClick={uploadFile}>Upload</button>
 
 
               <Button variant="contained" component="span"
