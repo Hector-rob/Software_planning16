@@ -378,10 +378,7 @@ export default function Database(props: any) {
 
 
               <Button variant="contained" component="span"
-
                 onClick={exportCertifications}
-              
-
                 style={{
                   backgroundColor: "#000000",
                   padding: "18px 36px"
@@ -417,9 +414,7 @@ export default function Database(props: any) {
           {/* {certificationsList.map((val)=> {
             return <div> 
               <h3> UID: {val.uid} | Department: {val.department} | Work Location : {val.work_location} | Certification Name : {val.certification_name} | Issue Date: {val.issue_date} | Type: {val.type} </h3>
-
           </div>
-
           })} */}
 
               <React.Fragment>
@@ -470,9 +465,7 @@ export default function Database(props: any) {
               </React.Fragment>
 
           </div>
-
           <br></br>
-
         </Container>
       </Box>
     </Box>

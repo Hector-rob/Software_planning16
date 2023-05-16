@@ -15,10 +15,10 @@
   ],
   "rootMainFiles": [],
   "pages": {
-    "/Database": [
+    "/Certifications": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/Database.js"
+      "static/chunks/pages/Certifications.js"
     ],
     "/_app": [
       "static/chunks/webpack.js",
