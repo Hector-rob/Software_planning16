@@ -37,6 +37,8 @@ import List from '@mui/material/List';
 import MuiDrawer from '@mui/material/Drawer';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Axios from "axios";
+import exportFromJSON from "export-from-json";
+import Papa from 'papaparse';
 
 
 
@@ -96,6 +98,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
+
+
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     width: drawerWidth,
@@ -117,6 +121,8 @@ export default function Database(props: any) {
 
 
   const [certificationsList, setCertificationsList] = useState([]);
+  const [certificationsDoc, setCertificationsDoc] = useState([]);
+  var [csvData, setCsvData] = useState([]);
 
   useEffect(() => {
     Axios.get("http://localhost:5000/certification").then((response) => {
@@ -128,7 +134,6 @@ export default function Database(props: any) {
 
   console.log(certificationsList);
 
-
   const inputRef = useRef(null);
 
   const [fileName, setFileName] = useState(null);
@@ -139,6 +144,55 @@ export default function Database(props: any) {
   const menuRefs = ["/MainPage", "/Database", "/Certifications"];
   const rowHeaders = ["ID", "Department", "Location", "Certification Name", "Date", "Type"];
 
+  // const exportCertifications = async () => {
+  //     const response = await fetch('http://localhost:5000/exportCertifications');
+  //     const body = await response.json();
+
+  //     if (response.status !== 200) {
+  //       console.error("a");
+  //       throw Error(body.message) 
+  //     }
+  //     console.log(response);
+  //     // fetch('http://localhost:5000/exportCertifications')
+  //     // .then((res) => res.json())
+  //     // .then((response) => {
+  //     //   const filename = "certifications";
+  //     //   const exportType = exportFromJSON.types.csv;
+  //     //   exportFromJSON({data: response.todos, fileName, exportType});
+  //     // });
+      
+      
+
+  //     return body;
+      
+  //   };
+
+    const exportCertifications = async () => {
+      // const response = await fetch('http://localhost:5000/exportCertifications')
+      Axios.get("http://localhost:5000/exportCertifications")
+      .then(response => {
+        // Convert data to CSV format
+        const csvData = Papa.unparse(response.data);
+        setCsvData(csvData)
+        exportData(csvData, 'certifications.csv', 'text/csv;charset=utf-8;');
+      })
+        .catch(error => {
+          // Handle errors
+          console.error(error);
+        });
+    }
+
+    const exportData = (data, fileName, type) => {
+      // Create a link and download the file
+      const blob = new Blob([data], { type });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    };
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -146,6 +200,7 @@ export default function Database(props: any) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
 
   const handleFile = async (e: any) => {
 
@@ -295,6 +350,10 @@ export default function Database(props: any) {
 
 
               <Button variant="contained" component="span"
+
+                onClick={exportCertifications}
+              
+
                 style={{
                   backgroundColor: "#000000",
                   padding: "18px 36px"
@@ -303,6 +362,7 @@ export default function Database(props: any) {
                 endIcon={<CloudDownloadRoundedIcon />}>
                 Export
               </Button>
+
 
               <Button variant="contained" component="span"
                 style={{
