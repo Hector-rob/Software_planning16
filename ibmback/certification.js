@@ -33,6 +33,7 @@ router.post("/importPendingCertifications", upload.single('file'),pendingCertifi
 
 
 router.get("/exportPendingCertifications", pendingCertificationController.exportPendingCertification)
+router.get("/exportCertifications", certificationController.exportCertification)
 
 //create certification
 router.post("/certification", (req, res) => {

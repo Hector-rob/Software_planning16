@@ -3,6 +3,7 @@ var Certifications = require('../models/certification');
 
 var csv = require('csvtojson');
 
+const CsvParser = require('json2csv').Parser;
 
 const importCertification = async(req,res) =>{
     try{
@@ -36,6 +37,42 @@ const importCertification = async(req,res) =>{
     }
 }
 
+
+const exportCertification= async(req,res) =>{
+    try{
+
+        let certificationsArr = [];
+
+        var certificationsData = await Certifications.find({})
+
+        certificationsData.forEach((certification => {
+            const {id,uid, department,work_location, certification_name, issue_date, type} = certification;
+
+            certificationsArr.push({uid, department,work_location, certification_name, issue_date, type});
+
+        }));
+        console.log(certificationsArr);
+        res.send(certificationsArr)
+        
+        // const csvFields = ['uid', 'department','work_location','certification_name','issue_date','type'];
+        // const csvParser = new CsvParser({ csvFields});
+        // const csvData = csvParser.parse(certificationsArr);
+        
+
+        // res.setHeader("Content-Type","text/csv");
+        // res.setHeader("Content-Disposition","text/attatchment: filename=certificationsData.csv");
+        // res.status(200).end(csvData);
+
+
+
+    } catch(error){
+        res.send({status: 400, success:false, msg:error.message })
+
+
+    }
+}
+
 module.exports = {
-    importCertification
+    importCertification,
+    exportCertification
 }
