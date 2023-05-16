@@ -38,10 +38,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import Axios from "axios";
 
 
-
-
-
-
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#0F62FE",
@@ -129,11 +125,23 @@ export default function Certifications(props: any) {
 
   console.log(pendingCertificationsList);
   //luego tenemos que cambiar esto por info real
-  const data = [["name", "department", "certification_name", "type"],
+/*   const data = [["name", "department", "certification_name", "type"],
   ["persona1", "Department", "Certification Name", "badge"],
-  ["persona2", "Department", "Certification Name", "external certification"],
   ["persona2", "Department", "Certification Name", "badge"],
-  ["persona2", "Department", "Certification Name", "external certification"]]
+  ["persona2", "Department", "Certification Name", "badge"],
+  ["persona2", "Department", "Certification Name", "external certification"]] */
+
+  const data = pendingCertificationsList.map((val) => [
+    val.uid,
+    val.department,
+    val.work_location,
+    val.certification_name,
+    val.issue_date,
+    val.type,
+  ]);
+
+  console.log("data", data);
+  
 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -252,46 +260,34 @@ export default function Certifications(props: any) {
           <Box display="flex-start" sx={{ height: 10, width: 0.3, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
 
           <br></br>
-          <br></br>
-          <br></br>
-        
-       <br></br>
-
-       
-
-
-
-       {pendingCertificationsList.map((val)=> {
-
-
+          <br></br>        
+{/*        {pendingCertificationsList.map((val)=> {
          return <div> <h3> UID: {val.uid} | Department: {val.department} | Work Location : {val.work_location} | Certification Name : {val.certification_name} | Issue Date: {val.issue_date} | Type: {val.type} </h3>
-    
          </div>
-         
-         
-       })}
+       })} */}
+
           <React.Fragment>
             <TableContainer component={Paper}>
               <Table aria-label="collapsible table">
                 <TableHead></TableHead>
                 <TableBody>
-                  {data.slice(1).map((row: any) => (
+                  {data.map((row: any) => (
                     <StyledTableRow key={row[0]}>
                       <StyledTableCell width={"10%"} align="center">
                         <AccountCircleRoundedIcon sx={{ fontSize: 100 }}></AccountCircleRoundedIcon>
                       </StyledTableCell>
                       <StyledTableCell width={"12%"} align="center">
-                        <Typography variant="subtitle1" fontWeight={'bold'}>{row[0]} </Typography>
-                        <Typography variant="subtitle1" >{row[1]} </Typography>
+                        <Typography variant="subtitle1" fontWeight={'bold'}> {row[0]} </Typography>
+                        <Typography variant="subtitle1" >{row[1]}  </Typography>
 
                       </StyledTableCell>
                       <StyledTableCell width={"20%"} align="center">
                         <Typography variant="subtitle1" style={{ color: '#0F62FE' }}>
-                          {row[2]}
+                          {row[3]}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell width={"15%"} align="center">
-                        <img src= {row[3] == "badge" ? "./Assets/images/IBMblue.png" : "./Assets/images/ExternalCert.png"} alt="Logo" width={120} ></img>
+                        <img src= {row[5] == "badge" ? "./Assets/images/IBMblue.png" : "./Assets/images/ExternalCert.png"} alt="Logo" width={120} ></img>
                       </StyledTableCell>
                       <StyledTableCell>
                         <Grid
