@@ -39,6 +39,8 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Axios from "axios";
 import exportFromJSON from "export-from-json";
 import Papa from 'papaparse';
+import SearchIcon from '@mui/icons-material/Search';
+import { InputAdornment, OutlinedInput } from '@mui/material';
 
 
 
@@ -99,7 +101,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 
-
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     width: drawerWidth,
@@ -119,15 +120,16 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function Database(props: any) {
 
-
   const [certificationsList, setCertificationsList] = useState([]);
   const [certificationsDoc, setCertificationsDoc] = useState([]);
   var [csvData, setCsvData] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     Axios.get("http://localhost:5000/certification").then((response) => {
       console.log(response.data);
       setCertificationsList(response.data);
+      setFilteredData(response.data);
     });
 
   }, []);
@@ -143,6 +145,9 @@ export default function Database(props: any) {
   const menuIcons = [<HomeIcon />, <PeopleIcon />, <WorkspacePremiumIcon />];
   const menuRefs = ["/MainPage", "/Database", "/Certifications"];
   const rowHeaders = ["ID", "Department", "Location", "Certification Name", "Date", "Type"];
+  const [filteredData, setFilteredData] = useState([]);
+
+
 
   // const exportCertifications = async () => {
   //     const response = await fetch('http://localhost:5000/exportCertifications');
@@ -232,6 +237,21 @@ export default function Database(props: any) {
     e.target.value = null;
 
   }
+
+  const handleSearchChange = (event) => {
+    const value = event.target.value;
+    setSearchValue(value);
+  
+    const filtered = certificationsList.filter((row) =>
+      Object.values(row).some((value) =>
+        String(value).toLowerCase().includes(searchValue.toLowerCase())
+      )
+    );
+    setFilteredData(filtered);
+  };
+
+  const filteredAndPaginatedData = filteredData.slice(0, 20); // Get the first 20 rows
+
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -328,7 +348,9 @@ export default function Database(props: any) {
           >
             <Stack direction="row" spacing={3} sx={{ width: "100%", boxSizing: 'border-box' }}>
 
-              <TextField id="standard-basic" label="Search" variant="standard" sx={{ width: "100%" }} />
+              <TextField id="standard-basic" label="Search" variant="standard" sx={{ width: "100%" }} 
+                value={searchValue}
+                onChange={handleSearchChange} />              
 
               <input
                 type="file"
@@ -409,7 +431,7 @@ export default function Database(props: any) {
                     </TableHead>
 
                     <TableBody>
-                      {certificationsList.map((row: any, rowIndex: any) => (
+                      {filteredAndPaginatedData.map((row: any, rowIndex: any) => (
                         <StyledTableRow key={rowIndex}>
                           {Object.values(row).slice(1, -1).map((cell: any, cellIndex: any) => (
                             <StyledTableCell key={cellIndex}>
