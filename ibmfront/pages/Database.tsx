@@ -39,7 +39,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Axios from "axios";
 import exportFromJSON from "export-from-json";
 import Papa from 'papaparse';
-
+import TablePagination from '@mui/material/TablePagination';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -99,7 +99,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 
-
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     width: drawerWidth,
@@ -119,15 +118,20 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function Database(props: any) {
 
-
   const [certificationsList, setCertificationsList] = useState([]);
   const [certificationsDoc, setCertificationsDoc] = useState([]);
   var [csvData, setCsvData] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10); //number of rows per page
+
 
   useEffect(() => {
     Axios.get("http://localhost:5000/certification").then((response) => {
       console.log(response.data);
       setCertificationsList(response.data);
+      setFilteredData(response.data);
     });
 
   }, []);
@@ -143,6 +147,9 @@ export default function Database(props: any) {
   const menuIcons = [<HomeIcon />, <PeopleIcon />, <WorkspacePremiumIcon />];
   const menuRefs = ["/MainPage", "/Database", "/Certifications"];
   const rowHeaders = ["ID", "Department", "Location", "Certification Name", "Date", "Type"];
+  const [filteredData, setFilteredData] = useState([]);
+
+
 
   // const exportCertifications = async () => {
   //     const response = await fetch('http://localhost:5000/exportCertifications');
@@ -232,6 +239,25 @@ export default function Database(props: any) {
     e.target.value = null;
 
   }
+
+  const handleSearchChange = (event) => {
+    const value = event.target.value;
+    setSearchValue(value);
+  
+    const filtered = certificationsList.filter((row) =>
+      Object.values(row).some((value) =>
+        String(value).toLowerCase().includes(searchValue.toLowerCase())
+      )
+    );
+    setFilteredData(filtered);
+  };
+
+  //const filteredAndPaginatedData = filteredData.slice(0, 20); // Get the first 20 rows
+
+  const indexOfLastRow = (page + 1) * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const paginatedData = filteredData.slice(indexOfFirstRow, indexOfLastRow);
+
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -328,7 +354,9 @@ export default function Database(props: any) {
           >
             <Stack direction="row" spacing={3} sx={{ width: "100%", boxSizing: 'border-box' }}>
 
-              <TextField id="standard-basic" label="Search" variant="standard" sx={{ width: "100%" }} />
+              <TextField id="standard-basic" label="Search" variant="standard" sx={{ width: "100%" }} 
+                value={searchValue}
+                onChange={handleSearchChange} />              
 
               <input
                 type="file"
@@ -350,10 +378,7 @@ export default function Database(props: any) {
 
 
               <Button variant="contained" component="span"
-
                 onClick={exportCertifications}
-              
-
                 style={{
                   backgroundColor: "#000000",
                   padding: "18px 36px"
@@ -389,9 +414,7 @@ export default function Database(props: any) {
           {/* {certificationsList.map((val)=> {
             return <div> 
               <h3> UID: {val.uid} | Department: {val.department} | Work Location : {val.work_location} | Certification Name : {val.certification_name} | Issue Date: {val.issue_date} | Type: {val.type} </h3>
-
           </div>
-
           })} */}
 
               <React.Fragment>
@@ -409,7 +432,7 @@ export default function Database(props: any) {
                     </TableHead>
 
                     <TableBody>
-                      {certificationsList.map((row: any, rowIndex: any) => (
+                      {paginatedData.map((row: any, rowIndex: any) => (
                         <StyledTableRow key={rowIndex}>
                           {Object.values(row).slice(1, -1).map((cell: any, cellIndex: any) => (
                             <StyledTableCell key={cellIndex}>
@@ -427,12 +450,22 @@ export default function Database(props: any) {
 
                   </Table>
                 </TableContainer>
+                <TablePagination
+                  component="div"
+                  count={filteredData.length}
+                  page={page}
+                  onPageChange={(event, newPage) => setPage(newPage)}
+                  rowsPerPage={rowsPerPage}
+                  onRowsPerPageChange={(event) => {
+                    setRowsPerPage(parseInt(event.target.value, 10));
+                    setPage(0);
+                  }}
+                />
+
               </React.Fragment>
 
           </div>
-
           <br></br>
-
         </Container>
       </Box>
     </Box>
