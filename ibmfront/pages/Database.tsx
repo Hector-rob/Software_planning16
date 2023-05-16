@@ -39,9 +39,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Axios from "axios";
 import exportFromJSON from "export-from-json";
 import Papa from 'papaparse';
-import SearchIcon from '@mui/icons-material/Search';
-import { InputAdornment, OutlinedInput } from '@mui/material';
-
+import TablePagination from '@mui/material/TablePagination';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -124,6 +122,10 @@ export default function Database(props: any) {
   const [certificationsDoc, setCertificationsDoc] = useState([]);
   var [csvData, setCsvData] = useState([]);
   const [searchValue, setSearchValue] = useState('');
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10); //number of rows per page
+
 
   useEffect(() => {
     Axios.get("http://localhost:5000/certification").then((response) => {
@@ -250,7 +252,11 @@ export default function Database(props: any) {
     setFilteredData(filtered);
   };
 
-  const filteredAndPaginatedData = filteredData.slice(0, 20); // Get the first 20 rows
+  //const filteredAndPaginatedData = filteredData.slice(0, 20); // Get the first 20 rows
+
+  const indexOfLastRow = (page + 1) * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const paginatedData = filteredData.slice(indexOfFirstRow, indexOfLastRow);
 
 
   return (
@@ -431,7 +437,7 @@ export default function Database(props: any) {
                     </TableHead>
 
                     <TableBody>
-                      {filteredAndPaginatedData.map((row: any, rowIndex: any) => (
+                      {paginatedData.map((row: any, rowIndex: any) => (
                         <StyledTableRow key={rowIndex}>
                           {Object.values(row).slice(1, -1).map((cell: any, cellIndex: any) => (
                             <StyledTableCell key={cellIndex}>
@@ -449,6 +455,18 @@ export default function Database(props: any) {
 
                   </Table>
                 </TableContainer>
+                <TablePagination
+                  component="div"
+                  count={filteredData.length}
+                  page={page}
+                  onPageChange={(event, newPage) => setPage(newPage)}
+                  rowsPerPage={rowsPerPage}
+                  onRowsPerPageChange={(event) => {
+                    setRowsPerPage(parseInt(event.target.value, 10));
+                    setPage(0);
+                  }}
+                />
+
               </React.Fragment>
 
           </div>
