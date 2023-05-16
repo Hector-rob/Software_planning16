@@ -23,7 +23,11 @@ self["webpackHotUpdate_N_E"]("webpack",{},
 /******/ 
 /******/ /* webpack/runtime/getFullHash */
 /******/ !function() {
+<<<<<<< HEAD:ibmfront/.next/static/webpack/webpack.bf7d40ff42e5c541.hot-update.js
+/******/ 	__webpack_require__.h = function() { return "85adaa79b5337b98"; }
+=======
 /******/ 	__webpack_require__.h = function() { return "bf40a9a6853ec613"; }
+>>>>>>> main:ibmfront/.next/static/webpack/webpack.5541d061a2c2e035.hot-update.js
 /******/ }();
 /******/ 
 /******/ }
