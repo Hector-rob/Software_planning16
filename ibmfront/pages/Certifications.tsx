@@ -36,6 +36,7 @@ import MuiDrawer from '@mui/material/Drawer';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
 import Axios from "axios";
+import TablePagination from '@mui/material/TablePagination';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -150,6 +151,9 @@ export default function Certifications(props: any) {
   const menuIcons = [<HomeIcon />, <PeopleIcon />, <WorkspacePremiumIcon />];
   const menuRefs = ["/MainPage", "/Database", "/Certifications"];
 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5); //number of rows per page
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -173,6 +177,10 @@ export default function Certifications(props: any) {
   const handleMessageClose = () => {
     setCommentOpen(false);
   }
+
+  const indexOfLastRow = (page + 1) * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const paginatedData = data.slice(indexOfFirstRow, indexOfLastRow);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -271,7 +279,7 @@ export default function Certifications(props: any) {
               <Table aria-label="collapsible table">
                 <TableHead></TableHead>
                 <TableBody>
-                  {data.map((row: any) => (
+                  {paginatedData.map((row: any) => (
                     <StyledTableRow key={row[0]}>
                       <StyledTableCell width={"10%"} align="center">
                         <AccountCircleRoundedIcon sx={{ fontSize: 100 }}></AccountCircleRoundedIcon>
@@ -378,6 +386,17 @@ export default function Certifications(props: any) {
 
               </Table>
             </TableContainer>
+            <TablePagination
+                  component="div"
+                  count={data.length}
+                  page={page}
+                  onPageChange={(event, newPage) => setPage(newPage)}
+                  rowsPerPage={rowsPerPage}
+                  onRowsPerPageChange={(event) => {
+                    setRowsPerPage(parseInt(event.target.value, 10));
+                    setPage(0);
+                  }}
+                />
           </React.Fragment>
         </Container>
       </Box>
