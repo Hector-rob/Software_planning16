@@ -162,6 +162,7 @@ export default function Database(props: any) {
       );
       console.log(res);
       console.log("gg");
+      refreshPage();
 
     } catch (ex) {
       console.log(ex);
@@ -249,6 +250,10 @@ export default function Database(props: any) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const refreshPage= () =>  {
+    window.location.reload();
+  }
 
 
   const handleFile = async (e: any) => {
@@ -435,7 +440,7 @@ export default function Database(props: any) {
                     padding: "18px 36px"
                   }}
                   
-                   onClick={uploadFile}
+                  //  onClick={uploadFile}
                   endIcon={<FileOpenRoundedIcon />}>
                   Select
                 </Button>
@@ -445,7 +450,7 @@ export default function Database(props: any) {
 
        
             <Tooltip title={fileSelected ? `Click to upload file: ${fileName2}`: "Select a file"}>
-              <label htmlFor="contained-button-file">
+              
                 <Button
                   variant="contained"
                   component="span"
@@ -459,7 +464,7 @@ export default function Database(props: any) {
                 >
                   Upload
                 </Button>
-              </label>
+              
             </Tooltip>
           
 
