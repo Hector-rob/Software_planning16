@@ -344,10 +344,6 @@ export default function Certifications(props: any) {
                                 console.log(certificationDate);
                                 console.log(certificationType);
                                 submitPendingCertification();
-
-
-
-
                               }}
                               // onClick={submitPendingCertification()}
 
