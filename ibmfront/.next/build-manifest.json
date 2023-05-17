@@ -15,11 +15,6 @@
   ],
   "rootMainFiles": [],
   "pages": {
-    "/Certifications": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/Certifications.js"
-    ],
     "/Database": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
