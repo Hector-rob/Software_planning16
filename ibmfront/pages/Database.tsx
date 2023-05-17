@@ -532,9 +532,9 @@ export default function Database(props: any) {
                             </StyledTableCell>
                           ))}
                           <StyledTableCell>
-                            {/* <Button href="/Employee" onClick={() => { console.log(allData.slice(1)[rowIndex][0]) }}>
+                            { <Button href="/Employee"  onClick={() => { console.log(Object.values(row).slice(1,-1)[0])}}>
                               <NavigateNextIcon />
-                            </Button> */}
+                            </Button> }
                           </StyledTableCell>
                         </StyledTableRow>
                       ))}
