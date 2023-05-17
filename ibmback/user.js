@@ -20,7 +20,7 @@ router.post("/user", (req, res) => {
 });
 
 
-//get all cusers
+//get all users
 
 router.get("/user", (req, res) => {
     userSchema

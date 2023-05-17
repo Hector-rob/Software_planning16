@@ -103,7 +103,14 @@ router.delete("/certification/:uid", (req, res) => {
     .deleteOne({"uid": req.params.uid}) //Sin _id ni __v de mongo
     .then((data) => res.json(data))
     .catch((error) => res.json({message: error}))
+    console.log(req.params.uid);
 });
 
+router.delete("/pendingCertification/:uid", (req, res) => {
+    pendingCertificationsSchema
+    .deleteOne({"uid": req.params.uid}) //Sin _id ni __v de mongo
+    .then((data) => res.json(data))
+    .catch((error) => res.json({message: error}))
+});
 
 module.exports = router;
