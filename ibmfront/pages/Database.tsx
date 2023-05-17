@@ -40,6 +40,9 @@ import Axios from "axios";
 import exportFromJSON from "export-from-json";
 import Papa from 'papaparse';
 import TablePagination from '@mui/material/TablePagination';
+import FileOpenRoundedIcon from '@mui/icons-material/FileOpenRounded';
+import Tooltip from '@mui/material/Tooltip';
+
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -129,12 +132,22 @@ export default function Database(props: any) {
   const [file2, setFile2] = useState();
   const [fileName2, setFileName2] = useState("");
 
+  const [fileSelected, setFileSelected] = useState(false);
+
+
 
   const saveFile = (e) => {
     setFile2(e.target.files[0]);
     setFileName2(e.target.files[0].name);
     console.log(e);
     console.log(fileName2);
+
+    if (e.target.files.length > 0) {
+      setFileSelected(true);
+    } 
+    else {
+      setFileSelected(false);
+    }
 
   };
 
@@ -371,9 +384,23 @@ export default function Database(props: any) {
       <Box component="main" sx={{ flexGrow: 1, }}>
         <DrawerHeader />
         <Container maxWidth={false} sx={{ width: "100%" }}>
-          <Typography fontSize={30} fontWeight={600} >Employees Database</Typography>
+          
+          <Typography fontSize={30} fontWeight={600} >Employees Database</Typography> 
           <Box display="flex-start" sx={{ height: 10, width: 0.3, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
-          <br></br>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            
+            {fileSelected && (
+              <Typography
+              variant="body2"
+              fontSize={14}
+              fontWeight={400}
+              style={{ marginLeft: 'auto' }}
+            >
+              Selected file: {fileName2}
+            </Typography>
+            )}
+            
+          </Box>
           <br></br>
 
           <Grid
@@ -397,7 +424,11 @@ export default function Database(props: any) {
                 // onChange={e => handleFile(e)}
                
               />
-              <label htmlFor="contained-button-file">
+             
+              
+              <input id="select-button" type="file" onChange={saveFile} accept=".csv, .xlsx" style={{ display: 'none' }} />
+              <Tooltip title="Select a file to be uploaded">
+              <label htmlFor="select-button">
                 <Button variant="contained" component="span"
                   style={{
                     backgroundColor: "#000000",
@@ -405,13 +436,32 @@ export default function Database(props: any) {
                   }}
                   
                    onClick={uploadFile}
-                  endIcon={<CloudUploadRoundedIcon />}>
+                  endIcon={<FileOpenRoundedIcon />}>
+                  Select
+                </Button>
+              </label>
+              </Tooltip>
+          {/* <button onClick={uploadFile}>Upload</button> */}
+
+       
+            <Tooltip title={fileSelected ? `Click to upload file: ${fileName2}`: "Select a file"}>
+              <label htmlFor="contained-button-file">
+                <Button
+                  variant="contained"
+                  component="span"
+                  style={{
+                    backgroundColor: fileSelected ? "#000000" : "#888888",
+                    padding: "18px 36px",
+                  }}
+                  onClick={uploadFile}
+                  endIcon={<CloudUploadRoundedIcon />}
+                  disabled={!fileSelected}
+                >
                   Upload
                 </Button>
               </label>
-
-              <input type="file" onChange={saveFile} />
-          <button onClick={uploadFile}>Upload</button>
+            </Tooltip>
+          
 
 
               <Button variant="contained" component="span"
