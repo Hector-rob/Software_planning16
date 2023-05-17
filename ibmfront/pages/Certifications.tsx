@@ -116,6 +116,55 @@ export default function Certifications(props: any) {
 
   const [pendingCertificationsList, setPendingCertificationsList] = useState([]);
 
+  const [certificationUid, setCertificationUid] = useState("");
+  const [certificationDepartment, setCertificationDepartment] = useState("");
+  const [certificationLocation, setCertificationLocation] = useState("");
+  const [certificationName, setCertificationName] = useState("");
+  const [certificationDate, setCertificationDate] = useState("");
+  const [certificationType, setCertificationType] = useState("");
+
+  const submitPendingCertification = () => {
+    Axios.post("http://localhost:5000/certification", {
+        uid: certificationUid,
+        department: certificationDepartment,
+        work_location: certificationLocation,
+        certification_name: certificationName,
+        issue_date: certificationDate,
+        type: certificationType
+    }).then(() => {
+        window.alert("Register was succesful");
+
+    })
+};
+
+// const deletePendingCertification = async (_uid) => {
+//   const params = {
+//     uid: _uid
+//   };
+//   Axios.delete("http://localhost:5000/pendingCertification/:uid", { params }
+//     // params: {
+//     //   uid: certificationUid
+//     // }
+//   ).then(() => {
+//      console.log(params);
+//       window.alert("Deletion was succesful");
+
+//   })
+// };
+
+const deletePendingCertification = async (uid) => {
+    try {
+      const response = await Axios.delete(`http://localhost:5000/pendingCertification/${uid}`);
+      if (response.data.acknowledged && response.data.deletedCount === 0) {
+        console.log('No record found with the specified uid.');
+      } else {
+        console.log('Record deleted successfully.');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     Axios.get("http://localhost:5000/exportPendingCertifications").then((response) => {
       console.log(response.data);
@@ -309,6 +358,24 @@ export default function Certifications(props: any) {
                                 backgroundColor: "#198038",
                                 padding: "9px 18px",
                               }}
+                              onClick={() => {
+                                setCertificationUid(row[0]);
+                                setCertificationDepartment(row[1]);
+                                setCertificationLocation(row[2]);
+                                setCertificationName(row[3]);
+                                setCertificationDate(row[4]);
+                                setCertificationType(row[5]);
+                                // console.log(certificationUid);
+                                // console.log(certificationDepartment);
+                                // console.log(certificationLocation);
+                                // console.log(certificationName);
+                                // console.log(certificationDate);
+                                // console.log(certificationType);
+                                // submitPendingCertification();
+                                deletePendingCertification(row[0]);
+                              }}
+                              // onClick={submitPendingCertification()}
+
                               endIcon={<CheckRoundedIcon />}>
                               Accept
                             </Button>

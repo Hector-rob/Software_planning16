@@ -4,6 +4,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 
 const certificationsSchema = require('./models/certification.js');
+const pendingCertificationsSchema = require('./models/pendingCertification.js');
 const router = express.Router();
 
 router.use(bodyParser.urlencoded({extended: true}));
@@ -43,6 +44,16 @@ router.post("/certification", (req, res) => {
     .then((data) => res.json(data))
     .catch((error) => res.json({message: error}))
 });
+
+//create certification
+router.post("/pendingCertification", (req, res) => {
+    const pendingCertification = pendingCertificationsSchema(req.body);
+    pendingCertification 
+    .save()
+    .then((data) => res.json(data))
+    .catch((error) => res.json({message: error}))
+});
+
 
 
 //get all certifications
@@ -92,7 +103,14 @@ router.delete("/certification/:uid", (req, res) => {
     .deleteOne({"uid": req.params.uid}) //Sin _id ni __v de mongo
     .then((data) => res.json(data))
     .catch((error) => res.json({message: error}))
+    console.log(req.params.uid);
 });
 
+router.delete("/pendingCertification/:uid", (req, res) => {
+    pendingCertificationsSchema
+    .deleteOne({"uid": req.params.uid}) //Sin _id ni __v de mongo
+    .then((data) => res.json(data))
+    .catch((error) => res.json({message: error}))
+});
 
 module.exports = router;
