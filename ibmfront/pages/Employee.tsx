@@ -78,14 +78,14 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function Employee() {
+export default function Employee(props) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
     const menuIcons = [<HomeIcon />, <PeopleIcon />, <WorkspacePremiumIcon />];
     const menuRefs = ["/MainPage", "/Database", "/Certifications"];
 
-    const data = { "uid": "078763781IBM", "name": "Derek", "lastName": "Morgan", "email": "derek.morgan@email.com", "joinDate": "29 / 08 / 2001", "projects": 223 };
+    const data = { "uid": "1", "name": "Derek", "lastName": "Morgan", "email": "derek.morgan@email.com", "joinDate": "29 / 08 / 2001", "projects": 223 };
 
     const handleDrawerOpen = () => {
         setOpen(true);
