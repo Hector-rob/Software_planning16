@@ -117,6 +117,7 @@ export default function Certifications(props: any) {
   const [pendingCertificationsList, setPendingCertificationsList] = useState([]);
 
   const [certificationUid, setCertificationUid] = useState("");
+  const [certificationuid, setCertificationuid] = useState("");
   const [certificationDepartment, setCertificationDepartment] = useState("");
   const [certificationLocation, setCertificationLocation] = useState("");
   const [certificationName, setCertificationName] = useState("");
@@ -226,8 +227,12 @@ const deletePendingCertification = async (uid) => {
     setOpen(false);
   };
 
-  const handleModalOpen = () => {
+  const handleModalOpen = (row) => {
     setModalOpen(true);
+    const certificationu = row[0];
+    setCertificationuid(certificationu);
+    // deletePendingCertification(certificationuid);
+    
   }
 
   const handleModalClose = () => {
@@ -408,7 +413,7 @@ const deletePendingCertification = async (uid) => {
                               }}
                               onClick={ () => {
                                 
-                                //handleClick(row);
+                                handleClick(row);
                                 // setCertificationUid(row[0]);
                                 // setCertificationDepartment(row[1]);
                                 // setCertificationLocation(row[2]);
@@ -422,7 +427,7 @@ const deletePendingCertification = async (uid) => {
                                 // console.log(certificationDate);
                                 // console.log(certificationType);
                                 
-                                submitPendingCertification(row);
+                                //submitPendingCertification();
                                 //deletePendingCertification(row[0]);
                                 
                               }}
@@ -438,7 +443,10 @@ const deletePendingCertification = async (uid) => {
                                 padding: "9px 18px"
                               }}
                               endIcon={<ClearRoundedIcon />}
-                              onClick={handleModalOpen}>
+                              onClick={() => {
+                                handleModalOpen(row[0]);
+                                
+                              }}>
                               Decline
                             </Button>
                             <Modal open={modalOpen} onClose={handleModalClose} sx={{ backgroundColor: "none", opacity: 0.6, backdropFilter: "blur(1px)" }}>
@@ -457,7 +465,12 @@ const deletePendingCertification = async (uid) => {
                                 </Typography>
                                 <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
                                   <Button variant="contained" sx={{ width: "50%" }} color={"primary"} onClick={handleModalClose} startIcon={<ArrowBackIcon />}><Typography>Cancel</Typography></Button>
-                                  <Button variant="contained" sx={{ width: "50%" }} color={"error"} endIcon={<ClearRoundedIcon />}><Typography fontWeight={700}>Decline</Typography></Button>
+                                  <Button variant="contained" sx={{ width: "50%" }} color={"error"}
+                                  onClick={() => {
+                                    //setCertificationUid(row[0]);
+                                    console.log(certificationuid);
+                                    deletePendingCertification(certificationuid);
+                                    }} endIcon={<ClearRoundedIcon />}><Typography fontWeight={700}>Decline</Typography></Button>
                                 </Stack>
                               </Box>
                             </Modal>
