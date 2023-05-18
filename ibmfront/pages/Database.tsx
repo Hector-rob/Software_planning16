@@ -42,6 +42,7 @@ import Papa from 'papaparse';
 import TablePagination from '@mui/material/TablePagination';
 import FileOpenRoundedIcon from '@mui/icons-material/FileOpenRounded';
 import Tooltip from '@mui/material/Tooltip';
+import Link from "next/link";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -529,11 +530,15 @@ export default function Database(props: any) {
                           </StyledTableCell>
                         ))}
                         <StyledTableCell>
-                          {<Button href={"/Employee?id=" + Object.values(row).slice(1, -1)[0]} onClick={() => {
-                            console.log(Object.values(row).slice(1, -1)[0]);
-                          }}>
-                            <NavigateNextIcon />
-                          </Button>}
+                          {
+                            <Link href={{
+                              pathname: "/Employee",
+                              query: {id: Object.values(row).slice(1, -1)[0] as String}
+                            }} passHref>
+                              <Button>
+                                <NavigateNextIcon />
+                              </Button>
+                            </Link>}
                         </StyledTableCell>
                       </StyledTableRow>
                     ))}

@@ -25,6 +25,8 @@ import Container from '@mui/material/Container';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useRouter } from 'next/router';
+import { useState, useRef, useEffect } from 'react';
+import Axios from "axios";
 
 const drawerWidth = 240;
 
@@ -98,7 +100,7 @@ export default function Employee(props: any) {
         setOpen(false);
     };
 
-    const employeeId = router.asPath.slice(-12); //Get respective EmployeeID retreived from the Database
+    const employeeId = router.query.id; //Get respective EmployeeID retreived from the Database
     console.log(employeeId);
 
     return (
@@ -201,7 +203,7 @@ export default function Employee(props: any) {
                                         <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
                                             <Stack justifyContent="center" alignItems="center" sx={{ mt: 3, mb: 3 }} spacing={2}>
                                                 <Stack direction="row" spacing={2} divider={<Divider orientation="vertical" flexItem color="#0F62FE" sx={{ width: 7, height: 30 }} />}>
-                                                    <Typography fontSize={20} fontWeight={700}>{data.uid}</Typography>
+                                                    <Typography fontSize={20} fontWeight={700}>{employeeId}</Typography>
                                                     <Typography fontSize={20}>Department</Typography>
                                                 </Stack>
                                                 <Typography component='div' fontSize={24}><Box fontWeight={700} display='inline'>Joined</Box>: {data.joinDate}</Typography>
