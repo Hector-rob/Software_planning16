@@ -123,18 +123,32 @@ export default function Certifications(props: any) {
   const [certificationDate, setCertificationDate] = useState("");
   const [certificationType, setCertificationType] = useState("");
 
-  const submitPendingCertification = () => {
-    Axios.post("http://localhost:5000/certification", {
-        uid: certificationUid,
-        department: certificationDepartment,
-        work_location: certificationLocation,
-        certification_name: certificationName,
-        issue_date: certificationDate,
-        type: certificationType
-    }).then(() => {
-        window.alert("Register was succesful");
+//   const submitPendingCertification = () => {
+//     Axios.post("http://localhost:5000/certification", {
+//         uid: certificationUid,
+//         department: certificationDepartment,
+//         work_location: certificationLocation,
+//         certification_name: certificationName,
+//         issue_date: certificationDate,
+//         type: certificationType
+//     }).then(() => {
+//         window.alert("Register was succesful");
 
-    })
+//     })
+// };
+
+const submitPendingCertification = (row) => {
+  Axios.post("http://localhost:5000/certification", {
+      uid: row[0],
+      department: row[1],
+      work_location: row[2],
+      certification_name: row[3],
+      issue_date: row[4],
+      type: row[5]
+  }).then(() => {
+      window.alert("Register was succesful");
+      deletePendingCertification(row[0]);
+  })
 };
 
 // const deletePendingCertification = async (_uid) => {
@@ -159,6 +173,7 @@ const deletePendingCertification = async (uid) => {
         console.log('No record found with the specified uid.');
       } else {
         console.log('Record deleted successfully.');
+      refreshPage()
       }
     } catch (error) {
       console.error(error);
@@ -225,6 +240,39 @@ const deletePendingCertification = async (uid) => {
 
   const handleMessageClose = () => {
     setCommentOpen(false);
+  }
+  const refreshPage= () =>  {
+    window.location.reload();
+  }
+
+  useEffect(() => {
+    const certificationData = {
+      uid: certificationUid,
+      department: certificationDepartment,
+      work_location: certificationLocation,
+      certification_name: certificationName,
+      issue_date: certificationDate,
+      type: certificationType
+    };
+
+    console.log(certificationData); // Log the certificationData object to the console
+  }, [certificationUid, certificationDepartment, certificationLocation, certificationName, certificationDate, certificationType]);
+
+  const handleClick = (row) => {
+    setCertificationUid(row[0]);
+    setCertificationDepartment(row[1]);
+    setCertificationLocation(row[2]);
+    setCertificationName(row[3]);
+    setCertificationDate(row[4]);
+    setCertificationType(row[5]);
+
+   
+    // console.log(certificationData); // Log the certificationData object to the console
+
+    submitPendingCertification(row);
+    deletePendingCertification(row[0]);
+
+    //submitPendingCertification();
   }
 
   const indexOfLastRow = (page + 1) * rowsPerPage;
@@ -352,27 +400,31 @@ const deletePendingCertification = async (uid) => {
                           alignItems="center"
                           justifyContent="center"
                         >
-                          <Stack direction="row" spacing={4} sx={{ ml: 5, boxSizing: 'border-box' }}>
+                          <Stack direction="row" spacing={4} sx={{ ml: 10, boxSizing: 'border-box' }}>
                             <Button variant="contained" component="span"
                               style={{
                                 backgroundColor: "#198038",
                                 padding: "9px 18px",
                               }}
-                              onClick={() => {
-                                setCertificationUid(row[0]);
-                                setCertificationDepartment(row[1]);
-                                setCertificationLocation(row[2]);
-                                setCertificationName(row[3]);
-                                setCertificationDate(row[4]);
-                                setCertificationType(row[5]);
+                              onClick={ () => {
+                                
+                                //handleClick(row);
+                                // setCertificationUid(row[0]);
+                                // setCertificationDepartment(row[1]);
+                                // setCertificationLocation(row[2]);
+                                // setCertificationName(row[3]);
+                                // setCertificationDate(row[4]);
+                                // setCertificationType(row[5]);
                                 // console.log(certificationUid);
                                 // console.log(certificationDepartment);
                                 // console.log(certificationLocation);
                                 // console.log(certificationName);
                                 // console.log(certificationDate);
                                 // console.log(certificationType);
-                                // submitPendingCertification();
-                                deletePendingCertification(row[0]);
+                                
+                                submitPendingCertification(row);
+                                //deletePendingCertification(row[0]);
+                                
                               }}
                               // onClick={submitPendingCertification()}
 
