@@ -15,11 +15,6 @@
   ],
   "rootMainFiles": [],
   "pages": {
-    "/Database": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/Database.js"
-    ],
     "/Employee": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",

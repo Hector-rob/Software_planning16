@@ -24,6 +24,7 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import Container from '@mui/material/Container';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useRouter } from 'next/router';
 
 const drawerWidth = 240;
 
@@ -78,9 +79,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function Employee(props) {
+
+export default function Employee(props: any) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const router = useRouter();
 
     const menuIcons = [<HomeIcon />, <PeopleIcon />, <WorkspacePremiumIcon />];
     const menuRefs = ["/MainPage", "/Database", "/Certifications"];
@@ -94,6 +97,9 @@ export default function Employee(props) {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const employeeId = router.asPath.slice(-12); //Get respective EmployeeID retreived from the Database
+    console.log(employeeId);
 
     return (
         <Box sx={{ display: 'flex', width: "100%", height: "100%", position: "absolute" }}>
