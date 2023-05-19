@@ -85,6 +85,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function Employee(props: any) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const [employeeData, setEmployeeData] = useState([]);
+
     const router = useRouter();
 
     const menuIcons = [<HomeIcon />, <PeopleIcon />, <WorkspacePremiumIcon />];
@@ -101,7 +103,19 @@ export default function Employee(props: any) {
     };
 
     const employeeId = router.query.id; //Get respective EmployeeID retreived from the Database
-    console.log(employeeId);
+    //console.log(employeeId);
+
+    useEffect(() => {
+        Axios.get("http://localhost:5000/employeeInfo").then((response) => {
+            console.log(response.data);
+            setEmployeeData(response.data);
+
+        });
+
+    }, []);
+
+    const employeeInfo = employeeData.find(x => x.uid === employeeId);
+    console.log(employeeInfo);
 
     return (
         <Box sx={{ display: 'flex', width: "100%", height: "100%", position: "absolute" }}>
@@ -256,6 +270,6 @@ export default function Employee(props: any) {
                     </Grid>
                 </Container>
             </Box>
-        </Box >
+        </Box >
     );
 }

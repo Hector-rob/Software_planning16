@@ -5,6 +5,7 @@ const cors = require("cors");
 const port = process.env.PORT || 5000; //Line 3
 const certificationRoutes = require("./certification.js");
 const userRoutes = require("./user.js");
+const employeeInfoRoutes = require("./employeeInfo.js");
 
 
 
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(cors());
 app.use(certificationRoutes);
 app.use(userRoutes);
+app.use(employeeInfoRoutes);
 
 
 
