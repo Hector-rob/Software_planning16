@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -100,48 +100,60 @@ export default function MainPage() {
   };
 
   const [file2, setFile2] = useState();
-const [fileName2, setFileName2] = useState("");
-const [fileSelected, setFileSelected] = useState(false);
+  const [fileName2, setFileName2] = useState("");
+  const [fileSelected, setFileSelected] = useState(false);
 
+  const [badges, setBadges] = useState("");
+  const [externalCerts, setExternalCerts] = useState("");
+  const [allCertifications, setCertifications] = useState([]);
 
-const saveFile = (e) => {
-  setFile2(e.target.files[0]);
-  setFileName2(e.target.files[0].name);
-  console.log(e);
-  console.log(fileName2);
+  useEffect(() => {
+    Axios.get("http://localhost:5000/certification").then((response) => {
+      setBadges(response.data.filter(x => x.type === "badge").length); //Get number of badges
+      setExternalCerts(response.data.filter(x => x.type === "external certification").length); //Get number of external certifications
+    });
+  }, []);
 
-  if (e.target.files.length > 0) {
-    setFileSelected(true);
-  } 
-  else {
-    setFileSelected(false);
+  console.log(badges, externalCerts);
+
+  const saveFile = (e) => {
+    setFile2(e.target.files[0]);
+    setFileName2(e.target.files[0].name);
+    console.log(e);
+    console.log(fileName2);
+
+    if (e.target.files.length > 0) {
+      setFileSelected(true);
+    }
+    else {
+      setFileSelected(false);
+    }
+
+  };
+
+  const uploadFile = async (e) => {
+    const formData = new FormData();
+    formData.append("file", file2);
+    formData.append("fileName", fileName2);
+    try {
+      const res = await Axios.post(
+        "http://localhost:5000/importPendingCertifications",
+        formData
+      );
+      console.log(res);
+      console.log("gg");
+      window.alert("The certification was uploaded");
+      refreshPage();
+
+    } catch (ex) {
+      console.log(ex);
+      console.log("error");
+    }
+  };
+
+  const refreshPage = () => {
+    window.location.reload();
   }
-
-};
-
-const uploadFile = async (e) => {
-  const formData = new FormData();
-  formData.append("file", file2);
-  formData.append("fileName", fileName2);
-  try {
-    const res = await Axios.post(
-      "http://localhost:5000/importPendingCertifications",
-      formData
-    );
-    console.log(res);
-    console.log("gg");
-    window.alert("The certification was uploaded");
-    refreshPage();
-
-  } catch (ex) {
-    console.log(ex);
-    console.log("error");
-  }
-};
-
-const refreshPage= () =>  {
-  window.location.reload();
-}
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -223,100 +235,104 @@ const refreshPage= () =>  {
           </ListItemButton>
         </ListItem>
       </Drawer>
-      
-        <DrawerHeader />
 
-        <Box component="main" sx={{ width: "90%" }}>
-          <Container maxWidth={false} sx={{ width: "100%" }}>
-            <br />
-            <Typography fontSize={30} fontWeight={600} sx={{ mt: 2, }}>Welcome back, <Typography component="span" fontSize={30} fontWeight={300}> UserName</Typography></Typography>
-            <Box display="flex-start" sx={{ height: 10, width: 0.4, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
-            <br></br>
-        
-          </Container>
-          
-          <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
-          
-            <Container sx={{ marginLeft:3, width: "60%", maxHeight:"25%", backgroundColor:"grey.300"}}>
-              <Typography fontSize={30} fontWeight={600} sx={{ mt: 2, }}>All Certifications</Typography>
-              <Box display="flex-start" sx={{ height: 10, width: 0.9, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
-              <br />
-              
-              <Box sx={{display: "inline-flex", flexDirection: 'row', width: "32%"}}>
-              
-                <DonutChart data={{ 
-                                labels: ['Low', 'Medium', 'High', 'Critical'], 
-                                values: [10, 20, 30, 40], 
-                                colors: ['#FFEE99', '#FF9F00', '#FF4500', '#E12901'] }} />
-                
-                <DonutChart data={{ 
-                                labels: ['Low', 'Medium', 'High', 'Critical'], 
-                                values: [10, 20, 30, 40], 
-                                colors: ['#FFEE99', '#FF9F00', '#FF4500', '#E12901'] }} />
+      <DrawerHeader />
 
-                <DonutChart data={{ 
-                                labels: ['Low', 'Medium', 'High', 'Critical'], 
-                                values: [10, 20, 30, 40], 
-                                colors: ['#FFEE99', '#FF9F00', '#FF4500', '#E12901'] }} />
-
-              </Box>
-
-              
-
-
-
-            </Container>
-
-            <Container sx={{ marginLeft:3, width: "40%",  maxHeight:"25%", backgroundColor:"grey.300"}}>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <Typography fontSize={30} fontWeight={600} sx={{ mt: 2 }}> Certifications  
-                <Typography component="span" fontSize={20} fontWeight={300} sx={{ verticalAlign: 'center' }}> by Department</Typography>
-                </Typography>
-              </Box>
-
-              <Box display="flex-start" sx={{ height: 10, width: 0.9, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
-              <br />
-
-              <Box sx={{width:"100%", height: "60%", display: 'flex', justifyContent: 'center', }}>
-                <PieChart data={{ 
-                                labels: ['Low', 'Medium', 'High', 'Critical'], 
-                                values: [10, 20, 30, 40], 
-                                colors: ['#FFEE99', '#FF9F00', '#FF4500', '#E12901'] }} />
-              </Box>
-
-             
-        
-
-            </Container>
-          </Box>
-
+      <Box component="main" sx={{ width: "90%" }}>
+        <Container maxWidth={false} sx={{ width: "100%" }}>
           <br />
+          <Typography fontSize={30} fontWeight={600} sx={{ mt: 2, }}>Welcome back, <Typography component="span" fontSize={30} fontWeight={300}> UserName</Typography></Typography>
+          <Box display="flex-start" sx={{ height: 10, width: 0.4, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
+          <br></br>
 
-          <Box sx={{ display: "flex", flexDirection: "row", width: "60%" }}>
-            <Container sx={{ marginLeft:3, width: "100%", backgroundColor:"grey.300"}}>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Typography fontSize={30} fontWeight={600} sx={{ mt: 2 }}> Upload  
-                  <Typography component="span" fontSize={20} fontWeight={300} sx={{ verticalAlign: 'center' }}> Certifications</Typography>
-                  </Typography>
-                </Box>
+        </Container>
 
-              <Box display="flex-start" sx={{ height: 10, width: 0.9, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
-              <br />
-            
-              <Box sx={{  width: "100%", display: "flex", justifyContent: "space-between" }}>
-                <Box>
-                  <Typography fontWeight={600}> Upload files </Typography>
-                  <Typography>Max file size is 500kb. Supported file types are .xlsx and .csv.</Typography>
-                </Box>
-                <input
-                  type="file"
-                  accept=".xlsx, .xls"
-                  style={{ display: 'none' }}
-                  id="contained-button-file"
-                 /*  onChange={e => handleFile(e)} */
-                />
-                <label htmlFor="contained-button-file">
-                  {/* <Button variant="contained" component="span"
+        <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
+
+          <Container sx={{ marginLeft: 3, width: "60%", maxHeight: "25%", backgroundColor: "grey.300" }}>
+            <Typography fontSize={30} fontWeight={600} sx={{ mt: 2, }}>All Certifications</Typography>
+            <Box display="flex-start" sx={{ height: 10, width: 0.9, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
+            <br />
+
+            <Box sx={{ display: "inline-flex", flexDirection: 'row', width: "32%" }}>
+
+              <DonutChart data={{
+                labels: ['Badges', 'External Certifications'],
+                values: [badges, externalCerts],
+                colors: ['#FF4500', '#FFEE99'],
+              }} />
+
+              <DonutChart data={{
+                labels: ['Low', 'Medium', 'High', 'Critical'],
+                values: [10, 20, 30, 40],
+                colors: ['#FFEE99', '#FF9F00', '#FF4500', '#E12901']
+              }} />
+
+              <DonutChart data={{
+                labels: ['Low', 'Medium', 'High', 'Critical'],
+                values: [10, 20, 30, 40],
+                colors: ['#FFEE99', '#FF9F00', '#FF4500', '#E12901']
+              }} />
+
+            </Box>
+
+
+
+
+
+          </Container>
+
+          <Container sx={{ marginLeft: 3, width: "40%", maxHeight: "25%", backgroundColor: "grey.300" }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Typography fontSize={30} fontWeight={600} sx={{ mt: 2 }}> Certifications
+                <Typography component="span" fontSize={20} fontWeight={300} sx={{ verticalAlign: 'center' }}> by Department</Typography>
+              </Typography>
+            </Box>
+
+            <Box display="flex-start" sx={{ height: 10, width: 0.9, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
+            <br />
+
+            <Box sx={{ width: "100%", height: "60%", display: 'flex', justifyContent: 'center', }}>
+              <PieChart data={{
+                labels: ['Low', 'Medium', 'High', 'Critical'],
+                values: [10, 20, 30, 40],
+                colors: ['#FFEE99', '#FF9F00', '#FF4500', '#E12901']
+              }} />
+            </Box>
+
+
+
+
+          </Container>
+        </Box>
+
+        <br />
+
+        <Box sx={{ display: "flex", flexDirection: "row", width: "60%" }}>
+          <Container sx={{ marginLeft: 3, width: "100%", backgroundColor: "grey.300" }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Typography fontSize={30} fontWeight={600} sx={{ mt: 1 }}> Upload
+                <Typography component="span" fontSize={20} fontWeight={300} sx={{ verticalAlign: 'center' }}> Certifications</Typography>
+              </Typography>
+            </Box>
+
+            <Box display="flex-start" sx={{ height: 10, width: 0.9, backgroundColor: "#0F62FE", mt: 1, marginLeft: 0 }}></Box>
+            <br />
+
+            <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
+              <Box>
+                <Typography fontWeight={600} > Upload files </Typography>
+                <Typography sx={{ mb: 1}}>Max file size is 500kb. Supported file types are .xlsx and .csv.</Typography>
+              </Box>
+              <input
+                type="file"
+                accept=".xlsx, .xls"
+                style={{ display: 'none' }}
+                id="contained-button-file"
+              /*  onChange={e => handleFile(e)} */
+              />
+              <label htmlFor="contained-button-file">
+                {/* <Button variant="contained" component="span"
                     style={{
                       backgroundColor: "#000000",
                       padding: "18px 36px"
@@ -324,10 +340,10 @@ const refreshPage= () =>  {
                     endIcon={<CloudUploadRoundedIcon />}>
                     Upload
                   </Button> */}
-                </label>
+              </label>
 
-              </Box>
-              {/* <input
+            </Box>
+            {/* <input
                 type="file"
                 accept=".xlsx, .xls, .csv"
                 style={{ display: 'none' }}
@@ -337,75 +353,76 @@ const refreshPage= () =>  {
                
               /> */}
 
-<Box sx={{ display: 'flex', alignItems: 'center' }}>
-            
-            {fileSelected && (
-              <Typography
-              variant="body2"
-              fontSize={14}
-              fontWeight={400}
-              style={{ marginLeft: 'auto' }}
-            >
-              Selected file: {fileName2}
-            </Typography>
-            )}
-            
-          </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
-           <input
-                type="file"
-                accept=".xlsx, .xls, .csv"
-                style={{ display: 'none' }}
-                id="contained-button-file"
-                onChange={e => saveFile(e)}
-                // onChange={e => handleFile(e)}
-               
-              />
-              <input id="select-button" type="file" onChange={saveFile} accept=".csv, .xlsx" style={{ display: 'none' }} />
-              <Tooltip title="Select a file to be uploaded">
+              {fileSelected && (
+                <Typography
+                  variant="body2"
+                  fontSize={14}
+                  fontWeight={400}
+                  style={{ marginLeft: 'auto' }}
+                >
+                  Selected file: {fileName2}
+                </Typography>
+              )}
+
+            </Box>
+
+            <input
+              type="file"
+              accept=".xlsx, .xls, .csv"
+              style={{ display: 'none' }}
+              id="contained-button-file"
+              onChange={e => saveFile(e)}
+            // onChange={e => handleFile(e)}
+
+            />
+            <input id="select-button" type="file" onChange={saveFile} accept=".csv, .xlsx" style={{ display: 'none' }} />
+            <Tooltip title="Select a file to be uploaded">
               <label htmlFor="select-button">
                 <Button variant="contained" component="span"
                   style={{
                     backgroundColor: "#000000",
                     padding: "18px 36px"
                   }}
-                  
+                  sx={{ mr: 1, mb:1}}
                   //  onClick={uploadFile}
                   endIcon={<FileOpenRoundedIcon />}>
                   Select
                 </Button>
               </label>
-              </Tooltip>
-              <Tooltip title={fileSelected ? `Click to upload file: ${fileName2}`: "Select a file"}>
+            </Tooltip>
+            <Tooltip title={fileSelected ? `Click to upload file: ${fileName2}` : "Select a file"}>
               <Button
-                  variant="contained"
-                  component="span"
-                  style={{
-                    backgroundColor: fileSelected ? "#000000" : "#888888",
-                    padding: "18px 36px",
-                  }}
-                  onClick={uploadFile}
-                  endIcon={<CloudUploadRoundedIcon />}
-                  disabled={!fileSelected}
-                >
-                  Upload
-                </Button>
-              
+                variant="contained"
+                component="span"
+                style={{
+                  backgroundColor: fileSelected ? "#000000" : "#888888",
+                  padding: "18px 36px",
+                }}
+                onClick={uploadFile}
+                endIcon={<CloudUploadRoundedIcon />}
+                disabled={!fileSelected}
+                sx={{mb:1}}
+              >
+                Upload
+              </Button>
+
             </Tooltip>
 
-          
-             
-              
-             
-              <br />
 
-            </Container>
-          
-          </Box>
+
+
+
+            <br />
+
+          </Container>
 
         </Box>
-        <br />
+
+      </Box>
+      <br />
     </Box>
-    
+
   );
 }
