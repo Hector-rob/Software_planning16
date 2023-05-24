@@ -130,6 +130,7 @@ const uploadFile = async (e) => {
     );
     console.log(res);
     console.log("gg");
+    window.alert("The certification was uploaded");
     refreshPage();
 
   } catch (ex) {
