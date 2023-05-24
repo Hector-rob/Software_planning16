@@ -227,10 +227,10 @@ const deletePendingCertification = async (uid) => {
     setOpen(false);
   };
 
-  const handleModalOpen = (row) => {
+  const handleModalOpen = (uid) => {
     setModalOpen(true);
-    const certificationu = row[0];
-    setCertificationuid(certificationu);
+    const certificationu = uid;
+    setCertificationuid(uid);
     // deletePendingCertification(certificationuid);
     
   }
