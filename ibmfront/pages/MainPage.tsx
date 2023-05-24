@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -23,9 +24,13 @@ import DonutChart from '../components/graficaDonut';
 import PieChart from '../components/graficaPie';
 import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded';
 import Button from '@mui/material/Button';
-
+import FileOpenRoundedIcon from '@mui/icons-material/FileOpenRounded';
+import Tooltip from '@mui/material/Tooltip';
+import Axios from "axios";
 
 const drawerWidth = 240;
+
+
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -82,6 +87,7 @@ export default function MainPage() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
+
   const menuIcons = [<HomeIcon />, <PeopleIcon />, <WorkspacePremiumIcon />];
   const menuRefs = ["/MainPage", "/Database", "/Certifications"];
 
@@ -92,6 +98,49 @@ export default function MainPage() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const [file2, setFile2] = useState();
+const [fileName2, setFileName2] = useState("");
+const [fileSelected, setFileSelected] = useState(false);
+
+
+const saveFile = (e) => {
+  setFile2(e.target.files[0]);
+  setFileName2(e.target.files[0].name);
+  console.log(e);
+  console.log(fileName2);
+
+  if (e.target.files.length > 0) {
+    setFileSelected(true);
+  } 
+  else {
+    setFileSelected(false);
+  }
+
+};
+
+const uploadFile = async (e) => {
+  const formData = new FormData();
+  formData.append("file", file2);
+  formData.append("fileName", fileName2);
+  try {
+    const res = await Axios.post(
+      "http://localhost:5000/importPendingCertifications",
+      formData
+    );
+    console.log(res);
+    console.log("gg");
+    refreshPage();
+
+  } catch (ex) {
+    console.log(ex);
+    console.log("error");
+  }
+};
+
+const refreshPage= () =>  {
+  window.location.reload();
+}
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -266,17 +315,87 @@ export default function MainPage() {
                  /*  onChange={e => handleFile(e)} */
                 />
                 <label htmlFor="contained-button-file">
-                  <Button variant="contained" component="span"
+                  {/* <Button variant="contained" component="span"
                     style={{
                       backgroundColor: "#000000",
                       padding: "18px 36px"
                     }}
                     endIcon={<CloudUploadRoundedIcon />}>
                     Upload
-                  </Button>
+                  </Button> */}
                 </label>
 
               </Box>
+              {/* <input
+                type="file"
+                accept=".xlsx, .xls, .csv"
+                style={{ display: 'none' }}
+                id="contained-button-file"
+                onChange={e => saveFile(e)}
+                // onChange={e => handleFile(e)}
+               
+              /> */}
+
+<Box sx={{ display: 'flex', alignItems: 'center' }}>
+            
+            {fileSelected && (
+              <Typography
+              variant="body2"
+              fontSize={14}
+              fontWeight={400}
+              style={{ marginLeft: 'auto' }}
+            >
+              Selected file: {fileName2}
+            </Typography>
+            )}
+            
+          </Box>
+
+           <input
+                type="file"
+                accept=".xlsx, .xls, .csv"
+                style={{ display: 'none' }}
+                id="contained-button-file"
+                onChange={e => saveFile(e)}
+                // onChange={e => handleFile(e)}
+               
+              />
+              <input id="select-button" type="file" onChange={saveFile} accept=".csv, .xlsx" style={{ display: 'none' }} />
+              <Tooltip title="Select a file to be uploaded">
+              <label htmlFor="select-button">
+                <Button variant="contained" component="span"
+                  style={{
+                    backgroundColor: "#000000",
+                    padding: "18px 36px"
+                  }}
+                  
+                  //  onClick={uploadFile}
+                  endIcon={<FileOpenRoundedIcon />}>
+                  Select
+                </Button>
+              </label>
+              </Tooltip>
+              <Tooltip title={fileSelected ? `Click to upload file: ${fileName2}`: "Select a file"}>
+              <Button
+                  variant="contained"
+                  component="span"
+                  style={{
+                    backgroundColor: fileSelected ? "#000000" : "#888888",
+                    padding: "18px 36px",
+                  }}
+                  onClick={uploadFile}
+                  endIcon={<CloudUploadRoundedIcon />}
+                  disabled={!fileSelected}
+                >
+                  Upload
+                </Button>
+              
+            </Tooltip>
+
+          
+             
+              
+             
               <br />
 
             </Container>
@@ -286,5 +405,6 @@ export default function MainPage() {
         </Box>
         <br />
     </Box>
+    
   );
 }
