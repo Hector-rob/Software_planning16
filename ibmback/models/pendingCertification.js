@@ -8,7 +8,7 @@ const pendingCertificationsSchema = mongoose.Schema({
     },
     department: {
         type: String,
-        required: true
+        required: false
     },
     work_location: {
         type: String,

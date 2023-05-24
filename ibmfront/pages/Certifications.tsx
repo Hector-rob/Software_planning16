@@ -147,7 +147,7 @@ const submitPendingCertification = (row) => {
       issue_date: row[4],
       type: row[5]
   }).then(() => {
-      window.alert("Register was succesful");
+      window.alert("The certification was accepted");
       deletePendingCertification(row[0]);
   })
 };
@@ -174,6 +174,7 @@ const deletePendingCertification = async (uid) => {
         console.log('No record found with the specified uid.');
       } else {
         console.log('Record deleted successfully.');
+        
       refreshPage()
       }
     } catch (error) {
@@ -227,10 +228,10 @@ const deletePendingCertification = async (uid) => {
     setOpen(false);
   };
 
-  const handleModalOpen = (row) => {
+  const handleModalOpen = (uid) => {
     setModalOpen(true);
-    const certificationu = row[0];
-    setCertificationuid(certificationu);
+    const certificationu = uid;
+    setCertificationuid(uid);
     // deletePendingCertification(certificationuid);
     
   }
