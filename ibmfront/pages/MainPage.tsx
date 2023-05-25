@@ -113,7 +113,7 @@ export default function MainPage() {
       setBadges(response.data.filter(x => x.type === "badge").length); //Get number of badges
       setExternalCerts(response.data.filter(x => x.type === "external certification").length); //Get number of external certifications
       setDepartments(response.data.map(x => x.department));
-      setLocations(response.data.map(x=>x.work_location));
+      setLocations(response.data.map(x => x.work_location));
     });
   }, []);
 
