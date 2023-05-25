@@ -105,16 +105,21 @@ export default function MainPage() {
 
   const [badges, setBadges] = useState("");
   const [externalCerts, setExternalCerts] = useState("");
-  const [allCertifications, setCertifications] = useState([]);
+  const [departments, setDepartments] = useState([]);
 
   useEffect(() => {
     Axios.get("http://localhost:5000/certification").then((response) => {
       setBadges(response.data.filter(x => x.type === "badge").length); //Get number of badges
       setExternalCerts(response.data.filter(x => x.type === "external certification").length); //Get number of external certifications
+      setDepartments(response.data.map(x => x.department));
     });
   }, []);
 
-  console.log(badges, externalCerts);
+  const dptNames = ["Programming", "Finance and Operations", "Consulting", "Systems, Technology Lifecycle Services"];
+  const dptNamesFreq = [];
+  dptNames.forEach(element => {
+    dptNamesFreq.push(departments.filter(x => x === element).length);
+  });
 
   const saveFile = (e) => {
     setFile2(e.target.files[0]);
@@ -292,10 +297,10 @@ export default function MainPage() {
             <Box display="flex-start" sx={{ height: 10, width: 0.9, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
             <br />
 
-            <Box sx={{ width: "100%", height: "60%", display: 'flex', justifyContent: 'center', }}>
+            <Box sx={{ width: "100%", height: "65%", display: 'flex', justifyContent: 'center', }}>
               <PieChart data={{
-                labels: ['Low', 'Medium', 'High', 'Critical'],
-                values: [10, 20, 30, 40],
+                labels: dptNames,
+                values: dptNamesFreq,
                 colors: ['#FFEE99', '#FF9F00', '#FF4500', '#E12901']
               }} />
             </Box>
@@ -322,7 +327,7 @@ export default function MainPage() {
             <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
               <Box>
                 <Typography fontWeight={600} > Upload files </Typography>
-                <Typography sx={{ mb: 1}}>Max file size is 500kb. Supported file types are .xlsx and .csv.</Typography>
+                <Typography sx={{ mb: 1 }}>Max file size is 500kb. Supported file types are .xlsx and .csv.</Typography>
               </Box>
               <input
                 type="file"
@@ -385,7 +390,7 @@ export default function MainPage() {
                     backgroundColor: "#000000",
                     padding: "18px 36px"
                   }}
-                  sx={{ mr: 1, mb:1}}
+                  sx={{ mr: 1, mb: 1 }}
                   //  onClick={uploadFile}
                   endIcon={<FileOpenRoundedIcon />}>
                   Select
@@ -403,7 +408,7 @@ export default function MainPage() {
                 onClick={uploadFile}
                 endIcon={<CloudUploadRoundedIcon />}
                 disabled={!fileSelected}
-                sx={{mb:1}}
+                sx={{ mb: 1 }}
               >
                 Upload
               </Button>
