@@ -106,20 +106,30 @@ export default function MainPage() {
   const [badges, setBadges] = useState("");
   const [externalCerts, setExternalCerts] = useState("");
   const [departments, setDepartments] = useState([]);
+  const [locations, setLocations] = useState([]);
 
   useEffect(() => {
     Axios.get("http://localhost:5000/certification").then((response) => {
       setBadges(response.data.filter(x => x.type === "badge").length); //Get number of badges
       setExternalCerts(response.data.filter(x => x.type === "external certification").length); //Get number of external certifications
       setDepartments(response.data.map(x => x.department));
+      setLocations(response.data.map(x=>x.work_location));
     });
   }, []);
 
-  const dptNames = ["Programming", "Finance and Operations", "Consulting", "Systems, Technology Lifecycle Services"];
+  const dptNames = ["Programming", "Finance and Operations", "Consulting", "Systems, Technology Lifecycle Services"]; //Get names of departments
   const dptNamesFreq = [];
   dptNames.forEach(element => {
     dptNamesFreq.push(departments.filter(x => x === element).length);
-  });
+  }); //Get amount of certifications per department
+  const workLocationNames = ["Guadalajara, Mx", "Mexico City, Mx", "Wroclaw, DS, Poland", "Vilnius, VL , Lithuania"];
+  const workLocationFreq = [];
+  workLocationFreq.push(locations.filter(x => x === "Guadalajara, Jalisco").length + locations.filter(x => x === "Guadalajara, JAL, Mexico").length);
+  workLocationFreq.push(locations.filter(x => x === "Mexico City, Mexico").length + locations.filter(x => x === "Mexico City, DIF, Mexico").length);
+  workLocationFreq.push(locations.filter(x => x === "Wroclaw, DS , Poland").length);
+  workLocationFreq.push(locations.filter(x => x === "Vilnius, VL , Lithuania").length);
+  console.log(workLocationFreq);
+
 
   const saveFile = (e) => {
     setFile2(e.target.files[0]);
@@ -268,8 +278,8 @@ export default function MainPage() {
               }} />
 
               <DonutChart data={{
-                labels: ['Low', 'Medium', 'High', 'Critical'],
-                values: [10, 20, 30, 40],
+                labels: workLocationNames,
+                values: workLocationFreq,
                 colors: ['#FFEE99', '#FF9F00', '#FF4500', '#E12901']
               }} />
 
