@@ -27,9 +27,9 @@ import Button from '@mui/material/Button';
 import FileOpenRoundedIcon from '@mui/icons-material/FileOpenRounded';
 import Tooltip from '@mui/material/Tooltip';
 import Axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const drawerWidth = 240;
-
 
 
 const openedMixin = (theme) => ({
@@ -107,6 +107,7 @@ export default function MainPage() {
   const [externalCerts, setExternalCerts] = useState("");
   const [departments, setDepartments] = useState([]);
   const [locations, setLocations] = useState([]);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     Axios.get("http://localhost:5000/certification").then((response) => {
@@ -114,6 +115,7 @@ export default function MainPage() {
       setExternalCerts(response.data.filter(x => x.type === "external certification").length); //Get number of external certifications
       setDepartments(response.data.map(x => x.department));
       setLocations(response.data.map(x => x.work_location));
+      setLoading(false);
     });
   }, []);
 
@@ -128,8 +130,38 @@ export default function MainPage() {
   workLocationFreq.push(locations.filter(x => x === "Mexico City, Mexico").length + locations.filter(x => x === "Mexico City, DIF, Mexico").length);
   workLocationFreq.push(locations.filter(x => x === "Wroclaw, DS , Poland").length);
   workLocationFreq.push(locations.filter(x => x === "Vilnius, VL , Lithuania").length);
-  console.log(workLocationFreq);
 
+  function getGraphs() {
+    return <React.Fragment>
+      <DonutChart data={{
+        labels: ['Badges', 'External Certifications'],
+        values: [badges, externalCerts],
+        colors: ['#FF4500', '#FFEE99'],
+      }} />
+
+      <DonutChart data={{
+        labels: workLocationNames,
+        values: workLocationFreq,
+        colors: ['#FFEE99', '#FF9F00', '#FF4500', '#E12901']
+      }} />
+
+      <DonutChart data={{
+        labels: ['Low', 'Medium', 'High', 'Critical'],
+        values: [10, 20, 30, 40],
+        colors: ['#FFEE99', '#FF9F00', '#FF4500', '#E12901']
+      }} />
+    </React.Fragment>
+  }
+
+  function getCertsbyDpt() {
+    return <React.Fragment>
+      <PieChart data={{
+        labels: dptNames,
+        values: dptNamesFreq,
+        colors: ['#FFEE99', '#FF9F00', '#FF4500', '#E12901']
+      }} />
+    </React.Fragment>
+  }
 
   const saveFile = (e) => {
     setFile2(e.target.files[0]);
@@ -270,30 +302,8 @@ export default function MainPage() {
             <br />
 
             <Box sx={{ display: "inline-flex", flexDirection: 'row', width: "32%" }}>
-
-              <DonutChart data={{
-                labels: ['Badges', 'External Certifications'],
-                values: [badges, externalCerts],
-                colors: ['#FF4500', '#FFEE99'],
-              }} />
-
-              <DonutChart data={{
-                labels: workLocationNames,
-                values: workLocationFreq,
-                colors: ['#FFEE99', '#FF9F00', '#FF4500', '#E12901']
-              }} />
-
-              <DonutChart data={{
-                labels: ['Low', 'Medium', 'High', 'Critical'],
-                values: [10, 20, 30, 40],
-                colors: ['#FFEE99', '#FF9F00', '#FF4500', '#E12901']
-              }} />
-
+              {isLoading ? <CircularProgress size={50} sx={{margin: "auto"}} /> : getGraphs()}
             </Box>
-
-
-
-
 
           </Container>
 
@@ -308,15 +318,8 @@ export default function MainPage() {
             <br />
 
             <Box sx={{ width: "100%", height: "65%", display: 'flex', justifyContent: 'center', }}>
-              <PieChart data={{
-                labels: dptNames,
-                values: dptNamesFreq,
-                colors: ['#FFEE99', '#FF9F00', '#FF4500', '#E12901']
-              }} />
+              {isLoading ? <CircularProgress size={50} sx={{margin: "auto"}} /> : getCertsbyDpt()}
             </Box>
-
-
-
 
           </Container>
         </Box>
