@@ -1,7 +1,13 @@
 const express = require("express");
+const mongoose = require('mongoose');
 
 const userSchema = require('./models/user.js');
+const bcrypt = require("bcryptjs");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
+
+const JWT_SECRET =
+  "hvdvay6ert72839289()aiyg8t87qt72393293883uhefiuh78ttq3ifi78272jbkj?[]]pou89ywe";
 
 
 
@@ -9,15 +15,96 @@ const router = express.Router();
 
 
 //FILTER AND PARAMS ARE JUST BY NAME IMPORTANT NOTE
-
+const User = mongoose.model("Users");
 //create user
-router.post("/user", (req, res) => {
-    const user = userSchema(req.body);
-    user 
-    .save()
-    .then((data) => res.json(data))
-    .catch((error) => res.json({message: error}))
-});
+// router.post("/user", (req, res) => {
+//     const user = userSchema(req.body);
+    
+//     try{
+//         const email = userSchema.findOne({email});
+//         console.log("hi");
+//         if(email){
+//             res.send({error: "User exists"});
+//         }
+//         user 
+//         .save()
+//         .then((data) => res.json(data))
+//         .catch((error) => res.json({message: error}))
+//     }
+//     catch(error){
+//         res.send({status: "error"});
+//     }
+
+  
+// });
+
+router.post("/user", async (req, res) => {
+    const { email, name, last_name, password, country, department} = req.body;
+  
+    const encryptedPassword = await bcrypt.hash(password, 10);
+    try {
+      const oldUser = await User.findOne({ email });
+  
+      if (oldUser) {
+        return res.json({ error: "User Exists" });
+      }
+      await User.create({
+        email,
+        name,
+        last_name,
+        password: encryptedPassword,
+        country,
+        department
+        // password: encryptedPassword,
+      });
+      res.send({ status: "ok" });
+    } catch (error) {
+      res.send({ status: "error" });
+    }
+  });
+
+  router.post("/login-user", async (req, res) => {
+    const { email, password } = req.body;
+    console.log(email);
+    console.log(password);
+
+
+  
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.json({ error: "User Not found" });
+    }
+    if (await bcrypt.compare(password, user.password)) {
+      const token = jwt.sign({ email: user.email }, JWT_SECRET, {
+        expiresIn: "15m",
+      });
+  
+      if (res.status(201)) {
+        console.log("Login")
+        return res.json({ status: "ok", data: token });
+      } else {
+        console.log("Invalid data")
+        return res.json({ error: "error" });
+      }
+    }
+    console.log("Invalid data")
+    res.json({ status: "error", error: "InvAlid Password" });
+  });
+
+
+
+// router.get('/login', async(req, res) =>{
+//     const { email, password } = req.body;
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       return res.json({ error: "Invalid data" });
+//     }
+//     if(password == user.password)
+
+
+// })
+
 
 
 //get all users
