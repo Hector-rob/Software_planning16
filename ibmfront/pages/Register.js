@@ -186,7 +186,7 @@ export default function Register() {
                                     }} />
                             </Grid>
                         </Grid>
-                        <Button component="a" to="/mainPage"
+                        <Button component="a" to="/MainPage"
                             type="submit"
                             variant="contained"
                             onClick={submitEmployee}
