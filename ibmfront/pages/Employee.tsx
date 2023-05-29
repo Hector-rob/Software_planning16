@@ -24,6 +24,7 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import Container from '@mui/material/Container';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Cookies from "js-cookie";
 
 const drawerWidth = 240;
 
@@ -97,6 +98,7 @@ export default function Employee() {
 
     const logOut = () => {
         window.localStorage.clear();
+        Cookies.remove("loggedin");
         window.location.href = "./Login";
       };
 

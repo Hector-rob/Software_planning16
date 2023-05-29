@@ -27,6 +27,7 @@ import Button from '@mui/material/Button';
 import FileOpenRoundedIcon from '@mui/icons-material/FileOpenRounded';
 import Tooltip from '@mui/material/Tooltip';
 import Axios from "axios";
+import Cookies from "js-cookie";
 
 const drawerWidth = 240;
 
@@ -121,6 +122,7 @@ const saveFile = (e) => {
 
 const logOut = () => {
   window.localStorage.clear();
+  Cookies.remove("loggedin");
   window.location.href = "./Login";
 };
 

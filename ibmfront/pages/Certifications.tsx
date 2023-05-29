@@ -37,7 +37,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
 import Axios from "axios";
 import TablePagination from '@mui/material/TablePagination';
-
+import Cookies from "js-cookie";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -238,6 +238,8 @@ const deletePendingCertification = async (uid) => {
 
   const logOut = () => {
     window.localStorage.clear();
+    Cookies.remove("loggedin");
+   
     window.location.href = "./Login";
   };
 
