@@ -236,6 +236,11 @@ const deletePendingCertification = async (uid) => {
     
   }
 
+  const logOut = () => {
+    window.localStorage.clear();
+    window.location.href = "./Login";
+  };
+
   const handleModalClose = () => {
     setModalOpen(false);
   }
@@ -342,7 +347,7 @@ const deletePendingCertification = async (uid) => {
         </List>
         <Divider color="white" variant="middle" />
         <ListItem key={"Sign Out"} disablePadding sx={{ display: 'block' }}>
-          <ListItemButton
+          <ListItemButton onClick={() => logOut()}
             sx={{
               justifyContent: open ? 'initial' : 'center',
               px: 2.5,

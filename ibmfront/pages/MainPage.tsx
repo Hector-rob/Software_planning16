@@ -119,6 +119,11 @@ const saveFile = (e) => {
 
 };
 
+const logOut = () => {
+  window.localStorage.clear();
+  window.location.href = "./Login";
+};
+
 const uploadFile = async (e) => {
   const formData = new FormData();
   formData.append("file", file2);
@@ -201,7 +206,7 @@ const refreshPage= () =>  {
         </List>
         <Divider color="white" variant="middle" />
         <ListItem key={"Sign Out"} disablePadding sx={{ display: 'block' }}>
-          <ListItemButton
+          <ListItemButton onClick={() => logOut()}
             sx={{
               justifyContent: open ? 'initial' : 'center',
               px: 2.5,

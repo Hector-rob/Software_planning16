@@ -287,6 +287,11 @@ export default function Database(props: any) {
 
   }
 
+  const logOut = () => {
+    window.localStorage.clear();
+    window.location.href = "./Login";
+  };
+
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchValue(value);
@@ -364,7 +369,7 @@ export default function Database(props: any) {
         </List>
         <Divider color="white" variant="middle" />
         <ListItem key={"Sign Out"} disablePadding sx={{ display: 'block' }}>
-          <ListItemButton
+          <ListItemButton onClick={() => logOut()}
             sx={{
               justifyContent: open ? 'initial' : 'center',
               px: 2.5,

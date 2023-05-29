@@ -95,6 +95,11 @@ export default function Employee() {
         setOpen(false);
     };
 
+    const logOut = () => {
+        window.localStorage.clear();
+        window.location.href = "./Login";
+      };
+
     return (
         <Box sx={{ display: 'flex', width: "100%", height: "100%", position: "absolute" }}>
             <CssBaseline />
@@ -153,7 +158,7 @@ export default function Employee() {
                 </List>
                 <Divider color="white" variant="middle" />
                 <ListItem key={"Sign Out"} disablePadding sx={{ display: 'block' }}>
-                    <ListItemButton
+                    <ListItemButton onClick={() => logOut()}
                         sx={{
                             justifyContent: open ? 'initial' : 'center',
                             px: 2.5,

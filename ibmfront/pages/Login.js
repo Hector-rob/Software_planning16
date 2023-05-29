@@ -63,11 +63,18 @@ const Log = async(e) =>  {
       alert("login successful");
       window.localStorage.setItem("token", response.data.data);
       window.localStorage.setItem("loggedIn", true);
+      window.location.href = "./MainPage";
   
+    }
+    else{
+       window.alert("Invalid data");
+
     }
   }
   catch(error){
     console.log(error);
+    // window.alert("Invalid data");
+
   }
 }
 
