@@ -124,7 +124,7 @@ export default function MainPage() {
   dptNames.forEach(element => {
     dptNamesFreq.push(departments.filter(x => x === element).length);
   }); //Get amount of certifications per department
-  const workLocationNames = ["Guadalajara, Mx", "Mexico City, Mx", "Wroclaw, DS, Poland", "Vilnius, VL , Lithuania"];
+  const workLocationNames = ["Guadalajara, Mexico", "Mexico City, Mexico", "Wroclaw, DS, Poland", "Vilnius, VL , Lithuania"];
   const workLocationFreq = [];
   workLocationFreq.push(locations.filter(x => x === "Guadalajara, Jalisco").length + locations.filter(x => x === "Guadalajara, JAL, Mexico").length);
   workLocationFreq.push(locations.filter(x => x === "Mexico City, Mexico").length + locations.filter(x => x === "Mexico City, DIF, Mexico").length);
