@@ -9,13 +9,9 @@ import { useState } from "react";
 import Button from "@mui/material/Button";
 import Axios from "axios";
 import { Navigate } from "react-router-dom";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function Register() {
-
-   
-
-    
 
     const [employeeEmail, setEmployeeEmail] = useState("");
     const [employeeName, setEmployeeName] = useState("");
@@ -33,11 +29,7 @@ export default function Register() {
             country: employeeCountry,
             department: employeeDepartment
         }).then(() => {
-
-           
-
             window.alert("Register was succesful");
-            
 
         })
     };
@@ -57,7 +49,7 @@ export default function Register() {
     //         alert("login successful");
     //         window.localStorage.setItem("token", response.data.data);
     //         window.localStorage.setItem("loggedIn", true);
-        
+
     //       }
     //     }
     //     catch(error){

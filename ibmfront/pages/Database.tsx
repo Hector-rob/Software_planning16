@@ -42,9 +42,8 @@ import Papa from 'papaparse';
 import TablePagination from '@mui/material/TablePagination';
 import FileOpenRoundedIcon from '@mui/icons-material/FileOpenRounded';
 import Tooltip from '@mui/material/Tooltip';
+import Link from "next/link";
 import Cookies from "js-cookie";
-
-
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -120,8 +119,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function Database(props: any) {
 
+export default function Database(props: any) {
   const [certificationsList, setCertificationsList] = useState([]);
   const [certificationsDoc, setCertificationsDoc] = useState([]);
   var [csvData, setCsvData] = useState([]);
@@ -135,8 +134,6 @@ export default function Database(props: any) {
 
   const [fileSelected, setFileSelected] = useState(false);
 
-
-
   const saveFile = (e) => {
     setFile2(e.target.files[0]);
     setFileName2(e.target.files[0].name);
@@ -145,7 +142,7 @@ export default function Database(props: any) {
 
     if (e.target.files.length > 0) {
       setFileSelected(true);
-    } 
+    }
     else {
       setFileSelected(false);
     }
@@ -170,6 +167,8 @@ export default function Database(props: any) {
       console.log("error");
     }
   };
+
+
 
   useEffect(() => {
     Axios.get("http://localhost:5000/certification").then((response) => {
@@ -211,38 +210,38 @@ export default function Database(props: any) {
   //     //   const exportType = exportFromJSON.types.csv;
   //     //   exportFromJSON({data: response.todos, fileName, exportType});
   //     // });
-      
-      
+
+
 
   //     return body;
-      
+
   //   };
 
-    const exportCertifications = async () => {
-      // const response = await fetch('http://localhost:5000/exportCertifications')
-      Axios.get("http://localhost:5000/exportCertifications")
+  const exportCertifications = async () => {
+    // const response = await fetch('http://localhost:5000/exportCertifications')
+    Axios.get("http://localhost:5000/exportCertifications")
       .then(response => {
         // Convert data to CSV format
         const csvData = Papa.unparse(response.data);
         setCsvData(csvData)
         exportData(csvData, 'certifications.csv', 'text/csv;charset=utf-8;');
       })
-        .catch(error => {
-          // Handle errors
-          console.error(error);
-        });
-    }
+      .catch(error => {
+        // Handle errors
+        console.error(error);
+      });
+  }
 
-    const exportData = (data, fileName, type) => {
-      // Create a link and download the file
-      const blob = new Blob([data], { type });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = fileName;
-      a.click();
-      window.URL.revokeObjectURL(url);
-    };
+  const exportData = (data, fileName, type) => {
+    // Create a link and download the file
+    const blob = new Blob([data], { type });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -252,7 +251,7 @@ export default function Database(props: any) {
     setOpen(false);
   };
 
-  const refreshPage= () =>  {
+  const refreshPage = () => {
     window.location.reload();
   }
 
@@ -297,7 +296,7 @@ export default function Database(props: any) {
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchValue(value);
-  
+
     const filtered = certificationsList.filter((row) =>
       Object.values(row).some((value) =>
         String(value).toLowerCase().includes(searchValue.toLowerCase())
@@ -312,9 +311,8 @@ export default function Database(props: any) {
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const paginatedData = filteredData.slice(indexOfFirstRow, indexOfLastRow);
 
-
   return (
-   
+
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <Drawer variant="permanent" open={open}>
@@ -396,22 +394,22 @@ export default function Database(props: any) {
       <Box component="main" sx={{ flexGrow: 1, }}>
         <DrawerHeader />
         <Container maxWidth={false} sx={{ width: "100%" }}>
-          
-          <Typography fontSize={30} fontWeight={600} >Employees Database</Typography> 
+
+          <Typography fontSize={30} fontWeight={600} >Employees Database</Typography>
           <Box display="flex-start" sx={{ height: 10, width: 0.3, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            
+
             {fileSelected && (
               <Typography
-              variant="body2"
-              fontSize={14}
-              fontWeight={400}
-              style={{ marginLeft: 'auto' }}
-            >
-              Selected file: {fileName2}
-            </Typography>
+                variant="body2"
+                fontSize={14}
+                fontWeight={400}
+                style={{ marginLeft: 'auto' }}
+              >
+                Selected file: {fileName2}
+              </Typography>
             )}
-            
+
           </Box>
           <br></br>
 
@@ -423,9 +421,9 @@ export default function Database(props: any) {
           >
             <Stack direction="row" spacing={3} sx={{ width: "100%", boxSizing: 'border-box' }}>
 
-              <TextField id="standard-basic" label="Search" variant="standard" sx={{ width: "100%" }} 
+              <TextField id="standard-basic" label="Search" variant="standard" sx={{ width: "100%" }}
                 value={searchValue}
-                onChange={handleSearchChange} />              
+                onChange={handleSearchChange} />
 
               <input
                 type="file"
@@ -433,31 +431,31 @@ export default function Database(props: any) {
                 style={{ display: 'none' }}
                 id="contained-button-file"
                 onChange={e => saveFile(e)}
-                // onChange={e => handleFile(e)}
-               
+              // onChange={e => handleFile(e)}
+
               />
-             
-              
+
+
               <input id="select-button" type="file" onChange={saveFile} accept=".csv, .xlsx" style={{ display: 'none' }} />
               <Tooltip title="Select a file to be uploaded">
-              <label htmlFor="select-button">
-                <Button variant="contained" component="span"
-                  style={{
-                    backgroundColor: "#000000",
-                    padding: "18px 36px"
-                  }}
-                  
-                  //  onClick={uploadFile}
-                  endIcon={<FileOpenRoundedIcon />}>
-                  Select
-                </Button>
-              </label>
-              </Tooltip>
-          {/* <button onClick={uploadFile}>Upload</button> */}
+                <label htmlFor="select-button">
+                  <Button variant="contained" component="span"
+                    style={{
+                      backgroundColor: "#000000",
+                      padding: "18px 36px"
+                    }}
 
-       
-            <Tooltip title={fileSelected ? `Click to upload file: ${fileName2}`: "Select a file"}>
-              
+                    //  onClick={uploadFile}
+                    endIcon={<FileOpenRoundedIcon />}>
+                    Select
+                  </Button>
+                </label>
+              </Tooltip>
+              {/* <button onClick={uploadFile}>Upload</button> */}
+
+
+              <Tooltip title={fileSelected ? `Click to upload file: ${fileName2}` : "Select a file"}>
+
                 <Button
                   variant="contained"
                   component="span"
@@ -471,9 +469,9 @@ export default function Database(props: any) {
                 >
                   Upload
                 </Button>
-              
-            </Tooltip>
-          
+
+              </Tooltip>
+
 
 
               <Button variant="contained" component="span"
@@ -510,58 +508,64 @@ export default function Database(props: any) {
               </React.Fragment>
             )}
 
-          {/* {certificationsList.map((val)=> {
+            {/* {certificationsList.map((val)=> {
             return <div> 
               <h3> UID: {val.uid} | Department: {val.department} | Work Location : {val.work_location} | Certification Name : {val.certification_name} | Issue Date: {val.issue_date} | Type: {val.type} </h3>
           </div>
           })} */}
 
-              <React.Fragment>
-                <TableContainer component={Paper}>
-                  <Table aria-label="collapsible table">
-                    <TableHead>
-                      <TableRow>
-                        {rowHeaders.map(
-                          (h: any, index) => <StyledTableCell key={h}> <Typography variant="h6"><strong>{rowHeaders[index]}</strong></Typography>  </StyledTableCell>
-                        )}
-                        <StyledTableCell> </StyledTableCell>
+            <React.Fragment>
+              <TableContainer component={Paper}>
+                <Table aria-label="collapsible table">
+                  <TableHead>
+                    <TableRow>
+                      {rowHeaders.map(
+                        (h: any, index) => <StyledTableCell key={h}> <Typography variant="h6"><strong>{rowHeaders[index]}</strong></Typography>  </StyledTableCell>
+                      )}
+                      <StyledTableCell> </StyledTableCell>
 
-                      </TableRow>
+                    </TableRow>
 
-                    </TableHead>
+                  </TableHead>
 
-                    <TableBody>
-                      {paginatedData.map((row: any, rowIndex: any) => (
-                        <StyledTableRow key={rowIndex}>
-                          {Object.values(row).slice(1, -1).map((cell: any, cellIndex: any) => (
-                            <StyledTableCell key={cellIndex}>
-                              <Typography variant="subtitle1">{cell}</Typography>
-                            </StyledTableCell>
-                          ))}
-                          <StyledTableCell>
-                            {/* <Button href="/Employee" onClick={() => { console.log(allData.slice(1)[rowIndex][0]) }}>
-                              <NavigateNextIcon />
-                            </Button> */}
+                  <TableBody>
+                    {paginatedData.map((row: any, rowIndex: any) => (
+                      <StyledTableRow key={rowIndex}>
+                        {Object.values(row).slice(1, -1).map((cell: any, cellIndex: any) => (
+                          <StyledTableCell key={cellIndex}>
+                            <Typography variant="subtitle1">{cell}</Typography>
                           </StyledTableCell>
-                        </StyledTableRow>
-                      ))}
-                    </TableBody>
+                        ))}
+                        <StyledTableCell>
+                          {
+                            <Link href={{
+                              pathname: "/Employee",
+                              query: { id: Object.values(row).slice(1, -1)[0] as String }
+                            }} passHref>
+                              <Button>
+                                <NavigateNextIcon />
+                              </Button>
+                            </Link>}
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                  </TableBody>
 
-                  </Table>
-                </TableContainer>
-                <TablePagination
-                  component="div"
-                  count={filteredData.length}
-                  page={page}
-                  onPageChange={(event, newPage) => setPage(newPage)}
-                  rowsPerPage={rowsPerPage}
-                  onRowsPerPageChange={(event) => {
-                    setRowsPerPage(parseInt(event.target.value, 10));
-                    setPage(0);
-                  }}
-                />
+                </Table>
+              </TableContainer>
+              <TablePagination
+                component="div"
+                count={filteredData.length}
+                page={page}
+                onPageChange={(event, newPage) => setPage(newPage)}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={(event) => {
+                  setRowsPerPage(parseInt(event.target.value, 10));
+                  setPage(0);
+                }}
+              />
 
-              </React.Fragment>
+            </React.Fragment>
 
           </div>
           <br></br>

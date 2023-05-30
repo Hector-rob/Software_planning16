@@ -39,6 +39,7 @@ import Axios from "axios";
 import TablePagination from '@mui/material/TablePagination';
 import Cookies from "js-cookie";
 
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#0F62FE",
@@ -124,58 +125,58 @@ export default function Certifications(props: any) {
   const [certificationDate, setCertificationDate] = useState("");
   const [certificationType, setCertificationType] = useState("");
 
-//   const submitPendingCertification = () => {
-//     Axios.post("http://localhost:5000/certification", {
-//         uid: certificationUid,
-//         department: certificationDepartment,
-//         work_location: certificationLocation,
-//         certification_name: certificationName,
-//         issue_date: certificationDate,
-//         type: certificationType
-//     }).then(() => {
-//         window.alert("Register was succesful");
+  //   const submitPendingCertification = () => {
+  //     Axios.post("http://localhost:5000/certification", {
+  //         uid: certificationUid,
+  //         department: certificationDepartment,
+  //         work_location: certificationLocation,
+  //         certification_name: certificationName,
+  //         issue_date: certificationDate,
+  //         type: certificationType
+  //     }).then(() => {
+  //         window.alert("Register was succesful");
 
-//     })
-// };
+  //     })
+  // };
 
-const submitPendingCertification = (row) => {
-  Axios.post("http://localhost:5000/certification", {
+  const submitPendingCertification = (row) => {
+    Axios.post("http://localhost:5000/certification", {
       uid: row[0],
       department: row[1],
       work_location: row[2],
       certification_name: row[3],
       issue_date: row[4],
       type: row[5]
-  }).then(() => {
+    }).then(() => {
       window.alert("The certification was accepted");
       deletePendingCertification(row[0]);
-  })
-};
+    })
+  };
 
-// const deletePendingCertification = async (_uid) => {
-//   const params = {
-//     uid: _uid
-//   };
-//   Axios.delete("http://localhost:5000/pendingCertification/:uid", { params }
-//     // params: {
-//     //   uid: certificationUid
-//     // }
-//   ).then(() => {
-//      console.log(params);
-//       window.alert("Deletion was succesful");
+  // const deletePendingCertification = async (_uid) => {
+  //   const params = {
+  //     uid: _uid
+  //   };
+  //   Axios.delete("http://localhost:5000/pendingCertification/:uid", { params }
+  //     // params: {
+  //     //   uid: certificationUid
+  //     // }
+  //   ).then(() => {
+  //      console.log(params);
+  //       window.alert("Deletion was succesful");
 
-//   })
-// };
+  //   })
+  // };
 
-const deletePendingCertification = async (uid) => {
+  const deletePendingCertification = async (uid) => {
     try {
       const response = await Axios.delete(`http://localhost:5000/pendingCertification/${uid}`);
       if (response.data.acknowledged && response.data.deletedCount === 0) {
         console.log('No record found with the specified uid.');
       } else {
         console.log('Record deleted successfully.');
-        
-      refreshPage()
+
+        refreshPage()
       }
     } catch (error) {
       console.error(error);
@@ -192,11 +193,11 @@ const deletePendingCertification = async (uid) => {
 
   console.log(pendingCertificationsList);
   //luego tenemos que cambiar esto por info real
-/*   const data = [["name", "department", "certification_name", "type"],
-  ["persona1", "Department", "Certification Name", "badge"],
-  ["persona2", "Department", "Certification Name", "badge"],
-  ["persona2", "Department", "Certification Name", "badge"],
-  ["persona2", "Department", "Certification Name", "external certification"]] */
+  /*   const data = [["name", "department", "certification_name", "type"],
+    ["persona1", "Department", "Certification Name", "badge"],
+    ["persona2", "Department", "Certification Name", "badge"],
+    ["persona2", "Department", "Certification Name", "badge"],
+    ["persona2", "Department", "Certification Name", "external certification"]] */
 
   const data = pendingCertificationsList.map((val) => [
     val.uid,
@@ -208,7 +209,7 @@ const deletePendingCertification = async (uid) => {
   ]);
 
   console.log("data", data);
-  
+
 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -233,13 +234,13 @@ const deletePendingCertification = async (uid) => {
     const certificationu = uid;
     setCertificationuid(uid);
     // deletePendingCertification(certificationuid);
-    
+
   }
 
   const logOut = () => {
     window.localStorage.clear();
     Cookies.remove("loggedin");
-   
+
     window.location.href = "./Login";
   };
 
@@ -254,7 +255,7 @@ const deletePendingCertification = async (uid) => {
   const handleMessageClose = () => {
     setCommentOpen(false);
   }
-  const refreshPage= () =>  {
+  const refreshPage = () => {
     window.location.reload();
   }
 
@@ -279,7 +280,7 @@ const deletePendingCertification = async (uid) => {
     setCertificationDate(row[4]);
     setCertificationType(row[5]);
 
-   
+
     // console.log(certificationData); // Log the certificationData object to the console
 
     submitPendingCertification(row);
@@ -378,8 +379,8 @@ const deletePendingCertification = async (uid) => {
           <Box display="flex-start" sx={{ height: 10, width: 0.3, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
 
           <br></br>
-          <br></br>        
-{/*        {pendingCertificationsList.map((val)=> {
+          <br></br>
+          {/*        {pendingCertificationsList.map((val)=> {
          return <div> <h3> UID: {val.uid} | Department: {val.department} | Work Location : {val.work_location} | Certification Name : {val.certification_name} | Issue Date: {val.issue_date} | Type: {val.type} </h3>
          </div>
        })} */}
@@ -405,7 +406,7 @@ const deletePendingCertification = async (uid) => {
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell width={"15%"} align="center">
-                        <img src= {row[5] == "badge" ? "./Assets/images/IBMblue.png" : "./Assets/images/ExternalCert.png"} alt="Logo" width={120} ></img>
+                        <img src={row[5] == "badge" ? "./Assets/images/IBMblue.png" : "./Assets/images/ExternalCert.png"} alt="Logo" width={120} ></img>
                       </StyledTableCell>
                       <StyledTableCell>
                         <Grid
@@ -419,8 +420,8 @@ const deletePendingCertification = async (uid) => {
                                 backgroundColor: "#198038",
                                 padding: "9px 18px",
                               }}
-                              onClick={ () => {
-                                
+                              onClick={() => {
+
                                 handleClick(row);
                                 // setCertificationUid(row[0]);
                                 // setCertificationDepartment(row[1]);
@@ -434,10 +435,10 @@ const deletePendingCertification = async (uid) => {
                                 // console.log(certificationName);
                                 // console.log(certificationDate);
                                 // console.log(certificationType);
-                                
+
                                 //submitPendingCertification();
                                 //deletePendingCertification(row[0]);
-                                
+
                               }}
                               // onClick={submitPendingCertification()}
 
@@ -453,7 +454,7 @@ const deletePendingCertification = async (uid) => {
                               endIcon={<ClearRoundedIcon />}
                               onClick={() => {
                                 handleModalOpen(row[0]);
-                                
+
                               }}>
                               Decline
                             </Button>
@@ -462,7 +463,7 @@ const deletePendingCertification = async (uid) => {
                                 position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'white', border: '2px solid #000',
                                 boxShadow: 24, p: 2, borderRadius: 2
                               }}>
-                                <Box display="flex" justifyContent="flex-end" alignItems="flex-end" sx={{mb:1}}>
+                                <Box display="flex" justifyContent="flex-end" alignItems="flex-end" sx={{ mb: 1 }}>
                                   <IconButton color={"error"} onClick={handleModalClose} children={<CloseIcon />} />
                                 </Box>
                                 <Typography variant="h6" fontWeight={700} align={"center"}>
@@ -474,10 +475,10 @@ const deletePendingCertification = async (uid) => {
                                 <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
                                   <Button variant="contained" sx={{ width: "50%" }} color={"primary"} onClick={handleModalClose} startIcon={<ArrowBackIcon />}><Typography>Cancel</Typography></Button>
                                   <Button variant="contained" sx={{ width: "50%" }} color={"error"}
-                                  onClick={() => {
-                                    //setCertificationUid(row[0]);
-                                    console.log(certificationuid);
-                                    deletePendingCertification(certificationuid);
+                                    onClick={() => {
+                                      //setCertificationUid(row[0]);
+                                      console.log(certificationuid);
+                                      deletePendingCertification(certificationuid);
                                     }} endIcon={<ClearRoundedIcon />}><Typography fontWeight={700}>Decline</Typography></Button>
                                 </Stack>
                               </Box>
@@ -527,16 +528,16 @@ const deletePendingCertification = async (uid) => {
               </Table>
             </TableContainer>
             <TablePagination
-                  component="div"
-                  count={data.length}
-                  page={page}
-                  onPageChange={(event, newPage) => setPage(newPage)}
-                  rowsPerPage={rowsPerPage}
-                  onRowsPerPageChange={(event) => {
-                    setRowsPerPage(parseInt(event.target.value, 10));
-                    setPage(0);
-                  }}
-                />
+              component="div"
+              count={data.length}
+              page={page}
+              onPageChange={(event, newPage) => setPage(newPage)}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={(event) => {
+                setRowsPerPage(parseInt(event.target.value, 10));
+                setPage(0);
+              }}
+            />
           </React.Fragment>
         </Container>
       </Box>
