@@ -30,8 +30,10 @@ import { useState, useEffect } from 'react';
 import Axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import Cookies from "js-cookie";
-import { FixedSizeList } from 'react-window';
-
+import VerifiedIcon from '@mui/icons-material/Verified';
+import EmailIcon from '@mui/icons-material/Email';
+import BusinessIcon from '@mui/icons-material/Business';
+import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 
 const drawerWidth = 240;
 
@@ -105,6 +107,20 @@ export default function Employee(props: any) {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    function getCertificationType(val: any) {
+        if (val == "badge") {
+            return <React.Fragment>
+                <BusinessIcon sx={{ ml: 1 }} />
+            </React.Fragment>
+        }
+        else {
+            return <React.Fragment>
+                <MilitaryTechIcon sx={{ ml: 1 }} />
+            </React.Fragment>
+        }
+
+    }
 
     const logOut = () => {
         window.localStorage.clear();
@@ -236,7 +252,7 @@ export default function Employee(props: any) {
                     <Stack justifyContent="center" alignItems="center">
                         <AccountCircleRoundedIcon sx={{ fontSize: 150 }} />
                         <Typography fontSize={35} fontWeight={700}>{employeeInfo.name + " " + employeeInfo.last_name}</Typography>
-                        <Typography fontSize={14}>{employeeInfo.email}</Typography>
+                        <Stack direction={"row"}><EmailIcon sx={{ mr: 1 }} /><Typography fontSize={14}>{employeeInfo.email}</Typography></Stack>
                         <Box display="flex-start" sx={{ height: 10, width: 0.25, backgroundColor: "#0F62FE", mt: 1 }}></Box>
                     </Stack>
                     <Grid container columnSpacing={3} sx={{ mb: 2, mt: 4, height: "100%" }} >
@@ -285,15 +301,32 @@ export default function Employee(props: any) {
                             </Grid>
                         </Grid>
                         <Grid item container xs={6} sm={6} md={6} lg={6} xl={6}>
-                            <Box display="flex" sx={{ width: "100%", minHeight: 280, maxHeight: 400}}>
+                            <Box display="flex" sx={{ width: "100%", minHeight: 280, maxHeight: 400 }}>
                                 <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
                                     <Stack justifyContent="center" alignItems="center" sx={{ mt: 2 }}>
                                         <Typography component='div' fontSize={30}>Certification <Box fontWeight={700} display='inline'>History</Box></Typography>
                                         <Box display="flex-start" sx={{ height: 7, width: 0.45, backgroundColor: "#0F62FE", mt: 1, mb: 3 }}></Box>
                                     </Stack>
                                     <List sx={{ overflow: 'auto', maxHeight: '70%' }}>
-                                        {employeeCertifications.map((val) => {
-                                            return <ListItem  sx={{mb:1}}><Typography fontSize={16}>{"●\t" + val.certification_name}</Typography></ListItem>
+                                        {employeeCertifications.map((val, index) => {
+                                            if (index % 2 == 0) {
+                                                return <ListItem sx={{ mb: 0.5 }}>
+                                                    <Paper elevation={6}>
+                                                        <Typography fontSize={16} sx={{ ml: 1, mr: 1 }}>{"●\t" + val.certification_name}</Typography>
+                                                    </Paper>
+                                                    {getCertificationType(val.type)}
+                                                    <VerifiedIcon sx={{ ml: 1, color: "#198038" }} />
+                                                </ListItem>
+                                            }
+                                            else {
+                                                return <ListItem sx={{ mb: 0.5 }}>
+                                                    <Paper elevation={6} sx={{ backgroundColor: "#0F62FE" }}>
+                                                        <Typography fontSize={16} color={"white"} sx={{ ml: 1, mr: 1 }}>{"●\t" + val.certification_name}</Typography>
+                                                    </Paper>
+                                                    {getCertificationType(val.type)}
+                                                    <VerifiedIcon sx={{ ml: 1, color: "#198038" }} />
+                                                </ListItem>
+                                            }
                                         })}
                                     </List>
                                 </Container>
