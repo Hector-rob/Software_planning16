@@ -24,11 +24,14 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import Container from '@mui/material/Container';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Paper from '@mui/material/Paper'
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import Axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import Cookies from "js-cookie";
+import { FixedSizeList } from 'react-window';
+
 
 const drawerWidth = 240;
 
@@ -145,7 +148,7 @@ export default function Employee(props: any) {
     const employeeCerts = employeeCertifications.length;
 
     return (
-        <Box sx={{ display: 'flex', width: "100%", height: "100%", position: "absolute" }}>
+        <Box sx={{ display: 'flex', width: "100%", position: "absolute" }}>
             <CssBaseline />
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
@@ -270,7 +273,7 @@ export default function Employee(props: any) {
                                     </Box>
                                 </Grid>
                                 <Grid item container xs={12} sm={12} md={12} lg={12} xl={12}>
-                                    <Box display="flex" sx={{ width: "100%", height: "385%" }}>
+                                    <Box display="flex" sx={{ width: "300%", minHeight: 240 }}>
                                         <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
                                             <Stack justifyContent="center" alignItems="center" sx={{ mt: 2 }}>
                                                 <Typography component='div' fontSize={24}><Box fontWeight={700} display='inline'>Skills</Box> & Areas of Opportunity</Typography>
@@ -282,17 +285,17 @@ export default function Employee(props: any) {
                             </Grid>
                         </Grid>
                         <Grid item container xs={6} sm={6} md={6} lg={6} xl={6}>
-                            <Box display="flex" sx={{ width: "100%", height: "105%" }}>
+                            <Box display="flex" sx={{ width: "100%", minHeight: 280, maxHeight: 400}}>
                                 <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
                                     <Stack justifyContent="center" alignItems="center" sx={{ mt: 2 }}>
                                         <Typography component='div' fontSize={30}>Certification <Box fontWeight={700} display='inline'>History</Box></Typography>
-                                        <Box display="flex-start" sx={{ height: 7, width: 0.45, backgroundColor: "#0F62FE", mt: 1, mb: 1 }}></Box>
+                                        <Box display="flex-start" sx={{ height: 7, width: 0.45, backgroundColor: "#0F62FE", mt: 1, mb: 3 }}></Box>
                                     </Stack>
-                                    <Stack spacing={0.5} sx={{ mt: 1.5 }}>
+                                    <List sx={{ overflow: 'auto', maxHeight: '70%' }}>
                                         {employeeCertifications.map((val) => {
-                                            return <Typography fontSize={16}>{val.certification_name}</Typography>
+                                            return <ListItem  sx={{mb:1}}><Typography fontSize={16}>{"●\t" + val.certification_name}</Typography></ListItem>
                                         })}
-                                    </Stack>
+                                    </List>
                                 </Container>
                             </Box>
                         </Grid>

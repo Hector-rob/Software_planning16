@@ -309,7 +309,7 @@ export default function MainPage() {
             <br />
 
             <Box sx={{ display: "inline-flex", flexDirection: 'row', width: "32%" }}>
-              {isLoading ? <CircularProgress size={50} sx={{ margin: "auto" }} /> : getGraphs()}
+              {isLoading ? <CircularProgress size={40} sx={{ margin: "auto" }} /> : getGraphs()}
             </Box>
 
           </Container>
@@ -325,7 +325,7 @@ export default function MainPage() {
             <br />
 
             <Box sx={{ width: "100%", height: "65%", display: 'flex', justifyContent: 'center', }}>
-              {isLoading ? <CircularProgress size={50} sx={{ margin: "auto" }} /> : getCertsbyDpt()}
+              {isLoading ? <CircularProgress size={40} sx={{ mt: 0}} /> : getCertsbyDpt()}
             </Box>
 
           </Container>
