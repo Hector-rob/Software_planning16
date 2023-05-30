@@ -37,7 +37,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
 import Axios from "axios";
 import TablePagination from '@mui/material/TablePagination';
-import Cookies from "js-cookie";
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -236,13 +236,6 @@ const deletePendingCertification = async (uid) => {
     
   }
 
-  const logOut = () => {
-    window.localStorage.clear();
-    Cookies.remove("loggedin");
-   
-    window.location.href = "./Login";
-  };
-
   const handleModalClose = () => {
     setModalOpen(false);
   }
@@ -349,7 +342,7 @@ const deletePendingCertification = async (uid) => {
         </List>
         <Divider color="white" variant="middle" />
         <ListItem key={"Sign Out"} disablePadding sx={{ display: 'block' }}>
-          <ListItemButton onClick={() => logOut()}
+          <ListItemButton
             sx={{
               justifyContent: open ? 'initial' : 'center',
               px: 2.5,

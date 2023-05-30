@@ -24,7 +24,10 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import Container from '@mui/material/Container';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Cookies from "js-cookie";
+import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
+import Axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const drawerWidth = 240;
 
@@ -79,14 +82,17 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function Employee() {
+export default function Employee(props: any) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const [employeeInfo, setEmployeeData] = useState([]);
+    const [employeeCertifications, setEmployeeCertifications] = useState([]);
+    const [isLoading, setLoading] = React.useState(true);
+
+    const router = useRouter();
 
     const menuIcons = [<HomeIcon />, <PeopleIcon />, <WorkspacePremiumIcon />];
     const menuRefs = ["/MainPage", "/Database", "/Certifications"];
-
-    const data = { "uid": "078763781IBM", "name": "Derek", "lastName": "Morgan", "email": "derek.morgan@email.com", "joinDate": "29 / 08 / 2001", "projects": 223 };
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -96,11 +102,40 @@ export default function Employee() {
         setOpen(false);
     };
 
-    const logOut = () => {
-        window.localStorage.clear();
-        Cookies.remove("loggedin");
-        window.location.href = "./Login";
-      };
+    const employeeId = router.query.id; //Get respective EmployeeID retreived from the Database
+    //console.log(employeeId)
+
+    useEffect(() => {
+        Axios.get("http://localhost:5000/employeeInfo").then((response) => {
+            //console.log(response.data);
+            setEmployeeData(response.data.find(x => x.uid === employeeId));
+        });
+        Axios.get("http://localhost:5000/certification").then((response) => {
+            //console.log(response.data.filter(x => x.uid === employeeId));
+            setEmployeeCertifications(response.data.filter(x => x.uid === employeeId));
+            setLoading(false);
+        });
+
+    }, []);
+
+    if (isLoading) {
+        return <React.Fragment>
+            <Container maxWidth="true">
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    marginTop: 20,
+                }}>
+                    <Typography fontSize={35} fontWeight={700}>Loading</Typography>
+                    <CircularProgress size={50} sx={{ mt: 3}} />
+                </Box>
+            </Container>
+        </React.Fragment>
+    }
+
+    const employeeDpt = employeeCertifications[0].department;
+    const employeeCerts = employeeCertifications.length;
 
     return (
         <Box sx={{ display: 'flex', width: "100%", height: "100%", position: "absolute" }}>
@@ -160,7 +195,7 @@ export default function Employee() {
                 </List>
                 <Divider color="white" variant="middle" />
                 <ListItem key={"Sign Out"} disablePadding sx={{ display: 'block' }}>
-                    <ListItemButton onClick={() => logOut()}
+                    <ListItemButton
                         sx={{
                             justifyContent: open ? 'initial' : 'center',
                             px: 2.5,
@@ -190,22 +225,19 @@ export default function Employee() {
                     </Button>
                     <Stack justifyContent="center" alignItems="center">
                         <AccountCircleRoundedIcon sx={{ fontSize: 150 }} />
-                        <Typography fontSize={35} fontWeight={700}>{data.name + " " + data.lastName}</Typography>
-                        <Typography fontSize={14}>{data.email}</Typography>
+                        <Typography fontSize={35} fontWeight={700}>{employeeInfo.name + " " + employeeInfo.last_name}</Typography>
+                        <Typography fontSize={14}>{employeeInfo.email}</Typography>
                         <Box display="flex-start" sx={{ height: 10, width: 0.25, backgroundColor: "#0F62FE", mt: 1 }}></Box>
                     </Stack>
                     <Grid container columnSpacing={3} sx={{ mb: 2, mt: 4, height: "100%" }} >
                         <Grid item container xs={6} sm={6} md={6} lg={6} xl={6}>
-                            <Grid container spacing={2} sx={{ height: "100%" }}>
+                            <Grid container spacing={2} sx={{ height: "50%" }}>
                                 <Grid item container xs={6} sm={6} md={6} lg={6} xl={6}>
                                     <Box display="flex" sx={{ width: "100%" }}>
                                         <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
-                                            <Stack justifyContent="center" alignItems="center" sx={{ mt: 3, mb: 3 }} spacing={2}>
-                                                <Stack direction="row" spacing={2} divider={<Divider orientation="vertical" flexItem color="#0F62FE" sx={{ width: 7, height: 30 }} />}>
-                                                    <Typography fontSize={20} fontWeight={700}>{data.uid}</Typography>
-                                                    <Typography fontSize={20}>Department</Typography>
-                                                </Stack>
-                                                <Typography component='div' fontSize={24}><Box fontWeight={700} display='inline'>Joined</Box>: {data.joinDate}</Typography>
+                                            <Stack justifyContent="center" alignItems="center" sx={{ mt: 3, mb: 3 }} spacing={1}>
+                                                <Typography align="center" component='div' fontSize={20}><Box fontWeight={700} display='inline'>{employeeInfo.uid}</Box> | {employeeDpt}</Typography>
+                                                <Typography component='div' fontSize={20}><Box fontWeight={700} display='inline'>Joined</Box>: {employeeInfo.join_date}</Typography>
                                             </Stack>
                                         </Container>
                                     </Box>
@@ -214,7 +246,7 @@ export default function Employee() {
                                     <Box display="flex" sx={{ width: "100%" }}>
                                         <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
                                             <Stack justifyContent="center" alignItems="center" sx={{ mt: 2 }}>
-                                                <Typography component='div' fontSize={50} fontWeight={800} color={"#0F62FE"}>XX</Typography>
+                                                <Typography component='div' fontSize={50} fontWeight={800} color={"#0F62FE"}>{employeeCerts}</Typography>
                                                 <Typography component='div' fontSize={20}>Certifications</Typography>
                                             </Stack>
                                         </Container>
@@ -224,14 +256,14 @@ export default function Employee() {
                                     <Box display="flex" sx={{ width: "100%" }}>
                                         <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
                                             <Stack justifyContent="center" alignItems="center" sx={{ mt: 2 }}>
-                                                <Typography component='div' fontSize={50} fontWeight={800} color={"#198038"}>{data.projects}</Typography>
+                                                <Typography component='div' fontSize={50} fontWeight={800} color={"#198038"}>{employeeInfo.projects}</Typography>
                                                 <Typography component='div' fontSize={20}>Projects</Typography>
                                             </Stack>
                                         </Container>
                                     </Box>
                                 </Grid>
                                 <Grid item container xs={12} sm={12} md={12} lg={12} xl={12}>
-                                    <Box display="flex" sx={{ width: "100%", height: "400%" }}>
+                                    <Box display="flex" sx={{ width: "100%", height: "385%" }}>
                                         <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
                                             <Stack justifyContent="center" alignItems="center" sx={{ mt: 2 }}>
                                                 <Typography component='div' fontSize={24}><Box fontWeight={700} display='inline'>Skills</Box> & Areas of Opportunity</Typography>
@@ -243,11 +275,16 @@ export default function Employee() {
                             </Grid>
                         </Grid>
                         <Grid item container xs={6} sm={6} md={6} lg={6} xl={6}>
-                            <Box display="flex" sx={{ width: "100%", height: "190%" }}>
+                            <Box display="flex" sx={{ width: "100%", height: "105%" }}>
                                 <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
                                     <Stack justifyContent="center" alignItems="center" sx={{ mt: 2 }}>
                                         <Typography component='div' fontSize={30}>Certification <Box fontWeight={700} display='inline'>History</Box></Typography>
-                                        <Box display="flex-start" sx={{ height: 7, width: 0.45, backgroundColor: "#0F62FE", mt: 1 }}></Box>
+                                        <Box display="flex-start" sx={{ height: 7, width: 0.45, backgroundColor: "#0F62FE", mt: 1, mb: 1 }}></Box>
+                                    </Stack>
+                                    <Stack spacing={0.5} sx={{ mt: 1.5 }}>
+                                        {employeeCertifications.map((val) => {
+                                            return <Typography fontSize={16}>{val.certification_name}</Typography>
+                                        })}
                                     </Stack>
                                 </Container>
                             </Box>
@@ -255,6 +292,6 @@ export default function Employee() {
                     </Grid>
                 </Container>
             </Box>
-        </Box >
+        </Box >
     );
 }

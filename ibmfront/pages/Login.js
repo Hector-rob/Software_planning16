@@ -12,7 +12,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useState } from "react";
 import Axios from "axios";
-import Cookies from "js-cookie";
+
 
 export default function Login() {
     const [_email, setEmail] = useState("");
@@ -63,19 +63,11 @@ const Log = async(e) =>  {
       alert("login successful");
       window.localStorage.setItem("token", response.data.data);
       window.localStorage.setItem("loggedIn", true);
-      Cookies.set("loggedin", true);
-      window.location.href = "./MainPage";
   
-    }
-    else{
-       window.alert("Invalid data");
-
     }
   }
   catch(error){
     console.log(error);
-    // window.alert("Invalid data");
-
   }
 }
 
