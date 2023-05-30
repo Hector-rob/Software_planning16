@@ -8,6 +8,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useState } from "react";
 import Button from "@mui/material/Button";
 import Axios from "axios";
+import { Navigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 export default function Register() {
 
@@ -31,6 +33,30 @@ export default function Register() {
 
         })
     };
+
+    // const submitEmployee = async() =>  {
+    //     try{
+    //       const response = await Axios.post("http://localhost:5000/user", {
+    //         email: employeeEmail,
+    //         name: employeeName,
+    //         last_name: employeeLastName,
+    //         password: employeePassword,
+    //         country: employeeCountry,
+    //         department: employeeDepartment
+    //         });
+    //       console.log(response.data, "User");
+    //       if (response.data.status == "ok") {
+    //         alert("login successful");
+    //         window.localStorage.setItem("token", response.data.data);
+    //         window.localStorage.setItem("loggedIn", true);
+
+    //       }
+    //     }
+    //     catch(error){
+    //       console.log(error);
+    //       alert("User exists")
+    //     }
+    //   }
 
     const countries = ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia', 'Austria',
         'Azerbaijan', 'The Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina',

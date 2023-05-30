@@ -12,11 +12,12 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useState } from "react";
 import Axios from "axios";
+import Cookies from "js-cookie";
 
 
 export default function Login() {
-    const [_email, setEmail] = useState("");
-    const [_password, setPassword] = useState("");
+  const [_email, setEmail] = useState("");
+  const [_password, setPassword] = useState("");
 
 
   const handleSubmit = (event) => {
@@ -28,48 +29,54 @@ export default function Login() {
     });
   };
 
-//   const Log = () => {
-//     console.log("WTf");
-//     const response = Axios.post("http://localhost:5000/login-user", {
-//         email: _email,
-//         password: _password
-//     })
-//     .then((res) => response.json(),console.log(response))
-//     // .then((data) => {
-//     //   if(data.status == "ok"){
-//     //    alert("Login was succesful");
-//     //    window.localStorage("token", data.data);
+  //   const Log = () => {
+  //     console.log("WTf");
+  //     const response = Axios.post("http://localhost:5000/login-user", {
+  //         email: _email,
+  //         password: _password
+  //     })
+  //     .then((res) => response.json(),console.log(response))
+  //     // .then((data) => {
+  //     //   if(data.status == "ok"){
+  //     //    alert("Login was succesful");
+  //     //    window.localStorage("token", data.data);
 
 
-//     //   }
-       
-//     //     console.log(response);
+  //     //   }
 
-//     // })
-// };
+  //     //     console.log(response);
 
-const Log = async(e) =>  {
-  e.preventDefault();
+  //     // })
+  // };
 
-  console.log(_email, _password);
+  const Log = async (e) => {
+    e.preventDefault();
 
-  try{
-    const response = await Axios.post("http://localhost:5000/login-user", {
-      email: _email,
-      password: _password
+    console.log(_email, _password);
+
+    try {
+      const response = await Axios.post("http://localhost:5000/login-user", {
+        email: _email,
+        password: _password
       });
-    console.log(response.data, "User");
-    if (response.data.status == "ok") {
-      alert("login successful");
-      window.localStorage.setItem("token", response.data.data);
-      window.localStorage.setItem("loggedIn", true);
-  
+      console.log(response.data, "User");
+      if (response.data.status == "ok") {
+        alert("login successful");
+        window.localStorage.setItem("token", response.data.data);
+        window.localStorage.setItem("loggedIn", true);
+        Cookies.set("loggedin", true);
+        window.location.href = "./MainPage";
+
+      }
+      else {
+        window.alert("Invalid data");
+
+      }
+    }
+    catch (error) {
+      console.log(error);
     }
   }
-  catch(error){
-    console.log(error);
-  }
-}
 
   // fetch("http://localhost:5000/login-user", {
   //   method: "POST",
@@ -84,18 +91,18 @@ const Log = async(e) =>  {
   //     _password,
   //   }),
   // })
-    // .then((response) => response.json())
-    // .then((data) => {
-    //   console.log(data, "User");
-    //   if (data.status == "ok") {
-    //     alert("login successful");
-    //     window.localStorage.setItem("token", data.data);
-    //     window.localStorage.setItem("loggedIn", true);
+  // .then((response) => response.json())
+  // .then((data) => {
+  //   console.log(data, "User");
+  //   if (data.status == "ok") {
+  //     alert("login successful");
+  //     window.localStorage.setItem("token", data.data);
+  //     window.localStorage.setItem("loggedIn", true);
 
-    //    // window.location.href = "./userDetails";
-    //   }
-    // });
-// }
+  //    // window.location.href = "./userDetails";
+  //   }
+  // });
+  // }
 
   const [visiblePassword, toggleVisibility] = useState(false);
   const clickHandler = () => toggleVisibility(!visiblePassword);
@@ -147,7 +154,7 @@ const Log = async(e) =>  {
             autoFocus
             onChange={(e) => {
               setEmail(e.target.value)
-          }}
+            }}
           />
           <TextField
             margin="normal"
@@ -164,7 +171,7 @@ const Log = async(e) =>  {
               // console.log(email);
               // console.log(password);
 
-          }}
+            }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -183,26 +190,26 @@ const Log = async(e) =>  {
             label="Remember me"
           />
           {/* <Button href="/MainPage" */}
-          <Button onClick={(e) => {Log(e)}}
+          <Button onClick={(e) => { Log(e) }}
             type="register"
             variant="contained"
             fullWidth
             sx={{ mt: 3, mb: 2, borderRadius: 0 }}
-            
+
           >
             Sign In
           </Button>
           <Grid container>
             <Grid item xs>
               <Typography>
-               {/*  {<Link href="/PageNotFound" underline="hover">
+                {/*  {<Link href="/PageNotFound" underline="hover">
                   "Forgot password?"
-                </Link>} */} 
+                </Link>} */}
                 <br></br>
                 <Button href="/PageNotFound" variant="text" underline="hover">Forgot password?</Button>
               </Typography>
-               
-              
+
+
             </Grid>
             <Grid item>
               <Typography>

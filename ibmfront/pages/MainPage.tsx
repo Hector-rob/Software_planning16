@@ -28,6 +28,7 @@ import FileOpenRoundedIcon from '@mui/icons-material/FileOpenRounded';
 import Tooltip from '@mui/material/Tooltip';
 import Axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
+import Cookies from "js-cookie";
 
 const drawerWidth = 240;
 
@@ -118,6 +119,12 @@ export default function MainPage() {
       setLoading(false);
     });
   }, []);
+
+  const logOut = () => {
+    window.localStorage.clear();
+    Cookies.remove("loggedin");
+    window.location.href = "./Login";
+  };
 
   const dptNames = ["Programming", "Finance and Operations", "Consulting", "Systems, Technology Lifecycle Services"]; //Get names of departments
   const dptNamesFreq = [];
@@ -260,7 +267,7 @@ export default function MainPage() {
         </List>
         <Divider color="white" variant="middle" />
         <ListItem key={"Sign Out"} disablePadding sx={{ display: 'block' }}>
-          <ListItemButton
+          <ListItemButton onClick={() => logOut()}
             sx={{
               justifyContent: open ? 'initial' : 'center',
               px: 2.5,
@@ -302,7 +309,7 @@ export default function MainPage() {
             <br />
 
             <Box sx={{ display: "inline-flex", flexDirection: 'row', width: "32%" }}>
-              {isLoading ? <CircularProgress size={50} sx={{margin: "auto"}} /> : getGraphs()}
+              {isLoading ? <CircularProgress size={50} sx={{ margin: "auto" }} /> : getGraphs()}
             </Box>
 
           </Container>
@@ -318,7 +325,7 @@ export default function MainPage() {
             <br />
 
             <Box sx={{ width: "100%", height: "65%", display: 'flex', justifyContent: 'center', }}>
-              {isLoading ? <CircularProgress size={50} sx={{margin: "auto"}} /> : getCertsbyDpt()}
+              {isLoading ? <CircularProgress size={50} sx={{ margin: "auto" }} /> : getCertsbyDpt()}
             </Box>
 
           </Container>

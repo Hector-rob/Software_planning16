@@ -28,6 +28,7 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import Axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
+import Cookies from "js-cookie";
 
 const drawerWidth = 240;
 
@@ -102,6 +103,12 @@ export default function Employee(props: any) {
         setOpen(false);
     };
 
+    const logOut = () => {
+        window.localStorage.clear();
+        Cookies.remove("loggedin");
+        window.location.href = "./Login";
+    };
+
     const employeeId = router.query.id; //Get respective EmployeeID retreived from the Database
     //console.log(employeeId)
 
@@ -128,7 +135,7 @@ export default function Employee(props: any) {
                     marginTop: 20,
                 }}>
                     <Typography fontSize={35} fontWeight={700}>Loading</Typography>
-                    <CircularProgress size={50} sx={{ mt: 3}} />
+                    <CircularProgress size={50} sx={{ mt: 3 }} />
                 </Box>
             </Container>
         </React.Fragment>
@@ -195,7 +202,7 @@ export default function Employee(props: any) {
                 </List>
                 <Divider color="white" variant="middle" />
                 <ListItem key={"Sign Out"} disablePadding sx={{ display: 'block' }}>
-                    <ListItemButton
+                    <ListItemButton onClick={() => logOut()}
                         sx={{
                             justifyContent: open ? 'initial' : 'center',
                             px: 2.5,

@@ -43,6 +43,7 @@ import TablePagination from '@mui/material/TablePagination';
 import FileOpenRoundedIcon from '@mui/icons-material/FileOpenRounded';
 import Tooltip from '@mui/material/Tooltip';
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -286,6 +287,12 @@ export default function Database(props: any) {
 
   }
 
+  const logOut = () => {
+    window.localStorage.clear();
+    Cookies.remove("loggedin");
+    window.location.href = "./Login";
+  };
+
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchValue(value);
@@ -362,7 +369,7 @@ export default function Database(props: any) {
         </List>
         <Divider color="white" variant="middle" />
         <ListItem key={"Sign Out"} disablePadding sx={{ display: 'block' }}>
-          <ListItemButton
+          <ListItemButton onClick={() => logOut()}
             sx={{
               justifyContent: open ? 'initial' : 'center',
               px: 2.5,
@@ -533,7 +540,7 @@ export default function Database(props: any) {
                           {
                             <Link href={{
                               pathname: "/Employee",
-                              query: {id: Object.values(row).slice(1, -1)[0] as String}
+                              query: { id: Object.values(row).slice(1, -1)[0] as String }
                             }} passHref>
                               <Button>
                                 <NavigateNextIcon />

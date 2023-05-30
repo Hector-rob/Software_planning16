@@ -19,7 +19,7 @@ const User = mongoose.model("Users");
 //create user
 // router.post("/user", (req, res) => {
 //     const user = userSchema(req.body);
-    
+
 //     try{
 //         const email = userSchema.findOne({email});
 //         console.log("hi");
@@ -35,62 +35,88 @@ const User = mongoose.model("Users");
 //         res.send({status: "error"});
 //     }
 
-  
+
 // });
 
 router.post("/user", async (req, res) => {
-    const { email, name, last_name, password, country, department} = req.body;
-  
-    const encryptedPassword = await bcrypt.hash(password, 10);
-    try {
-      const oldUser = await User.findOne({ email });
-  
-      if (oldUser) {
-        return res.json({ error: "User Exists" });
+  const { email, name, last_name, password, country, department } = req.body;
+
+  const encryptedPassword = await bcrypt.hash(password, 10);
+  try {
+    const oldUser = await User.findOne({ email });
+
+    if (oldUser) {
+      console.log("User exists");
+      return res.json({ error: "User Exists" });
+    }
+    await User.create({
+      email,
+      name,
+      last_name,
+      password: encryptedPassword,
+      country,
+      department
+      // password: encryptedPassword,
+    });
+    res.send({ status: "ok" });
+  } catch (error) {
+    res.send({ status: "error" });
+  }
+});
+
+router.post("/login-user", async (req, res) => {
+  const { email, password } = req.body;
+  console.log(email);
+  console.log(password);
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.json({ error: "User Not found" });
+  }
+  if (await bcrypt.compare(password, user.password)) {
+    const token = jwt.sign({ email: user.email }, JWT_SECRET, {
+      expiresIn: "15m",
+    });
+
+    if (res.status(201)) {
+      console.log("Login")
+      return res.json({ status: "ok", data: token });
+    } else {
+      console.log("Invalid data")
+      return res.json({ error: "error" });
+    }
+  }
+  console.log("Invalid data")
+  res.json({ status: "error", error: "InvAlid Password" });
+});
+
+
+router.post("/userData", async (req, res) => {
+  const { token } = req.body;
+  try {
+    const user = jwt.verify(token, JWT_SECRET, (err, res) => {
+      if (err) {
+        return "token expired";
       }
-      await User.create({
-        email,
-        name,
-        last_name,
-        password: encryptedPassword,
-        country,
-        department
-        // password: encryptedPassword,
+      return res;
+    });
+    console.log(user);
+    if (user == "token expired") {
+      return res.send({ status: "error", data: "token expired" });
+    }
+
+    const useremail = user.email;
+    User.findOne({ email: useremail })
+      .then((data) => {
+        res.send({ status: "ok", data: data });
+      })
+      .catch((error) => {
+        res.send({ status: "error", data: error });
       });
-      res.send({ status: "ok" });
-    } catch (error) {
-      res.send({ status: "error" });
-    }
-  });
+  } catch (error) { }
+});
 
-  router.post("/login-user", async (req, res) => {
-    const { email, password } = req.body;
-    console.log(email);
-    console.log(password);
-
-
-  
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.json({ error: "User Not found" });
-    }
-    if (await bcrypt.compare(password, user.password)) {
-      const token = jwt.sign({ email: user.email }, JWT_SECRET, {
-        expiresIn: "15m",
-      });
-  
-      if (res.status(201)) {
-        console.log("Login")
-        return res.json({ status: "ok", data: token });
-      } else {
-        console.log("Invalid data")
-        return res.json({ error: "error" });
-      }
-    }
-    console.log("Invalid data")
-    res.json({ status: "error", error: "InvAlid Password" });
-  });
 
 
 
@@ -110,50 +136,52 @@ router.post("/user", async (req, res) => {
 //get all users
 
 router.get("/user", (req, res) => {
-    userSchema
+  userSchema
     .find()
     .then((data) => res.json(data))
-    .catch((error) => res.json({message: error}))
+    .catch((error) => res.json({ message: error }))
 });
 
 //get a user
 
 router.get("/user/:name", (req, res) => {
-    userSchema
-    .findOne({"name": req.params.name}, {_id: 0, __v: 0}) //Sin _id ni __v de mongo
+  userSchema
+    .findOne({ "name": req.params.name }, { _id: 0, __v: 0 }) //Sin _id ni __v de mongo
     .then((data) => res.json(data))
-    .catch((error) => res.json({message: error}))
+    .catch((error) => res.json({ message: error }))
 });
 
 //Update a user
 router.put("/user/:name", (req, res) => {
-    const {email, 
-        name,
-        last_name,
-        password,
-        country,
-        department} = req.body;
-    userSchema
-    .updateOne({"name": req.params.name}, //Update through the use of uid
-    {$set: {
-        email, 
-        name,
-        last_name,
-        password,
-        country,
-        department
-    }})
+  const { email,
+    name,
+    last_name,
+    password,
+    country,
+    department } = req.body;
+  userSchema
+    .updateOne({ "name": req.params.name }, //Update through the use of uid
+      {
+        $set: {
+          email,
+          name,
+          last_name,
+          password,
+          country,
+          department
+        }
+      })
     .then((data) => res.json(data))
-    .catch((error) => res.json({message: error}))
+    .catch((error) => res.json({ message: error }))
 });
 
 //delete a user
 
 router.delete("/user/:name", (req, res) => {
-    userSchema
-    .deleteOne({"name": req.params.name}) //Sin _id ni __v de mongo
+  userSchema
+    .deleteOne({ "name": req.params.name }) //Sin _id ni __v de mongo
     .then((data) => res.json(data))
-    .catch((error) => res.json({message: error}))
+    .catch((error) => res.json({ message: error }))
 });
 
 
