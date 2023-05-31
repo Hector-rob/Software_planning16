@@ -24,11 +24,17 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import Container from '@mui/material/Container';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Paper from '@mui/material/Paper'
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import Axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import Cookies from "js-cookie";
+import VerifiedIcon from '@mui/icons-material/Verified';
+import EmailIcon from '@mui/icons-material/Email';
+import BusinessIcon from '@mui/icons-material/Business';
+import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 const drawerWidth = 240;
 
@@ -103,6 +109,20 @@ export default function Employee(props: any) {
         setOpen(false);
     };
 
+    function getCertificationType(val: any) {
+        if (val == "badge") {
+            return <React.Fragment>
+                <BusinessIcon sx={{ ml: 1 }} />
+            </React.Fragment>
+        }
+        if (val == "external certification") {
+            return <React.Fragment>
+                <MilitaryTechIcon sx={{ ml: 1 }} />
+            </React.Fragment>
+        }
+
+    }
+
     const logOut = () => {
         window.localStorage.clear();
         Cookies.remove("loggedin");
@@ -143,9 +163,10 @@ export default function Employee(props: any) {
 
     const employeeDpt = employeeCertifications[0].department;
     const employeeCerts = employeeCertifications.length;
+    const employeeLocation = employeeCertifications[0].work_location;
 
     return (
-        <Box sx={{ display: 'flex', width: "100%", height: "100%", position: "absolute" }}>
+        <Box sx={{ display: 'flex', width: "100%", position: "absolute" }}>
             <CssBaseline />
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
@@ -233,8 +254,11 @@ export default function Employee(props: any) {
                     <Stack justifyContent="center" alignItems="center">
                         <AccountCircleRoundedIcon sx={{ fontSize: 150 }} />
                         <Typography fontSize={35} fontWeight={700}>{employeeInfo.name + " " + employeeInfo.last_name}</Typography>
-                        <Typography fontSize={14}>{employeeInfo.email}</Typography>
-                        <Box display="flex-start" sx={{ height: 10, width: 0.25, backgroundColor: "#0F62FE", mt: 1 }}></Box>
+                        <Stack direction={"row"} sx={{ mt: 0.5 }}>
+                            <EmailIcon sx={{ mr: 1 }} /><Typography fontSize={16}>{employeeInfo.email}</Typography>
+                            <LocationOnIcon sx={{ ml: 1, mr: 0.5 }} /><Typography fontSize={16}>{employeeLocation}</Typography>
+                        </Stack>
+                        <Box display="flex-start" sx={{ height: 10, width: 0.325, backgroundColor: "#0F62FE", mt: 1 }}></Box>
                     </Stack>
                     <Grid container columnSpacing={3} sx={{ mb: 2, mt: 4, height: "100%" }} >
                         <Grid item container xs={6} sm={6} md={6} lg={6} xl={6}>
@@ -244,7 +268,7 @@ export default function Employee(props: any) {
                                         <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
                                             <Stack justifyContent="center" alignItems="center" sx={{ mt: 3, mb: 3 }} spacing={1}>
                                                 <Typography align="center" component='div' fontSize={20}><Box fontWeight={700} display='inline'>{employeeInfo.uid}</Box> | {employeeDpt}</Typography>
-                                                <Typography component='div' fontSize={20}><Box fontWeight={700} display='inline'>Joined</Box>: {employeeInfo.join_date}</Typography>
+                                                <Typography component='div' fontSize={20}><Box fontWeight={700} display='inline'>Joined on</Box> {employeeInfo.join_date}</Typography>
                                             </Stack>
                                         </Container>
                                     </Box>
@@ -270,7 +294,7 @@ export default function Employee(props: any) {
                                     </Box>
                                 </Grid>
                                 <Grid item container xs={12} sm={12} md={12} lg={12} xl={12}>
-                                    <Box display="flex" sx={{ width: "100%", height: "385%" }}>
+                                    <Box display="flex" sx={{ width: "300%", minHeight: 240 }}>
                                         <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
                                             <Stack justifyContent="center" alignItems="center" sx={{ mt: 2 }}>
                                                 <Typography component='div' fontSize={24}><Box fontWeight={700} display='inline'>Skills</Box> & Areas of Opportunity</Typography>
@@ -282,23 +306,40 @@ export default function Employee(props: any) {
                             </Grid>
                         </Grid>
                         <Grid item container xs={6} sm={6} md={6} lg={6} xl={6}>
-                            <Box display="flex" sx={{ width: "100%", height: "105%" }}>
+                            <Box display="flex" sx={{ width: "100%", minHeight: 280, maxHeight: 400 }}>
                                 <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
                                     <Stack justifyContent="center" alignItems="center" sx={{ mt: 2 }}>
                                         <Typography component='div' fontSize={30}>Certification <Box fontWeight={700} display='inline'>History</Box></Typography>
-                                        <Box display="flex-start" sx={{ height: 7, width: 0.45, backgroundColor: "#0F62FE", mt: 1, mb: 1 }}></Box>
+                                        <Box display="flex-start" sx={{ height: 7, width: 0.45, backgroundColor: "#0F62FE", mt: 1, mb: 3 }}></Box>
                                     </Stack>
-                                    <Stack spacing={0.5} sx={{ mt: 1.5 }}>
-                                        {employeeCertifications.map((val) => {
-                                            return <Typography fontSize={16}>{val.certification_name}</Typography>
+                                    <List sx={{ overflow: 'auto', maxHeight: '70%' }}>
+                                        {employeeCertifications.map((val, index) => {
+                                            if (index % 2 == 0) {
+                                                return <ListItem sx={{ mb: 0.5 }}>
+                                                    <Paper elevation={6}>
+                                                        <Typography fontSize={16} sx={{ ml: 1, mr: 1 }}>{"●\t" + val.certification_name}</Typography>
+                                                    </Paper>
+                                                    {getCertificationType(val.type)}
+                                                    <VerifiedIcon sx={{ ml: 1, color: "#198038" }} />
+                                                </ListItem>
+                                            }
+                                            else {
+                                                return <ListItem sx={{ mb: 0.5 }}>
+                                                    <Paper elevation={6} sx={{ backgroundColor: "#0F62FE" }}>
+                                                        <Typography fontSize={16} color={"white"} sx={{ ml: 1, mr: 1 }}>{"●\t" + val.certification_name}</Typography>
+                                                    </Paper>
+                                                    {getCertificationType(val.type)}
+                                                    <VerifiedIcon sx={{ ml: 1, color: "#198038" }} />
+                                                </ListItem>
+                                            }
                                         })}
-                                    </Stack>
+                                    </List>
                                 </Container>
                             </Box>
                         </Grid>
                     </Grid>
                 </Container>
             </Box>
-        </Box >
+        </Box>
     );
 }

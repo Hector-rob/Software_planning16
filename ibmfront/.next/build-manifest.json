@@ -25,6 +25,11 @@
       "static/chunks/main.js",
       "static/chunks/pages/Employee.js"
     ],
+    "/MainPage": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/MainPage.js"
+    ],
     "/_app": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
