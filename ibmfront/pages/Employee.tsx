@@ -115,7 +115,7 @@ export default function Employee(props: any) {
                 <BusinessIcon sx={{ ml: 1 }} />
             </React.Fragment>
         }
-        else {
+        if (val == "external certification") {
             return <React.Fragment>
                 <MilitaryTechIcon sx={{ ml: 1 }} />
             </React.Fragment>
