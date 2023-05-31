@@ -29,6 +29,8 @@ import Tooltip from '@mui/material/Tooltip';
 import Axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import Cookies from "js-cookie";
+import { Paper, Stack } from '@mui/material';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 const drawerWidth = 240;
 
@@ -108,8 +110,13 @@ export default function MainPage() {
   const [departments, setDepartments] = useState([]);
   const [locations, setLocations] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const [pendingCerts, setPendingCerts] = useState("");
 
   useEffect(() => {
+    Axios.get("http://localhost:5000/exportPendingCertifications").then((response) => {
+      setPendingCerts(response.data.length);
+
+    });
     Axios.get("http://localhost:5000/certification").then((response) => {
       setBadges(response.data.filter(x => x.type === "badge").length); //Get number of badges
       setExternalCerts(response.data.filter(x => x.type === "external certification").length); //Get number of external certifications
@@ -332,8 +339,8 @@ export default function MainPage() {
 
         <br />
 
-        <Box sx={{ display: "flex", flexDirection: "row", width: "60%" }}>
-          <Container sx={{ marginLeft: 3, width: "100%", backgroundColor: "grey.300" }}>
+        <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
+          <Container sx={{ marginLeft: 3, width: "60%", backgroundColor: "grey.300" }}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Typography fontSize={30} fontWeight={600} sx={{ mt: 1 }}> Upload
                 <Typography component="span" fontSize={20} fontWeight={300} sx={{ verticalAlign: 'center' }}> Certifications</Typography>
@@ -438,6 +445,20 @@ export default function MainPage() {
 
           </Container>
 
+          <Paper elevation={12} sx={{ marginLeft: 3, width: "40%", backgroundColor: "grey.300" }}>
+            <Typography sx={{ mt: 2, ml: 2 }} fontSize={25} fontWeight={600}>Pending Certifications</Typography>
+            <Box display="flex-start" sx={{ height: 10, width: 0.55, backgroundColor: "#0F62FE", mt: 1, marginLeft: 2, mb: 1 }}></Box>
+            <Stack direction="column" spacing={0.5} alignItems={"center"}>
+              <Stack direction="row" alignSelf={"center"} spacing={1.5}>
+                <Typography fontSize={60} fontWeight={600} color="#34B53A">{pendingCerts}</Typography>
+                <Stack direction="column" sx={{ mt: 2 }}>
+                  <Typography fontSize={26}>Pending</Typography>
+                  <Typography fontSize={26}>Certifications</Typography>
+                </Stack>
+              </Stack>
+              <Button href="/Certifications" variant="contained" sx={{ bgcolor: "black" }} endIcon={<NavigateNextIcon />}>Review</Button>
+            </Stack>
+          </Paper>
         </Box>
 
       </Box>
