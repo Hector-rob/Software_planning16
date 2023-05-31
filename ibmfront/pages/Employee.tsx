@@ -34,6 +34,7 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import EmailIcon from '@mui/icons-material/Email';
 import BusinessIcon from '@mui/icons-material/Business';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 const drawerWidth = 240;
 
@@ -162,6 +163,7 @@ export default function Employee(props: any) {
 
     const employeeDpt = employeeCertifications[0].department;
     const employeeCerts = employeeCertifications.length;
+    const employeeLocation = employeeCertifications[0].work_location;
 
     return (
         <Box sx={{ display: 'flex', width: "100%", position: "absolute" }}>
@@ -252,8 +254,11 @@ export default function Employee(props: any) {
                     <Stack justifyContent="center" alignItems="center">
                         <AccountCircleRoundedIcon sx={{ fontSize: 150 }} />
                         <Typography fontSize={35} fontWeight={700}>{employeeInfo.name + " " + employeeInfo.last_name}</Typography>
-                        <Stack direction={"row"}><EmailIcon sx={{ mr: 1 }} /><Typography fontSize={14}>{employeeInfo.email}</Typography></Stack>
-                        <Box display="flex-start" sx={{ height: 10, width: 0.25, backgroundColor: "#0F62FE", mt: 1 }}></Box>
+                        <Stack direction={"row"} sx={{ mt: 0.5 }}>
+                            <EmailIcon sx={{ mr: 1 }} /><Typography fontSize={16}>{employeeInfo.email}</Typography>
+                            <LocationOnIcon sx={{ ml: 1, mr: 0.5 }} /><Typography fontSize={16}>{employeeLocation}</Typography>
+                        </Stack>
+                        <Box display="flex-start" sx={{ height: 10, width: 0.325, backgroundColor: "#0F62FE", mt: 1 }}></Box>
                     </Stack>
                     <Grid container columnSpacing={3} sx={{ mb: 2, mt: 4, height: "100%" }} >
                         <Grid item container xs={6} sm={6} md={6} lg={6} xl={6}>
@@ -263,7 +268,7 @@ export default function Employee(props: any) {
                                         <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
                                             <Stack justifyContent="center" alignItems="center" sx={{ mt: 3, mb: 3 }} spacing={1}>
                                                 <Typography align="center" component='div' fontSize={20}><Box fontWeight={700} display='inline'>{employeeInfo.uid}</Box> | {employeeDpt}</Typography>
-                                                <Typography component='div' fontSize={20}><Box fontWeight={700} display='inline'>Joined</Box>: {employeeInfo.join_date}</Typography>
+                                                <Typography component='div' fontSize={20}><Box fontWeight={700} display='inline'>Joined on</Box> {employeeInfo.join_date}</Typography>
                                             </Stack>
                                         </Container>
                                     </Box>
@@ -335,6 +340,6 @@ export default function Employee(props: any) {
                     </Grid>
                 </Container>
             </Box>
-        </Box >
+        </Box>
     );
 }
