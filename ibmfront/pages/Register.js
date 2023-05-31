@@ -30,6 +30,7 @@ export default function Register() {
             department: employeeDepartment
         }).then(() => {
             window.alert("Register was succesful");
+            window.location.href = "./Login";
 
         })
     };
