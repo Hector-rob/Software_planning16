@@ -43,6 +43,7 @@ import TablePagination from '@mui/material/TablePagination';
 import FileOpenRoundedIcon from '@mui/icons-material/FileOpenRounded';
 import Tooltip from '@mui/material/Tooltip';
 import Link from "next/link";
+import CircularProgress from "@mui/material/CircularProgress";
 import Cookies from "js-cookie";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -175,6 +176,7 @@ export default function Database(props: any) {
       console.log(response.data);
       setCertificationsList(response.data);
       setFilteredData(response.data);
+      setLoading(false);
     });
 
   }, []);
@@ -191,6 +193,7 @@ export default function Database(props: any) {
   const menuRefs = ["/MainPage", "/Database", "/Certifications"];
   const rowHeaders = ["ID", "Department", "Location", "Certification Name", "Date", "Type"];
   const [filteredData, setFilteredData] = useState([]);
+  const [isLoading, setLoading] = React.useState(true);
 
 
 
@@ -225,8 +228,11 @@ export default function Database(props: any) {
         const csvData = Papa.unparse(response.data);
         setCsvData(csvData)
         exportData(csvData, 'certifications.csv', 'text/csv;charset=utf-8;');
+
+         
       })
       .catch(error => {
+
         // Handle errors
         console.error(error);
       });
@@ -310,6 +316,22 @@ export default function Database(props: any) {
   const indexOfLastRow = (page + 1) * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const paginatedData = filteredData.slice(indexOfFirstRow, indexOfLastRow);
+
+  if (isLoading) {
+    return <React.Fragment>
+        <Container maxWidth="true">
+            <Box sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginTop: 20,
+            }}>
+                <Typography fontSize={35} fontWeight={700}>Loading</Typography>
+                <CircularProgress size={50} sx={{ mt: 3 }} />
+            </Box>
+        </Container>
+    </React.Fragment>
+}
 
   return (
 
