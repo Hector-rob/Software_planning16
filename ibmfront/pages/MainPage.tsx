@@ -128,15 +128,7 @@ export default function MainPage() {
     });
   }, []);
 
-   const [userName, setUserName] = useState("");
-  // const setUser = () => {
-  // //  const username = localStorage.getItem("email");
-  //  Cookies.get("email");
-  //   // setUserName(username);
-  // }
-
-  // setUser();
-
+  const [userName, setUserName] = useState("");
   useEffect(() => {
     fetch("http://localhost:5000/userData", {
       method: "POST",
@@ -152,9 +144,7 @@ export default function MainPage() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data, "userData");
-        
         setUserName(data.data.email);
-
         if (data.data == "token expired") {
           alert("Token expired login again");
           window.localStorage.clear();
@@ -166,9 +156,6 @@ export default function MainPage() {
   const logOut = () => {
     window.localStorage.clear();
     Cookies.remove("loggedin");
-    
-    
-    
     window.location.href = "./Login";
   };
 
