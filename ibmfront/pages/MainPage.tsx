@@ -112,6 +112,8 @@ export default function MainPage() {
   const [isLoading, setLoading] = useState(true);
   const [pendingCerts, setPendingCerts] = useState("");
 
+  
+
   useEffect(() => {
     Axios.get("http://localhost:5000/exportPendingCertifications").then((response) => {
       setPendingCerts(response.data.length);
@@ -124,6 +126,31 @@ export default function MainPage() {
       setLocations(response.data.map(x => x.work_location));
       setLoading(false);
     });
+  }, []);
+
+  const [userName, setUserName] = useState("");
+  useEffect(() => {
+    fetch("http://localhost:5000/userData", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        token: window.localStorage.getItem("token"),
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data, "userData");
+        setUserName(data.data.email);
+        if (data.data == "token expired") {
+          alert("Token expired login again");
+          window.localStorage.clear();
+          window.location.href = "./Login";
+        }
+      });
   }, []);
 
   const logOut = () => {
@@ -301,7 +328,7 @@ export default function MainPage() {
       <Box component="main" sx={{ width: "90%" }}>
         <Container maxWidth={false} sx={{ width: "100%" }}>
           <br />
-          <Typography fontSize={30} fontWeight={600} sx={{ mt: 2, }}>Welcome back, <Typography component="span" fontSize={30} fontWeight={300}> UserName</Typography></Typography>
+          <Typography fontSize={30} fontWeight={600} sx={{ mt: 2, }}>Welcome back, <Typography component="span" fontSize={30} fontWeight={300}> {userName}</Typography></Typography>
           <Box display="flex-start" sx={{ height: 10, width: 0.4, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
           <br></br>
 
