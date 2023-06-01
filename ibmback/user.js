@@ -85,11 +85,11 @@ router.post("/login-user", async (req, res) => {
 
     if (res.status(201)) {
       console.log("Login")
-      if(email == "hector@ibm.com" ||
-      "paola@ibm.com" || "diego@ibm.com" ||
-      "rudy@ibm.com" || "raul@ibm.com"){
-        return res.json({status: "manager", data: token});
-      }
+      if(email == "hector@ibm.com" || 
+      email == "paola@ibm.com" ||
+      email == "diego@ibm.com" ||
+      email == "rudy@ibm.com" ||
+      email == "raul@ibm.com")
       return res.json({ status: "ok", data: token });
     } else {
       console.log("Invalid data")
