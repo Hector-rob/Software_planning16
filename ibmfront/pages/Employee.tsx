@@ -35,6 +35,8 @@ import EmailIcon from '@mui/icons-material/Email';
 import BusinessIcon from '@mui/icons-material/Business';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import Chip from '@mui/material/Chip';
+import StarIcon from '@mui/icons-material/Star';
 
 const drawerWidth = 240;
 
@@ -95,6 +97,8 @@ export default function Employee(props: any) {
     const [employeeInfo, setEmployeeData] = useState([]);
     const [employeeCertifications, setEmployeeCertifications] = useState([]);
     const [isLoading, setLoading] = React.useState(true);
+
+    const Skills = ["Design Thinking", "Supply Chain Management", "Blockchain", "Agile", "Public Speaking", "Cloud", "DevOps", "Scrum", "Project Management", "Automation", "AI & Data Science", "Cybersecurity"];
 
     const router = useRouter();
 
@@ -296,11 +300,27 @@ export default function Employee(props: any) {
                                 <Grid item container xs={12} sm={12} md={12} lg={12} xl={12}>
                                     <Box display="flex" sx={{ width: "300%", minHeight: 240 }}>
                                         <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
-                                            <Stack justifyContent="center" alignItems="center" sx={{ mt: 2 }}>
+                                            <Stack justifyContent="center" alignItems="center" sx={{ mt: 2, mb: 2 }}>
                                                 <Typography component='div' fontSize={24}><Box fontWeight={700} display='inline'>Skills</Box> & Areas of Opportunity</Typography>
                                                 <Box display="flex-start" sx={{ height: 7, width: 0.5, backgroundColor: "#0F62FE", mt: 1 }}></Box>
                                             </Stack>
+                                            {Skills.map((element, index) => {
+                                                if (index % 2 == 0) {
+                                                    return <React.Fragment>
+                                                        <Chip icon={<StarIcon sx={{fill:"#FFD400"}}/>} label={element} sx={{ backgroundColor: "#34B53A", mr: 2, mb: 2 }}>
+                                                        </Chip>
+                                                    </React.Fragment>
+                                                }
+                                                else {
+                                                    return <React.Fragment>
+                                                        <Chip label={element} sx={{ backgroundColor: "#FFB200", mr: 2, mb: 2 }}>
+                                                        </Chip>
+                                                    </React.Fragment>
+                                                }
+
+                                            })}
                                         </Container>
+
                                     </Box>
                                 </Grid>
                             </Grid>
