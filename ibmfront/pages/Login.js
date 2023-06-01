@@ -60,12 +60,20 @@ export default function Login() {
         password: _password
       });
       console.log(response.data, "User");
-      if (response.data.status == "ok") {
+      if(response.data.status == "manager"){
         alert("login successful");
         window.localStorage.setItem("token", response.data.data);
         window.localStorage.setItem("loggedIn", true);
         Cookies.set("loggedin", true);
         window.location.href = "./MainPage";
+
+      }
+      if (response.data.status == "ok") {
+        alert("login successful");
+        window.localStorage.setItem("token", response.data.data);
+        window.localStorage.setItem("loggedIn", true);
+        Cookies.set("loggedin", true);
+        window.location.href = "./EmployeeView";
 
       }
       else {

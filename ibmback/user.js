@@ -69,7 +69,11 @@ router.post("/login-user", async (req, res) => {
   console.log(email);
   console.log(password);
 
+  
+
   const user = await User.findOne({ email });
+
+  
 
   if (!user) {
     return res.json({ error: "User Not found" });
@@ -81,6 +85,11 @@ router.post("/login-user", async (req, res) => {
 
     if (res.status(201)) {
       console.log("Login")
+      if(email == "hector@ibm.com" ||
+      "paola@ibm.com" || "diego@ibm.com" ||
+      "rudy@ibm.com" || "raul@ibm.com"){
+        return res.json({status: "manager", data: token});
+      }
       return res.json({ status: "ok", data: token });
     } else {
       console.log("Invalid data")
