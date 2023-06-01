@@ -68,7 +68,7 @@ export default function Login() {
         window.location.href = "./MainPage";
 
       }
-      if (response.data.status == "ok") {
+      else if (response.data.status == "ok") {
         alert("login successful");
         window.localStorage.setItem("token", response.data.data);
         window.localStorage.setItem("loggedIn", true);
