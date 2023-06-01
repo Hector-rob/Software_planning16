@@ -89,7 +89,9 @@ router.post("/login-user", async (req, res) => {
       email == "paola@ibm.com" ||
       email == "diego@ibm.com" ||
       email == "rudy@ibm.com" ||
-      email == "raul@ibm.com")
+      email == "raul@ibm.com"){
+        return res.json({ status: "manager", data: token });
+      }
       return res.json({ status: "ok", data: token });
     } else {
       console.log("Invalid data")
