@@ -29,6 +29,12 @@ export default function Login() {
     });
   };
 
+  const ForgotPassword = () => {
+    window.location.href = "./ForgotPassword";
+
+
+  }
+
   //   const Log = () => {
   //     console.log("WTf");
   //     const response = Axios.post("http://localhost:5000/login-user", {
@@ -214,7 +220,7 @@ export default function Login() {
                   "Forgot password?"
                 </Link>} */}
                 <br></br>
-                <Button href="/PageNotFound" variant="text" underline="hover">Forgot password?</Button>
+                <Button href="/ForgotPassword" variant="text" underline="hover">Forgot password?</Button>
               </Typography>
 
 
