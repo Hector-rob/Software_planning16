@@ -1,11 +1,11 @@
-import { FormControl, Grid, InputLabel, Select, TextField, Typography, MenuItem, } from "@mui/material";
+import { FormControl, Grid, InputLabel, Select, TextField, Typography, MenuItem, Tooltip } from "@mui/material";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import { IconButton, InputAdornment } from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Axios from "axios";
 import { Navigate } from "react-router-dom";
@@ -20,7 +20,36 @@ export default function Register() {
     const [employeeCountry, setEmployeeCountry] = useState("");
     const [employeeDepartment, setEmployeeDepartment] = useState("");
 
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [passwordsMatch, setPasswordsMatch] = useState(true);
+
+    const [isValidPassword2, setIsValidPassword2] = useState(true);
+    const [isValidEmail, setIsValidEmail] = useState(true);
+
+    const [isFormValid, setIsFormValid] = useState(false);
+
+    const handlePasswordChange = (e) => {
+        
+        setEmployeePassword(e.target.value);
+        setPasswordsMatch(e.target.value === confirmPassword);
+    };
+    
+    const handleConfirmPasswordChange = (e) => {
+        setConfirmPassword(e.target.value);
+        setPasswordsMatch(e.target.value === employeePassword);
+    };
+
+    const validatePassword = (password) => {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{8,}$/;
+        return passwordRegex.test(password);
+    };
+
     const submitEmployee = () => {
+        if (!isFormValid) {
+            window.alert("Invalid input(s). Please check the form and try again.");
+            return;
+        }
+
         Axios.post("http://localhost:5000/user", {
             email: employeeEmail,
             name: employeeName,
@@ -77,9 +106,54 @@ export default function Register() {
         'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican City', 'Venezuela', 'Vietnam', 'Yemen', 'Zambia', 'Zimbabwe']
 
     const [visiblePassword, toggleVisibility] = useState(false);
+    const [visiblePasswordConfirm, toggleVisibilityConfirm] = useState(false);
+
     const clickHandler = () => toggleVisibility(!visiblePassword);
+    const clickHandlerConfirm = () => toggleVisibilityConfirm(!visiblePasswordConfirm);
+
     const [country, selectCountry] = useState("");
     const selectCountryHandler = (val) => selectCountry(val.target.value);
+
+    const validateForm = () => {
+        const hasValidEmail = employeeEmail.trim().length > 0 && employeeEmail.includes("@") && employeeEmail.includes(".");
+        const hasValidName = employeeName.trim().length > 0;
+        const hasValidLastName = employeeLastName.trim().length > 0;
+        const hasValidPassword = employeePassword.trim().length > 0;
+        const hasValidConfirmPassword = confirmPassword.trim().length >= 8;
+        const hasValidCountry = !isNaN(employeeCountry);
+        const hasValidDepartment = employeeDepartment.trim().length > 0;
+        const passwordsMatch = employeePassword === confirmPassword 
+        const isValidPassword = validatePassword(employeePassword);
+        setIsValidPassword2(isValidPassword);
+        setIsValidEmail(hasValidEmail);
+
+        setIsFormValid(hasValidEmail &&
+            hasValidName &&
+            hasValidLastName &&
+            hasValidPassword &&
+            hasValidConfirmPassword &&
+            hasValidCountry &&
+            hasValidDepartment &&
+            passwordsMatch &&
+            isValidPassword)
+
+        return (
+        hasValidEmail &&
+        hasValidName &&
+        hasValidLastName &&
+        hasValidPassword &&
+        hasValidConfirmPassword &&
+        hasValidCountry &&
+        hasValidDepartment &&
+        passwordsMatch &&
+        isValidPassword
+        );
+    };
+    
+    useEffect(() => {
+        validateForm(); 
+      }, [employeeEmail, employeeName, employeeLastName, employeePassword, confirmPassword, employeeCountry, employeeDepartment]);
+
 
     return (
         <Container maxWidth="false" disableGutters="false">
@@ -111,6 +185,11 @@ export default function Register() {
                                     onChange={(e) => {
                                         setEmployeeEmail(e.target.value)
                                     }} />
+                                {!isValidEmail && employeeEmail.trim().length > 4 && (
+                                <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+                                    Invalid Email.
+                                </Typography>
+                                )}
                             </Grid>
                             <Grid item xs={6} sm={6} md={6} lg={6} xl={6} sx={{ mt: 3 }}>
                                 <TextField
@@ -163,8 +242,48 @@ export default function Register() {
                                         )
                                     }}
                                     onChange={(e) => {
-                                        setEmployeePassword(e.target.value)
+                                        //setEmployeePassword(e.target.value)
+                                        handlePasswordChange(e);
                                     }} />
+                            </Grid>
+                            {!isValidPassword2 && employeePassword.trim().length > 0 && (
+                                <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+                                    Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.
+                                </Typography>
+                            )}
+                            <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mt: 3 }}>
+                                <TextField
+                                    sx={{ width: 0.95 }}
+                                    variant="filled"
+                                    required
+                                    name="password-rewrite"
+                                    label="Rewrite Password"
+                                    type={visiblePasswordConfirm ? "text" : "password"}
+                                    id="password"
+                                    autoComplete="current-password"
+                                    error={!passwordsMatch}
+                                    helperText={!passwordsMatch && confirmPassword.trim().length >=8 && "Passwords do not match"}
+                                    /* InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle visibility"
+                                                    onClick={clickHandlerConfirm}
+                                                >
+                                                    {visiblePasswordConfirm ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        )
+                                    }} */
+                                    onChange={(e) => {
+                                        //setEmployeePassword(e.target.value)
+                                        handleConfirmPasswordChange(e)
+                                    }} />
+                            {/* {!passwordsMatch && (
+                                <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+                                    Passwords do not match.
+                                </Typography>
+                            )} */}
                             </Grid>
                             <Grid item xs={6} sm={6} md={6} lg={6} xl={6} sx={{ mt: 3 }}>
                                 <FormControl required sx={{ width: 0.9 }}>
@@ -182,9 +301,6 @@ export default function Register() {
                                         onClose={(e) => {
                                             setEmployeeCountry(e.target.value)
                                         }}
-
-
-
                                     >
 
                                         {countries.map((countryName) => (
@@ -213,14 +329,23 @@ export default function Register() {
                                     }} />
                             </Grid>
                         </Grid>
-                        <Button component="a" to="/MainPage"
-                            type="submit"
-                            variant="contained"
-                            onClick={submitEmployee}
-                            sx={{ mt: 5, mb: 2, borderRadius: 0, width: 350 }}
-                        >
-                            Create Account
-                        </Button>
+                        
+                        <Tooltip title={!isFormValid ? "Invalid Input(s)" : ""} arrow>
+                            <span>
+                                <Button
+                                component="a"
+                                to="/MainPage"
+                                type="submit"
+                                variant="contained"
+                                onClick={submitEmployee}
+                                disabled={!isFormValid}
+                                sx={{ mt: 5, mb: 2, borderRadius: 0, width: 350 }}
+                                >
+                                Create Account
+                                </Button>
+                            </span>
+                        
+                        </Tooltip>
                     </Box>
                 </Grid>
             </Grid>
