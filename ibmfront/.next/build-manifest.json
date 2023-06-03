@@ -15,10 +15,10 @@
   ],
   "rootMainFiles": [],
   "pages": {
-    "/Employee": [
+    "/EmployeeView": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/Employee.js"
+      "static/chunks/pages/EmployeeView.js"
     ],
     "/_app": [
       "static/chunks/webpack.js",
