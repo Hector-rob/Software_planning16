@@ -13,11 +13,16 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useState } from "react";
 import Axios from "axios";
 import Cookies from "js-cookie";
-
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 export default function Login() {
   const [_email, setEmail] = useState("");
   const [_password, setPassword] = useState("");
+
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false); 
+  const [showErrorAlert, setShowErrorAlert] = useState(false); 
+
 
 
   const handleSubmit = (event) => {
@@ -67,7 +72,9 @@ export default function Login() {
       });
       console.log(response.data, "User");
       if(response.data.status == "manager"){
-        alert("login successful");
+        //alert("Login Successful");
+        setShowSuccessAlert(true);
+       
         window.localStorage.setItem("token", response.data.data);
         window.localStorage.setItem("loggedIn", true);
         Cookies.set("loggedin", true);
@@ -75,7 +82,9 @@ export default function Login() {
 
       }
       else if (response.data.status == "ok") {
-        alert("login successful");
+        //alert("Login Successful");
+        setShowSuccessAlert(true);
+        
         window.localStorage.setItem("token", response.data.data);
         window.localStorage.setItem("loggedIn", true);
         Cookies.set("loggedin", true);
@@ -83,7 +92,8 @@ export default function Login() {
 
       }
       else {
-        window.alert("Invalid data");
+        //window.alert("Invalid data");
+        setShowErrorAlert(true);
 
       }
     }
@@ -123,6 +133,22 @@ export default function Login() {
 
   return (
     <Container component="main" maxWidth="sm">
+        {showSuccessAlert && (
+        <Box position="absolute" top={20} right={20} sx={{width: 300}}>
+          <Alert severity="success">
+            <AlertTitle>Success</AlertTitle>
+             Login Successful
+          </Alert>
+        </Box>
+        )} 
+        {showErrorAlert && !showSuccessAlert && (
+          <Box position="absolute" top={20} right={20} sx={{width: 300}}>
+            <Alert severity="error">
+              <AlertTitle>Error</AlertTitle>
+              Invalid Data
+            </Alert>
+            </Box>
+        )} 
       <Box
         sx={{
           boxShadow: 7,

@@ -38,6 +38,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import Axios from "axios";
 import TablePagination from '@mui/material/TablePagination';
 import Cookies from "js-cookie";
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -125,6 +127,11 @@ export default function Certifications(props: any) {
   const [certificationDate, setCertificationDate] = useState("");
   const [certificationType, setCertificationType] = useState("");
 
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false); 
+  const [showDeclineAlert, setShowDeclinesAlert] = useState(false); 
+
+
+
   //   const submitPendingCertification = () => {
   //     Axios.post("http://localhost:5000/certification", {
   //         uid: certificationUid,
@@ -148,7 +155,8 @@ export default function Certifications(props: any) {
       issue_date: row[4],
       type: row[5]
     }).then(() => {
-      window.alert("The certification was accepted");
+      //window.alert("The certification was accepted");
+      setShowSuccessAlert(true);
       deletePendingCertification(row[0]);
     })
   };
@@ -175,6 +183,7 @@ export default function Certifications(props: any) {
         console.log('No record found with the specified uid.');
       } else {
         console.log('Record deleted successfully.');
+        setShowDeclinesAlert(true);
 
         refreshPage()
       }
@@ -215,6 +224,8 @@ export default function Certifications(props: any) {
   const [open, setOpen] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
   const [commentOpen, setCommentOpen] = React.useState(false);
+  const [acceptOpen, setAcceptOpen] = React.useState(false);
+
   const menuIcons = [<HomeIcon />, <PeopleIcon />, <WorkspacePremiumIcon />];
   const menuRefs = ["/MainPage", "/Database", "/Certifications"];
 
@@ -231,6 +242,14 @@ export default function Certifications(props: any) {
 
   const handleModalOpen = (uid) => {
     setModalOpen(true);
+    const certificationu = uid;
+    setCertificationuid(uid);
+    // deletePendingCertification(certificationuid);
+
+  }
+
+  const handleModalOpen2 = (uid) => {
+    setAcceptOpen(true);
     const certificationu = uid;
     setCertificationuid(uid);
     // deletePendingCertification(certificationuid);
@@ -255,6 +274,15 @@ export default function Certifications(props: any) {
   const handleMessageClose = () => {
     setCommentOpen(false);
   }
+
+  const handleAcceptOpen = () => {
+    setAcceptOpen(false);
+  }
+
+  const handleAcceptClose = () => {
+    setAcceptOpen(false);
+  }
+
   const refreshPage = () => {
     window.location.reload();
   }
@@ -372,6 +400,25 @@ export default function Certifications(props: any) {
           </ListItemButton>
         </ListItem>
       </Drawer>
+
+      {showSuccessAlert && !showDeclineAlert && (
+        <Box position="absolute" top={60} right={20} sx={{width: 300}}>
+          <Alert severity="success">
+            <AlertTitle>Success</AlertTitle>
+             Certification Accepted
+          </Alert>
+        </Box>
+      )}
+
+      {showDeclineAlert && !showSuccessAlert && (
+        <Box position="absolute" top={60} right={20} sx={{width: 300}}>
+          <Alert severity="info">
+            <AlertTitle>Info</AlertTitle>
+            Certification Declined
+          </Alert>
+        </Box>
+      )}
+
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Container maxWidth={false} sx={{ width: "100%" }}>
           <br />
@@ -415,13 +462,12 @@ export default function Certifications(props: any) {
                           justifyContent="center"
                         >
                           <Stack direction="row" spacing={4} sx={{ ml: 10, boxSizing: 'border-box' }}>
-                            <Button variant="contained" component="span"
+                            {/* <Button variant="contained" component="span"
                               style={{
                                 backgroundColor: "#198038",
                                 padding: "9px 18px",
                               }}
                               onClick={() => {
-
                                 handleClick(row);
                                 // setCertificationUid(row[0]);
                                 // setCertificationDepartment(row[1]);
@@ -444,7 +490,46 @@ export default function Certifications(props: any) {
 
                               endIcon={<CheckRoundedIcon />}>
                               Accept
+                            </Button> */}
+
+                            <Button variant="contained" component="span"
+                              style={{
+                                backgroundColor: "#198038",
+                                padding: "9px 18px"
+                              }}
+                              endIcon={<CheckRoundedIcon />}
+                              onClick={() => {
+                                handleModalOpen2(row[0]);
+                              }}>
+                              Accept
                             </Button>
+                            <Modal open={acceptOpen} onClose={handleAcceptClose} sx={{ backgroundColor: "none", opacity: 0.6, backdropFilter: "blur(1px)" }}>
+                              <Box sx={{
+                                position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'white', border: '2px solid #000',
+                                boxShadow: 24, p: 2, borderRadius: 2
+                              }}>
+                                <Box display="flex" justifyContent="flex-end" alignItems="flex-end" sx={{ mb: 1 }}>
+                                  <IconButton color={"error"} onClick={handleAcceptClose} children={<CloseIcon />} />
+                                </Box>
+                                <Typography variant="h6" fontWeight={700} align={"center"}>
+                                  Are you sure you want to accept the certification?
+                                </Typography>
+                                <Typography align={"center"} sx={{ mt: 2 }} color={"error"} fontWeight={700}>
+                                  This cannot be undone.
+                                </Typography>
+                                <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
+                                  <Button variant="contained" sx={{ width: "50%" }} color={"primary"} onClick={handleAcceptClose} startIcon={<ArrowBackIcon />}><Typography>Cancel</Typography></Button>
+                                  <Button variant="contained" style={{ backgroundColor: "#198038"}} sx={{ width: "50%" }} 
+                                    onClick={() => {
+                                      handleClick(row);
+                                    }} endIcon={<CheckRoundedIcon />}><Typography fontWeight={700}>Accept</Typography></Button>
+                                </Stack>
+                              </Box>
+                            </Modal>
+
+
+
+                               
 
                             <Button variant="contained" component="span"
                               style={{

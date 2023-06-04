@@ -21,6 +21,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import Container from '@mui/material/Container';
 import DonutChart from '../components/graficaDonut';
+import DonutChartSide from '../components/graficaDonutSide';
 import PieChart from '../components/graficaPie';
 import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded';
 import Button from '@mui/material/Button';
@@ -173,32 +174,38 @@ export default function MainPage() {
 
   function getGraphs() {
     return <React.Fragment>
+
       <DonutChart data={{
         labels: ['Badges', 'External Certifications'],
         values: [badges, externalCerts],
-        colors: ['#FF4500', '#FFEE99'],
+        colors: ['#31135e', '#8a3ffc'],
       }} />
 
-      <DonutChart data={{
-        labels: workLocationNames,
-        values: workLocationFreq,
-        colors: ['#FFEE99', '#FF9F00', '#FF4500', '#E12901']
-      }} />
+    <Box sx={{ maxHeight: '315px',  mt:-10, ml:5 }}>
+      <DonutChartSide
+        data={{
+          labels: workLocationNames,
+          values: workLocationFreq,
+          colors: ['#00539a', '#78a9ff', '#42be65', '#a2a9b0']
+        }}
+      />
+    </Box>
 
-      <DonutChart data={{
+      {/* <DonutChart data={{
         labels: ['Low', 'Medium', 'High', 'Critical'],
         values: [10, 20, 30, 40],
         colors: ['#FFEE99', '#FF9F00', '#FF4500', '#E12901']
-      }} />
+      }} /> */}
     </React.Fragment>
   }
 
   function getCertsbyDpt() {
     return <React.Fragment>
+      
       <PieChart data={{
         labels: dptNames,
         values: dptNamesFreq,
-        colors: ['#FFEE99', '#FF9F00', '#FF4500', '#E12901']
+        colors: ['#510224', '#012749', '#3ddbd9', '#198038']
       }} />
     </React.Fragment>
   }
@@ -477,7 +484,7 @@ export default function MainPage() {
             <Box display="flex-start" sx={{ height: 10, width: 0.55, backgroundColor: "#0F62FE", mt: 1, marginLeft: 2, mb: 1 }}></Box>
             <Stack direction="column" spacing={0.5} alignItems={"center"}>
               <Stack direction="row" alignSelf={"center"} spacing={1.5}>
-                <Typography fontSize={60} fontWeight={600} color="#34B53A">{pendingCerts}</Typography>
+                <Typography fontSize={60} fontWeight={600} color="#34B53A" sx={{ml: 1, mr: 1, mt: 0}}>{pendingCerts}</Typography>
                 <Stack direction="column" sx={{ mt: 2 }}>
                   <Typography fontSize={26}>Pending</Typography>
                   <Typography fontSize={26}>Certifications</Typography>
@@ -489,7 +496,7 @@ export default function MainPage() {
         </Box>
 
       </Box>
-      <br />
+      <br /> <br /> <br />
     </Box>
 
   );
