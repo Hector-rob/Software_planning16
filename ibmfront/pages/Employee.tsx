@@ -37,6 +37,8 @@ import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Chip from '@mui/material/Chip';
 import StarIcon from '@mui/icons-material/Star';
+import recommendationsData from '../public/Assets/recommendations.json';
+
 
 const drawerWidth = 240;
 
@@ -98,7 +100,7 @@ export default function Employee(props: any) {
     const [employeeCertifications, setEmployeeCertifications] = useState([]);
     const [isLoading, setLoading] = React.useState(true);
 
-    const Skills = ["Design Thinking", "Supply Chain Management", "Blockchain", "Agile", "Public Speaking", "Cloud", "DevOps", "Scrum", "Project Management", "Automation", "AI & Data Science", "Cybersecurity"];
+    //const Skills = ["Design Thinking", "Supply Chain Management", "Blockchain", "Agile", "Public Speaking", "Cloud", "DevOps", "Scrum", "Project Management", "Automation", "AI & Data Science", "Cybersecurity"];
 
     const router = useRouter();
 
@@ -168,6 +170,85 @@ export default function Employee(props: any) {
     const employeeDpt = employeeCertifications[0].department;
     const employeeCerts = employeeCertifications.length;
     const employeeLocation = employeeCertifications[0].work_location;
+
+    //const employeeID = employeeInfo.find(x => x.email === userEmail).uid;
+    console.log("empleado info", employeeInfo);
+    //const employeeCertifications = certifications.filter(x => x.uid === employeeID);
+
+    console.log("certificaciones empleado", employeeCertifications);
+
+    //Skills
+    const natural = require('natural');
+
+    const prepareDocumentsData = (jsonData) => {
+        return jsonData.data.map((item) => {
+          const skills = item.skills.map((skill) => skill.name);
+          return {
+            id: item.id,
+            name: item.name,
+            description: item.description,
+            skills: skills,
+            content: `${item.name} ${item.description} ${skills.join(" ")}`,
+            
+          };
+        });
+    };
+
+    const prepareEmployeeCertificationsData = (certifications) => {
+        return certifications.map((certification) => {
+          return {
+            id: certification.id,
+            content: certification.certification_name,
+          };
+        });
+    };
+
+    const documentsPrepared = prepareDocumentsData(recommendationsData);
+
+  const employeeCertificationsPrepared = prepareEmployeeCertificationsData(employeeCertifications);
+
+  // Create a TF-IDF vectorizer
+  const tfidf = new natural.TfIdf();
+
+  // Add documents to the TF-IDF vectorizer
+  documentsPrepared.forEach((document) => {
+    tfidf.addDocument(document.content);
+  });
+
+  // Train the TF-IDF vectorizer
+  tfidf.tfidfs(documentsPrepared.map((doc) => doc.content));
+
+  // Calculate similarities
+  const similarDocuments = employeeCertificationsPrepared.map((certification) => {
+    const similarities = documentsPrepared.map((document, index) => {
+      const certificationContent = certification.content ? certification.content.toString() : '';
+      const similarity = tfidf.tfidf(certificationContent, index) || 0;
+      return {
+        id: document.id,
+        name: document.name,
+        description: document.description,
+        global_activity_url: document.global_activity_url,
+        image_url: document.image_url,
+        skills: document.skills,
+        similarity,
+      };
+    });
+
+    // Sort the similarities by similarity score in descending order
+    similarities.sort((a, b) => b.similarity - a.similarity);
+
+    const Skills = [];
+    for (const recommendation of similarities) {
+        if (recommendation.similarity > 0) {
+        Skills.push(...recommendation.skills);
+        }
+    }
+
+    return { certificationId: certification.id, recommendations: similarities, Skills };
+  });
+
+  console.log("similares", similarDocuments[0]);
+
 
     return (
         <Box sx={{ display: 'flex', width: "100%", position: "absolute" }}>
@@ -304,7 +385,7 @@ export default function Employee(props: any) {
                                                 <Typography component='div' fontSize={24}><Box fontWeight={700} display='inline'>Skills</Box> & Areas of Opportunity</Typography>
                                                 <Box display="flex-start" sx={{ height: 7, width: 0.5, backgroundColor: "#0F62FE", mt: 1 }}></Box>
                                             </Stack>
-                                            {Skills.map((element, index) => {
+                                            {similarDocuments[0].Skills.slice(0,13).map((element, index) => {
                                                 if (index % 2 == 0) {
                                                     return <React.Fragment>
                                                         <Chip icon={<StarIcon sx={{fill:"#FFD400"}}/>} label={element} sx={{ backgroundColor: "#34B53A", mr: 2, mb: 2 }}>
@@ -326,7 +407,7 @@ export default function Employee(props: any) {
                             </Grid>
                         </Grid>
                         <Grid item container xs={6} sm={6} md={6} lg={6} xl={6}>
-                            <Box display="flex" sx={{ width: "100%", minHeight: 280, maxHeight: 400 }}>
+                            <Box display="flex" sx={{ width: "100%", minHeight: 280, maxHeight: 450 }}>
                                 <Container sx={{ borderRadius: 2, backgroundColor: "white" }}>
                                     <Stack justifyContent="center" alignItems="center" sx={{ mt: 2 }}>
                                         <Typography component='div' fontSize={30}>Certification <Box fontWeight={700} display='inline'>History</Box></Typography>
