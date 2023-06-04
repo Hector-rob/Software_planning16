@@ -18,6 +18,19 @@ import { useState, useEffect } from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Cookies from "js-cookie";
 import Axios from "axios";
+import ContentBasedRecommender from 'content-based-recommender';
+import recommendationsData from '../public/Assets/recommendations.json';
+//import ContentBasedRecommender from 'node-content-based-recommender';
+import { Card, CardContent, Link, Grid, IconButton} from "@mui/material";
+import CardActions from '@mui/material/CardActions';
+import CardMedia from '@mui/material/CardMedia';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
+
 
 export default function EmployeeView() {
 
@@ -30,6 +43,18 @@ export default function EmployeeView() {
   const [fileName2, setFileName2] = useState("");
   const [fileSelected, setFileSelected] = useState(false);
 
+  const [similarDocumentsAll, setSimilarDocumentsAll] = useState([]);
+  const [value, setValue] = React.useState(0);
+  const [startIndex, setStartIndex] = useState(0);
+  const cardsPerPage = 3;
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+    setStartIndex(newValue * cardsPerPage);
+  };
+  
+
+  
   const saveFile = (e) => {
     setFile2(e.target.files[0]);
     setFileName2(e.target.files[0].name);
@@ -139,6 +164,96 @@ export default function EmployeeView() {
   const employeeID = employeeData.find(x => x.email === userEmail).uid;
   const employeeCertifications = certifications.filter(x => x.uid === employeeID);
 
+   //recommendations
+   const natural = require('natural');
+
+    // Prepare documents data from recommendationsData
+    const prepareDocumentsData = (jsonData) => {
+      return jsonData.data.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+          description: item.description,
+          content: `${item.name} ${item.description}`,
+          global_activity_url: item.global_activity_url,
+          image_url: item.image_url
+        };
+      });
+    };
+
+// Prepare employee certifications data
+const prepareEmployeeCertificationsData = (certifications) => {
+  return certifications.map((certification) => {
+    return {
+      id: certification.id,
+      content: certification.certification_name,
+    };
+  });
+};
+
+// Prepare documents data from the recommendations data
+const documentsPrepared = prepareDocumentsData(recommendationsData);
+
+// Prepare employee certifications data
+const employeeCertificationsPrepared = prepareEmployeeCertificationsData(employeeCertifications);
+
+// Create a TF-IDF vectorizer
+const tfidf = new natural.TfIdf();
+
+// Add documents to the TF-IDF vectorizer
+documentsPrepared.forEach((document) => {
+  tfidf.addDocument(document.content);
+});
+
+// Train the TF-IDF vectorizer
+tfidf.tfidfs('');
+
+// Calculate similarities between employee certifications and documents
+const similarDocuments = employeeCertificationsPrepared.map((certification) => {
+  const similarities = documentsPrepared.map((document, index) => {
+    const certificationContent = certification.content ? certification.content.toString() : '';
+    const similarity = tfidf.tfidf(certificationContent, index) || 0;
+    return {
+      id: document.id,
+      name: document.name,
+      description: document.description,
+      global_activity_url: document.global_activity_url,
+      image_url: document.image_url,
+      similarity,
+    };
+  });
+
+  // Sort the similarities by similarity score in descending order
+  similarities.sort((a, b) => b.similarity - a.similarity);
+
+  return { certificationId: certification.id, recommendations: similarities };
+});
+
+  console.log("a ver", similarDocuments[0]);
+  //setSimilarDocumentsAll(similarDocuments[0]);
+
+  // Get the first 5 recommendations 
+  const recommendations = similarDocuments.length > 0 ? similarDocuments[0].recommendations.slice(0, 12) : [];
+
+  const state = {
+    currentIndex: 0,
+  };
+
+  const handlePrevious = () => {
+    this.setState((prevState) => ({
+      currentIndex: Math.max(prevState.currentIndex - 1, 0),
+    }));
+  };
+  
+  const handleNext = () => {
+    const { recommendations } = this.props;
+    this.setState((prevState) => ({
+      currentIndex: Math.min(prevState.currentIndex + 1, recommendations.length - 1),
+    }));
+  };
+  
+
+
   return (
 
     <Container maxWidth={false} sx={{ width: "100%" }}>
@@ -152,10 +267,65 @@ export default function EmployeeView() {
       </Stack>
       <br />
 
-      <Box sx={{ display: "flex", width: "100%" }}>
-        <Paper elevation={12} sx={{ width: "100%", backgroundColor: "grey.300", minHeight: 300, maxHeight: 300, mt: 1 }}>
+      <Box sx={{ display: "flex", width: "100%", justifyContent: "center" }}>
+        <Paper elevation={12} sx={{ width: "100%", backgroundColor: "grey.300", minHeight: 300, minHeight: 300, mt: 1 }}>
           <Typography sx={{ mt: 2, ml: 2 }} fontSize={25} fontWeight={600}>Recommended Certifications</Typography>
-          <Box display="flex-start" sx={{ height: 10, width: 0.25, backgroundColor: "#0F62FE", mt: 1, marginLeft: 2, mb: 1 }}></Box>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Box
+                sx={{
+                  alignSelf: 'center',
+                  position: 'absolute',
+                  left: 40,
+                  top: '50%',
+                  transform: 'translateY(150%)',
+                }}
+              >
+                <IconButton
+                  disabled={value === 0}
+                  onClick={() => handleChange(null, value - 1)}
+                >
+                  <ArrowBackIosIcon />
+                </IconButton>
+            </Box>
+            <Box
+                sx={{
+                  alignSelf: 'center',
+                  position: 'absolute',
+                  right: 40,
+                  top: '50%',
+                  transform: 'translateY(150%)',
+                }}
+              >
+                <IconButton
+                  disabled={startIndex + cardsPerPage >= recommendations.length}
+                  onClick={() => handleChange(null, value + 1)}
+                >
+                  <ArrowForwardIosIcon />
+                </IconButton>
+            </Box>
+          </Box>
+          <br />
+
+          <Grid sx={{ ml: 1 }} container spacing={1}>
+            {recommendations.slice(startIndex, startIndex + cardsPerPage).map((recommendation) => (
+              <Grid item key={recommendation.id} xs={12} sm={6} md={4} lg={3} mr={5} ml={5}>
+                <Card sx={{ width: '100%', maxWidth: 400, minHeight: 400, marginBottom: 1, position: 'relative' }}>
+                  <CardMedia component="img" height="140" image={recommendation.image_url} alt="green iguana" />
+                  <CardContent>
+                    <Typography sx={{ fontWeight: 600, textAlign: 'left' }}>{recommendation.name}</Typography>
+                    <Box display="flex-start" sx={{ height: 10, width: 0.9, backgroundColor: '#0F62FE', mt: 1, marginLeft: 1, mb: 1 }}></Box>
+                    <Typography fontSize={14} sx={{ textAlign: 'justify' }}>{recommendation.description}</Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button onClick={() => window.open(recommendation.global_activity_url)}>Learn More</Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+          <br />
+          <br />
+            
         </Paper>
       </Box>
 
@@ -287,18 +457,6 @@ export default function EmployeeView() {
           </Container>
         </Paper>
       </Box>
-
-
     </Container >
-
-
   )
-
-
-
-
-
-
-
-
 }
