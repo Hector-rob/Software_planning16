@@ -22,11 +22,12 @@ import recommendationsData from '../public/Assets/recommendations.json';
 import { Card, CardContent, Link, Grid, IconButton} from "@mui/material";
 import CardActions from '@mui/material/CardActions';
 import CardMedia from '@mui/material/CardMedia';
-
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-
-
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import CssBaseline from '@mui/material/CssBaseline';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
 
 export default function EmployeeView() {
 
@@ -219,11 +220,10 @@ export default function EmployeeView() {
     return { certificationId: certification.id, recommendations: similarities };
   });
 
-  console.log("a ver", similarDocuments[0]);
   //setSimilarDocumentsAll(similarDocuments[0]);
 
   //get first 12 recommendations 
-  const recommendations = similarDocuments.length > 0 ? similarDocuments[0].recommendations.slice(0, 12) : [];
+  const recommendations = similarDocuments.length > 0 ? similarDocuments[0].recommendations.slice(0, 13) : [];
 
   return (
 
@@ -280,12 +280,14 @@ export default function EmployeeView() {
           <Grid sx={{ ml: 1 }} container spacing={1}>
             {recommendations.slice(startIndex, startIndex + cardsPerPage).map((recommendation) => (
               <Grid item key={recommendation.id} xs={12} sm={6} md={4} lg={3} mr={5} ml={5}>
-                <Card sx={{ width: '100%', maxWidth: 400, minHeight: 500, marginBottom: 1, position: 'relative' }}>
-                  <CardMedia component="img" height="140" image={recommendation.image_url} alt="green iguana" />
-                  <CardContent>
+                <Card sx={{ width: '100%', maxWidth: 500, minHeight: 450, marginBottom: 1, position: 'relative', display: 'flex', flexDirection: 'column' }}>
+                  <CardMedia component="img" height="140" image={recommendation.image_url}  />
+                  <CardContent sx={{ flex: '1 0 0', display: 'flex', flexDirection: 'column' }}>
                     <Typography sx={{ fontWeight: 600, textAlign: 'left' }}>{recommendation.name}</Typography>
                     <Box display="flex-start" sx={{ height: 10, width: 0.9, backgroundColor: '#0F62FE', mt: 1, marginLeft: 1, mb: 1 }}></Box>
-                    <Typography fontSize={14} sx={{ textAlign: 'justify' }}>{recommendation.description}</Typography>
+                    <Box sx={{ flex: '1 0 auto', maxHeight: 200, overflowY: 'auto', mb: 3 }}>
+                      <Typography fontSize={14} sx={{ textAlign: 'justify' }}>{recommendation.description}</Typography>
+                    </Box>
                   </CardContent>
                   <CardActions sx={{ position: "absolute", bottom: 2, width: "100%", justifyContent: "left" }}>
                     <Button onClick={() => window.open(recommendation.global_activity_url)}>Learn More</Button>
@@ -303,7 +305,7 @@ export default function EmployeeView() {
         <Paper elevation={12} sx={{ width: "50%", backgroundColor: "grey.300", maxHeight: "40%", mt: 3, mr: 2 }}>
           <Typography sx={{ mt: 2, ml: 2 }} fontSize={25} fontWeight={600}>Your Certifications</Typography>
           <Box display="flex-start" sx={{ height: 10, width: 0.4, backgroundColor: "#0F62FE", mt: 1, marginLeft: 2, mb: 1 }}></Box>
-          <List sx={{ overflow: 'auto', maxHeight: '100%' }}>
+          <List sx={{ overflow: 'auto', maxHeight: 250 }}>
             {employeeCertifications.map((val, index) => {
               if (index % 2 == 0) {
                 return <ListItem sx={{ mb: 1 }}>
