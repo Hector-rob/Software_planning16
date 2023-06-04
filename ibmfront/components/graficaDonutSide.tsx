@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-const PieChart = ({ data }) => {
+const DonutChartSide = ({ data }) => {
   const chartContainer = useRef(null);
   const chartInstanceRef = useRef(null);
 
@@ -13,7 +13,7 @@ const PieChart = ({ data }) => {
       }
       const ctx = chartContainer.current.getContext('2d');
       chartInstanceRef.current = new Chart(ctx, {
-        type: 'pie',
+        type: 'doughnut',
         data: {
           labels: data.labels,
           datasets: [{
@@ -26,11 +26,11 @@ const PieChart = ({ data }) => {
           maintainAspectRatio: true,
           plugins: {
             legend: {
-              position: 'bottom',
-              align: 'start',
+              position: 'right', 
+              align: 'center',
               labels: {
-                boxWidth: 10,
-                boxHeight: 10
+                boxWidth: 20,
+                boxHeight: 20
               }
             }
           }
@@ -40,9 +40,8 @@ const PieChart = ({ data }) => {
   }, [chartContainer, data]);
 
   return (
-    <canvas ref={chartContainer} style={{ width: '50px', height: '50px' }} />
-
+    <canvas ref={chartContainer} style={{ width: '500px', height: '500px' }} />
   );
 };
 
-export default PieChart;
+export default DonutChartSide;
