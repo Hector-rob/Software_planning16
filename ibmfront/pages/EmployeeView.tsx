@@ -18,6 +18,13 @@ import { useState, useEffect } from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Cookies from "js-cookie";
 import Axios from "axios";
+import ContentBasedRecommender from 'content-based-recommender';
+import recommendationsData from '../public/Assets/recommendations.json';
+//import ContentBasedRecommender from 'node-content-based-recommender';
+import { Card, CardContent, Link, Grid} from "@mui/material";
+import CardActions from '@mui/material/CardActions';
+
+
 
 export default function EmployeeView() {
 
@@ -29,6 +36,8 @@ export default function EmployeeView() {
   const [file2, setFile2] = useState();
   const [fileName2, setFileName2] = useState("");
   const [fileSelected, setFileSelected] = useState(false);
+
+  const [similarDocumentsAll, setSimilarDocumentsAll] = useState([]);
 
   const saveFile = (e) => {
     setFile2(e.target.files[0]);
@@ -139,6 +148,76 @@ export default function EmployeeView() {
   const employeeID = employeeData.find(x => x.email === userEmail).uid;
   const employeeCertifications = certifications.filter(x => x.uid === employeeID);
 
+   //recommendations
+   const natural = require('natural');
+
+    // Prepare documents data from recommendationsData
+    const prepareDocumentsData = (jsonData) => {
+      return jsonData.data.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+          description: item.description,
+          content: `${item.name} ${item.description}`,
+          global_activity_url: item.global_activity_url,
+        };
+      });
+    };
+
+// Prepare employee certifications data
+const prepareEmployeeCertificationsData = (certifications) => {
+  return certifications.map((certification) => {
+    return {
+      id: certification.id,
+      content: certification.certification_name,
+    };
+  });
+};
+
+// Prepare documents data from the recommendations data
+const documentsPrepared = prepareDocumentsData(recommendationsData);
+
+// Prepare employee certifications data
+const employeeCertificationsPrepared = prepareEmployeeCertificationsData(employeeCertifications);
+
+// Create a TF-IDF vectorizer
+const tfidf = new natural.TfIdf();
+
+// Add documents to the TF-IDF vectorizer
+documentsPrepared.forEach((document) => {
+  tfidf.addDocument(document.content);
+});
+
+// Train the TF-IDF vectorizer
+tfidf.tfidfs('');
+
+// Calculate similarities between employee certifications and documents
+const similarDocuments = employeeCertificationsPrepared.map((certification) => {
+  const similarities = documentsPrepared.map((document, index) => {
+    const certificationContent = certification.content ? certification.content.toString() : '';
+    const similarity = tfidf.tfidf(certificationContent, index) || 0;
+    return {
+      id: document.id,
+      name: document.name,
+      description: document.description,
+      global_activity_url: document.global_activity_url,
+      similarity,
+    };
+  });
+
+  // Sort the similarities by similarity score in descending order
+  similarities.sort((a, b) => b.similarity - a.similarity);
+
+  return { certificationId: certification.id, recommendations: similarities };
+});
+
+  console.log("a ver", similarDocuments[0]);
+  //setSimilarDocumentsAll(similarDocuments[0]);
+
+  // Get the first 5 recommendations from similarDocuments[0]
+  const recommendations = similarDocuments.length > 0 ? similarDocuments[0].recommendations.slice(0, 5) : [];
+
+
   return (
 
     <Container maxWidth={false} sx={{ width: "100%" }}>
@@ -153,9 +232,29 @@ export default function EmployeeView() {
       <br />
 
       <Box sx={{ display: "flex", width: "100%" }}>
-        <Paper elevation={12} sx={{ width: "100%", backgroundColor: "grey.300", minHeight: 300, maxHeight: 300, mt: 1 }}>
+        <Paper elevation={12} sx={{ width: "100%", backgroundColor: "grey.300", minHeight: 300, minHeight: 300, mt: 1 }}>
           <Typography sx={{ mt: 2, ml: 2 }} fontSize={25} fontWeight={600}>Recommended Certifications</Typography>
           <Box display="flex-start" sx={{ height: 10, width: 0.25, backgroundColor: "#0F62FE", mt: 1, marginLeft: 2, mb: 1 }}></Box>
+            {/* Display the recommendations */}
+            <Grid sx={{ ml: 1 }} container spacing={1}>
+              {recommendations.map((recommendation) => (
+                <Grid item key={recommendation.id} xs={12} sm={6} md={4} lg={3}>
+                  <Card sx={{ width: "100%", maxWidth: 300, minHeight: 400, marginBottom: 1, position: "relative" }}>
+                    <CardContent>
+                      <Typography sx={{ fontWeight: 600, textAlign: "center" }}>{recommendation.name}</Typography>
+                      <Typography sx={{ textAlign: "justify" }}>{recommendation.description}</Typography>
+                    </CardContent>
+                    <CardActions sx={{ position: "absolute", bottom: 2, width: "100%", justifyContent: "center" }}>
+                      <Button variant="contained" style={{ backgroundColor: "#0F62FE" }} onClick={() => window.open(recommendation.global_activity_url)}>
+                        Learn More
+                      </Button>
+                    </CardActions>
+                    
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+            
         </Paper>
       </Box>
 
@@ -287,18 +386,6 @@ export default function EmployeeView() {
           </Container>
         </Paper>
       </Box>
-
-
     </Container >
-
-
   )
-
-
-
-
-
-
-
-
 }
