@@ -10,6 +10,8 @@ import Button from "@mui/material/Button";
 import Axios from "axios";
 import { Navigate } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 export default function Register() {
 
@@ -27,6 +29,9 @@ export default function Register() {
     const [isValidEmail, setIsValidEmail] = useState(true);
 
     const [isFormValid, setIsFormValid] = useState(false);
+
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false); 
+    const [showErrorAlert, setShowErrorAlert] = useState(false); 
 
     const handlePasswordChange = (e) => {
         
@@ -46,7 +51,8 @@ export default function Register() {
 
     const submitEmployee = () => {
         if (!isFormValid) {
-            window.alert("Invalid input(s). Please check the form and try again.");
+            //window.alert("Invalid input(s). Please check the form and try again.");
+            setShowErrorAlert(true);
             return;
         }
 
@@ -58,7 +64,8 @@ export default function Register() {
             country: employeeCountry,
             department: employeeDepartment
         }).then(() => {
-            window.alert("Register was succesful");
+            //window.alert("Register was succesful");
+            setShowSuccessAlert(true);
             window.location.href = "./Login";
 
         })
@@ -329,6 +336,24 @@ export default function Register() {
                                     }} />
                             </Grid>
                         </Grid>
+
+                        {/* Alerts */}
+                        {showErrorAlert && !showSuccessAlert && (
+                        <Box position="absolute" top={20} right={20} sx={{width: 300}}>
+                            <Alert severity="error">
+                            <AlertTitle>Error</AlertTitle>
+                            Invalid Data
+                            </Alert>
+                        </Box>
+                        )}  
+                        {showSuccessAlert && (
+                            <Box position="absolute" top={20} right={20} sx={{width: 300}}>
+                            <Alert severity="success">
+                                <AlertTitle>Success</AlertTitle>
+                                Registration Successful
+                            </Alert>
+                            </Box>
+                        )}
                         
                         <Tooltip title={!isFormValid ? "Invalid Input(s)" : ""} arrow>
                             <span>
