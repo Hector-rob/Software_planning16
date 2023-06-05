@@ -85,6 +85,10 @@ export default function EmployeeView() {
     }
   };
 
+  const refreshPage = () => {
+    window.location.reload();
+  }
+
   const logOut = () => {
     window.localStorage.clear();
     Cookies.remove("loggedin");
