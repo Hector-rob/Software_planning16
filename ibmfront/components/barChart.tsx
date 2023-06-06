@@ -48,7 +48,7 @@ const BarChart = ({ data }) => {
   }, [chartContainer, data]);
 
   return (
-    <canvas ref={chartContainer} style={{ width: 700, height: 200 }} />
+    <canvas ref={chartContainer} style={{ width: 650, height: 200 }} />
   );
 };
 

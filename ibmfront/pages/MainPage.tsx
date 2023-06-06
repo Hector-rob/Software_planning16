@@ -332,7 +332,7 @@ export default function MainPage() {
     return <React.Fragment>
 
       <Box sx={{ maxHeight: 500, mt: 1, ml: 1 }}>
-          <BarChart2 data={{
+          <PolarAreaChart data={{
           labels: certificationCountsEmployee.labels,
           values: certificationCountsEmployee.values,
           title: "Certification Counts",

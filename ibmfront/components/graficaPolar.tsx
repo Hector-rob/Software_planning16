@@ -40,7 +40,7 @@ const DonutChart = ({ data }) => {
   }, [chartContainer, data]);
 
   return (
-    <canvas ref={chartContainer} style={{ width: "100%", height: "100%" }} />
+    <canvas ref={chartContainer} style={{ width: 500, height: 7000 }} />
 
   );
 };
