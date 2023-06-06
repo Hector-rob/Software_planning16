@@ -23,6 +23,7 @@ import Container from '@mui/material/Container';
 import DonutChart from '../components/graficaDonut';
 import DonutChartSide from '../components/graficaDonutSide';
 import PieChart from '../components/graficaPie';
+import BarChart from '../components/barChart';
 import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded';
 import Button from '@mui/material/Button';
 import FileOpenRoundedIcon from '@mui/icons-material/FileOpenRounded';
@@ -32,9 +33,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Cookies from "js-cookie";
 import { Paper, Stack } from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import PolarAreaChart from '../components/graficaPolar';
+import BarChart2 from '../components/barChart2';
 
 const drawerWidth = 240;
-
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -113,6 +115,87 @@ export default function MainPage() {
   const [isLoading, setLoading] = useState(true);
   const [pendingCerts, setPendingCerts] = useState("");
 
+  const [certsData, setCertsData] = useState();
+  const [certificationCounts, setCertificationCounts] = useState({});
+  const [certificationCountsLeast, setCertificationCountsLeast] = useState({});
+  const [certificationCountsEmployee, setCertificationCountsEmployee] = useState({});
+
+
+  const [employeeInfo, setEmployeeInfo] = useState([]);
+
+
+  const countCertifications = (data) => {
+    const counts = {};
+    data.forEach(item => {
+      const name = item.certification_name;
+      if (counts[name]) {
+        counts[name]++;
+      } else {
+        counts[name] = 1;
+      }
+    });
+    const sortedCertifications = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+    const top5Certifications = sortedCertifications.slice(0, 5);
+
+    const top5Counts = top5Certifications.map(certification => counts[certification]);
+
+    return {
+      labels: top5Certifications,
+      values: top5Counts
+    };
+  };
+
+  const countCertificationsLeast = (data) => {
+    const counts = {};
+    data.forEach(item => {
+      const name = item.certification_name;
+      if (counts[name]) {
+        counts[name]++;
+      } else {
+        counts[name] = 1;
+      }
+    });
+    const sortedCertifications = Object.keys(counts).sort((a, b) => counts[a] - counts[b]);
+    const top5Certifications = sortedCertifications.slice(0, 5);
+
+    const top5Counts = top5Certifications.map(certification => counts[certification]);
+
+    return {
+      labels: top5Certifications,
+      values: top5Counts
+    };
+  };
+
+  const countCertificationsByEmployee = (certsData, employeeInfo) => {
+    const certificationCounts = {};
+  
+    certsData.forEach(cert => {
+      const employee = employeeInfo.find(emp => emp.uid === cert.uid);
+      if (employee) {
+        const employeeId = employee._id;
+        const employeeName = `${employee.name} ${employee.last_name}`;
+        if (certificationCounts[employeeId]) {
+          certificationCounts[employeeId].count++;
+        } else {
+          certificationCounts[employeeId] = {
+            name: employeeName,
+            count: 1
+          };
+        }
+      }
+    });
+
+  
+    const sortedCertificationCounts = Object.values(certificationCounts).sort((a, b) => b.count - a.count);
+    const top5CertificationCounts = sortedCertificationCounts.slice(0, 5);
+
+    const top5Counts = top5CertificationCounts.map(certification => certification.count);
+  
+    return {
+      labels: top5CertificationCounts.map(certification => certification.name),
+      values: top5Counts
+    };
+  };
   
 
   useEffect(() => {
@@ -126,8 +209,34 @@ export default function MainPage() {
       setDepartments(response.data.map(x => x.department));
       setLocations(response.data.map(x => x.work_location));
       setLoading(false);
+      setCertsData(response.data);
+
+      const certificationCounts = countCertifications(response.data);
+      setCertificationCounts(certificationCounts);
+
+      const certificationCountsLeast = countCertificationsLeast(response.data);
+      setCertificationCountsLeast(certificationCountsLeast);
+
     });
+
+    Axios.get("http://localhost:5000/employeeInfo").then((response) => {
+      //console.log(response.data);
+      //setEmployeeData(response.data.find(x => x.uid === employeeId));
+      setEmployeeInfo(response.data);
+    });
+
   }, []);
+
+  useEffect(() => {
+    if (certsData && employeeInfo.length > 0) {
+      const certificationCounts = countCertificationsByEmployee(certsData, employeeInfo);
+      setCertificationCountsEmployee(certificationCounts);
+      console.log('Certifications by Employee:', certificationCounts);
+    }
+  }, [certsData, employeeInfo]);
+
+
+
 
   const [userName, setUserName] = useState("");
   useEffect(() => {
@@ -144,7 +253,7 @@ export default function MainPage() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data, "userData");
+        //console.log(data, "userData");
         setUserName(data.data.email);
         if (data.data == "token expired") {
           alert("Token expired login again");
@@ -172,6 +281,11 @@ export default function MainPage() {
   workLocationFreq.push(locations.filter(x => x === "Wroclaw, DS , Poland").length);
   workLocationFreq.push(locations.filter(x => x === "Vilnius, VL , Lithuania").length);
 
+  console.log("certs data", certsData);
+
+
+
+
   function getGraphs() {
     return <React.Fragment>
 
@@ -181,15 +295,15 @@ export default function MainPage() {
         colors: ['#31135e', '#8a3ffc'],
       }} />
 
-    <Box sx={{ maxHeight: '315px',  mt:-10, ml:5 }}>
-      <DonutChartSide
-        data={{
-          labels: workLocationNames,
-          values: workLocationFreq,
-          colors: ['#00539a', '#78a9ff', '#42be65', '#a2a9b0']
-        }}
-      />
-    </Box>
+      <Box sx={{ maxHeight: '315px', mt: -10, ml: 5 }}>
+        <DonutChartSide
+          data={{
+            labels: workLocationNames,
+            values: workLocationFreq,
+            colors: ['#00539a', '#78a9ff', '#42be65', '#a2a9b0']
+          }}
+        />
+      </Box>
 
       {/* <DonutChart data={{
         labels: ['Low', 'Medium', 'High', 'Critical'],
@@ -199,9 +313,39 @@ export default function MainPage() {
     </React.Fragment>
   }
 
+  function getGraphs2() {
+    return <React.Fragment>
+
+      <Box sx={{ maxHeight: 500, mt: 1, ml: 1 }}>
+        <BarChart data={{
+          labels: certificationCounts.labels,
+          values: certificationCounts.values,
+          title: "Certification Counts",
+          colors: ['#be95ff', '#78a9ff', '#08bdba', '#42be65', 'a2a9b0']
+        }} />
+      </Box>
+
+    </React.Fragment>
+  }
+
+  function getGraphs3() {
+    return <React.Fragment>
+
+      <Box sx={{ maxHeight: 500, mt: 1, ml: 1 }}>
+          <PolarAreaChart data={{
+          labels: certificationCountsEmployee.labels,
+          values: certificationCountsEmployee.values,
+          title: "Certification Counts",
+          colors: ['#750e13', '#002d9c', '#044317', '#343a3f', '#004144']
+        }} />
+      </Box>
+
+    </React.Fragment>
+  }
+
   function getCertsbyDpt() {
     return <React.Fragment>
-      
+
       <PieChart data={{
         labels: dptNames,
         values: dptNamesFreq,
@@ -341,6 +485,7 @@ export default function MainPage() {
 
         </Container>
 
+        {/* All certifications and by department */}
         <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
 
           <Container sx={{ marginLeft: 3, width: "60%", maxHeight: "25%", backgroundColor: "grey.300" }}>
@@ -364,9 +509,46 @@ export default function MainPage() {
             <Box display="flex-start" sx={{ height: 10, width: 0.9, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
             <br />
 
-            <Box sx={{ width: "100%", height: "65%", display: 'flex', justifyContent: 'center', }}>
+            <Box sx={{ width: "100%", height: "65%", display: 'flex', justifyContent: 'center', alignItems: 'center', justifyItems:"center" }}>
               {isLoading ? <CircularProgress size={40} sx={{ mt: 0 }} /> : getCertsbyDpt()}
             </Box>
+
+
+          </Container>
+        </Box>
+        <br /><br />
+
+
+        {/* Most popular certifications */}
+        <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
+
+          <Container sx={{ marginLeft: 3, width: "60%", maxHeight: "25%", backgroundColor: "grey.300" }}>
+            <Typography fontSize={30} fontWeight={600} sx={{ mt: 2, }}>Most Popular Certifications</Typography>
+            <Box display="flex-start" sx={{ height: 10, width: 0.9, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
+            <br />
+
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              {isLoading ? <CircularProgress size={40} sx={{ margin: "auto" }} /> : getGraphs2()}
+
+            </Box>
+
+          </Container>
+
+          <Container sx={{ marginLeft: 3, width: "40%", maxHeight: "25%", backgroundColor: "grey.300" }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Typography fontSize={30} fontWeight={600} sx={{ mt: 2 }}> Certifications
+                <Typography component="span" fontSize={20} fontWeight={300} sx={{ verticalAlign: 'center' }}> by Employee</Typography>
+              </Typography>
+            </Box>
+
+            <Box display="flex-start" sx={{ height: 10, width: 0.9, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
+            <br />
+
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              {isLoading ? <CircularProgress size={40} sx={{ margin: "auto" }} /> : getGraphs3()}
+
+            </Box>
+
 
           </Container>
         </Box>
@@ -479,12 +661,14 @@ export default function MainPage() {
 
           </Container>
 
+
+
           <Paper elevation={12} sx={{ marginLeft: 3, width: "40%", backgroundColor: "grey.300" }}>
             <Typography sx={{ mt: 2, ml: 2 }} fontSize={25} fontWeight={600}>Pending Certifications</Typography>
-            <Box display="flex-start" sx={{ height: 10, width: 0.55, backgroundColor: "#0F62FE", mt: 1, marginLeft: 2, mb: 1 }}></Box>
+            <Box display="flex-start" sx={{ height: 10, width: 0.75, backgroundColor: "#0F62FE", mt: 1, marginLeft: 2, mb: 1 }}></Box>
             <Stack direction="column" spacing={0.5} alignItems={"center"}>
               <Stack direction="row" alignSelf={"center"} spacing={1.5}>
-                <Typography fontSize={60} fontWeight={600} color="#34B53A" sx={{ml: 1, mr: 1, mt: 0}}>{pendingCerts}</Typography>
+                <Typography fontSize={60} fontWeight={600} color="#34B53A" sx={{ ml: 1, mr: 1, mt: 0 }}>{pendingCerts}</Typography>
                 <Stack direction="column" sx={{ mt: 2 }}>
                   <Typography fontSize={26}>Pending</Typography>
                   <Typography fontSize={26}>Certifications</Typography>
