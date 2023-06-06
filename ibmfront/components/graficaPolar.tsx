@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-const BarChart = ({ data }) => {
+const DonutChart = ({ data }) => {
   const chartContainer = useRef(null);
   const chartInstanceRef = useRef(null);
 
@@ -13,32 +13,24 @@ const BarChart = ({ data }) => {
       }
       const ctx = chartContainer.current.getContext('2d');
       chartInstanceRef.current = new Chart(ctx, {
-        type: 'bar',
+        type: 'polarArea',
         data: {
           labels: data.labels,
           datasets: [{
-            label: data.title,
             data: data.values,
             backgroundColor: data.colors,
           }]
         },
         options: {
-          indexAxis: 'y',
           responsive: true,
           maintainAspectRatio: true,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          },
           plugins: {
             legend: {
-              display: false,
-              position: 'right',
-              align: 'start',
+              position: 'bottom',
+              align: 'center',
               labels: {
-                boxWidth: 100,
-                boxHeight: 100
+                boxWidth: 10,
+                boxHeight: 10
               }
             }
           }
@@ -48,8 +40,9 @@ const BarChart = ({ data }) => {
   }, [chartContainer, data]);
 
   return (
-    <canvas ref={chartContainer} style={{ width: 700, height: 200 }} />
+    <canvas ref={chartContainer} style={{ width: "100%", height: "100%" }} />
+
   );
 };
 
-export default BarChart;
+export default DonutChart;

@@ -33,6 +33,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Cookies from "js-cookie";
 import { Paper, Stack } from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import PolarAreaChart from '../components/graficaPolar';
+import BarChart2 from '../components/barChart2';
 
 const drawerWidth = 240;
 
@@ -323,17 +325,6 @@ export default function MainPage() {
         }} />
       </Box>
 
-
-      {/*  <Box sx={{ maxHeight: '315px',  mt:-10, ml:5 }}>
-      <DonutChartSide
-        data={{
-          labels: workLocationNames,
-          values: workLocationFreq,
-          colors: ['#00539a', '#78a9ff', '#42be65', '#a2a9b0']
-        }}
-      />
-    </Box> */}
-
     </React.Fragment>
   }
 
@@ -341,24 +332,13 @@ export default function MainPage() {
     return <React.Fragment>
 
       <Box sx={{ maxHeight: 500, mt: 1, ml: 1 }}>
-        <BarChart data={{
+          <BarChart2 data={{
           labels: certificationCountsEmployee.labels,
           values: certificationCountsEmployee.values,
           title: "Certification Counts",
-          colors: ['#be95ff', '#78a9ff', '#08bdba', '#42be65', 'a2a9b0']
+          colors: ['#750e13', '#002d9c', '#044317', '#343a3f', '#004144']
         }} />
       </Box>
-
-
-      {/*  <Box sx={{ maxHeight: '315px',  mt:-10, ml:5 }}>
-      <DonutChartSide
-        data={{
-          labels: workLocationNames,
-          values: workLocationFreq,
-          colors: ['#00539a', '#78a9ff', '#42be65', '#a2a9b0']
-        }}
-      />
-    </Box> */}
 
     </React.Fragment>
   }
@@ -685,7 +665,7 @@ export default function MainPage() {
 
           <Paper elevation={12} sx={{ marginLeft: 3, width: "40%", backgroundColor: "grey.300" }}>
             <Typography sx={{ mt: 2, ml: 2 }} fontSize={25} fontWeight={600}>Pending Certifications</Typography>
-            <Box display="flex-start" sx={{ height: 10, width: 0.55, backgroundColor: "#0F62FE", mt: 1, marginLeft: 2, mb: 1 }}></Box>
+            <Box display="flex-start" sx={{ height: 10, width: 0.75, backgroundColor: "#0F62FE", mt: 1, marginLeft: 2, mb: 1 }}></Box>
             <Stack direction="column" spacing={0.5} alignItems={"center"}>
               <Stack direction="row" alignSelf={"center"} spacing={1.5}>
                 <Typography fontSize={60} fontWeight={600} color="#34B53A" sx={{ ml: 1, mr: 1, mt: 0 }}>{pendingCerts}</Typography>
