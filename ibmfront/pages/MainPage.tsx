@@ -116,6 +116,10 @@ export default function MainPage() {
   const [certsData, setCertsData] = useState();
   const [certificationCounts, setCertificationCounts] = useState({});
   const [certificationCountsLeast, setCertificationCountsLeast] = useState({});
+  const [certificationCountsEmployee, setCertificationCountsEmployee] = useState({});
+
+
+  const [employeeInfo, setEmployeeInfo] = useState([]);
 
 
   const countCertifications = (data) => {
@@ -160,6 +164,38 @@ export default function MainPage() {
     };
   };
 
+  const countCertificationsByEmployee = (certsData, employeeInfo) => {
+    const certificationCounts = {};
+  
+    certsData.forEach(cert => {
+      const employee = employeeInfo.find(emp => emp.uid === cert.uid);
+      if (employee) {
+        const employeeId = employee._id;
+        const employeeName = `${employee.name} ${employee.last_name}`;
+        if (certificationCounts[employeeId]) {
+          certificationCounts[employeeId].count++;
+        } else {
+          certificationCounts[employeeId] = {
+            name: employeeName,
+            count: 1
+          };
+        }
+      }
+    });
+
+  
+    const sortedCertificationCounts = Object.values(certificationCounts).sort((a, b) => b.count - a.count);
+    const top5CertificationCounts = sortedCertificationCounts.slice(0, 5);
+
+    const top5Counts = top5CertificationCounts.map(certification => certification.count);
+  
+    return {
+      labels: top5CertificationCounts.map(certification => certification.name),
+      values: top5Counts
+    };
+  };
+  
+
   useEffect(() => {
     Axios.get("http://localhost:5000/exportPendingCertifications").then((response) => {
       setPendingCerts(response.data.length);
@@ -179,11 +215,26 @@ export default function MainPage() {
       const certificationCountsLeast = countCertificationsLeast(response.data);
       setCertificationCountsLeast(certificationCountsLeast);
 
+    });
 
-      console.log("counts", certificationCounts);
+    Axios.get("http://localhost:5000/employeeInfo").then((response) => {
+      //console.log(response.data);
+      //setEmployeeData(response.data.find(x => x.uid === employeeId));
+      setEmployeeInfo(response.data);
     });
 
   }, []);
+
+  useEffect(() => {
+    if (certsData && employeeInfo.length > 0) {
+      const certificationCounts = countCertificationsByEmployee(certsData, employeeInfo);
+      setCertificationCountsEmployee(certificationCounts);
+      console.log('Certifications by Employee:', certificationCounts);
+    }
+  }, [certsData, employeeInfo]);
+
+
+
 
   const [userName, setUserName] = useState("");
   useEffect(() => {
@@ -200,7 +251,7 @@ export default function MainPage() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data, "userData");
+        //console.log(data, "userData");
         setUserName(data.data.email);
         if (data.data == "token expired") {
           alert("Token expired login again");
@@ -291,8 +342,8 @@ export default function MainPage() {
 
       <Box sx={{ maxHeight: 500, mt: 1, ml: 1 }}>
         <BarChart data={{
-          labels: certificationCountsLeast.labels,
-          values: certificationCountsLeast.values,
+          labels: certificationCountsEmployee.labels,
+          values: certificationCountsEmployee.values,
           title: "Certification Counts",
           colors: ['#be95ff', '#78a9ff', '#08bdba', '#42be65', 'a2a9b0']
         }} />
@@ -506,7 +557,7 @@ export default function MainPage() {
           <Container sx={{ marginLeft: 3, width: "40%", maxHeight: "25%", backgroundColor: "grey.300" }}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Typography fontSize={30} fontWeight={600} sx={{ mt: 2 }}> Certifications
-                <Typography component="span" fontSize={20} fontWeight={300} sx={{ verticalAlign: 'center' }}> by Department</Typography>
+                <Typography component="span" fontSize={20} fontWeight={300} sx={{ verticalAlign: 'center' }}> by Employee</Typography>
               </Typography>
             </Box>
 
