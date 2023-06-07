@@ -1,0 +1,6 @@
+name: CI Testing GitHub Actions
+
+on:
+  push:
+    branches:
+      - main
