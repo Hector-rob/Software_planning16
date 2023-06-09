@@ -92,6 +92,13 @@ router.post("/send-message", async (req, res) => {
   }
 });
 
+router.get("/get-message/:uid", (req, res) => {
+  messageSchema
+    .findOne({ "uid": req.params.uid }, { _id: 0, __v: 0 }) //Sin _id ni __v de mongo
+    .then((data) => res.json(data))
+    .catch((error) => res.json({ message: error }))
+});
+
 router.post("/login-user", async (req, res) => {
   const { email, password } = req.body;
   console.log(email);
