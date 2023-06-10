@@ -40,6 +40,7 @@ import TablePagination from '@mui/material/TablePagination';
 import Cookies from "js-cookie";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import Tooltip from '@mui/material/Tooltip';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -133,10 +134,6 @@ export default function Certifications(props: any) {
   const [messageUid, setMessageUid] = useState("");
   const[userName, setUserName] = useState("");
 
-
-
-
-
   //   const submitPendingCertification = () => {
   //     Axios.post("http://localhost:5000/certification", {
   //         uid: certificationUid,
@@ -202,9 +199,8 @@ export default function Certifications(props: any) {
       console.log(message_);
       if(message_ == " "){
         window.alert("Message can't be blank");
-        
-
       }
+
       Axios.post("http://localhost:5000/send-message", {
           uid: messageUid,
           message: message_,
@@ -626,10 +622,18 @@ export default function Certifications(props: any) {
                                   <Typography fontSize={14} >Message will be sent to: {userName}</Typography>
                                 </Stack>
                                 <TextField minRows={3} label="Message" defaultValue={""} variant="filled" onChange={(e) => { setMessage(e.target.value)}}multiline sx={{ mt: 3, mb: 3, width: "100%" }} />
-                                <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-                                  <Button variant="contained" sx={{ width: "50%" }} color={"error"} onClick={handleMessageClose} startIcon={<ArrowBackIcon />}><Typography>Cancel</Typography></Button>
-                                  <Button variant="contained" sx={{ width: "50%" }} disabled={!message_} color={"primary"} onClick={() => {sendMessage(), handleMessageClose(),setMessage(" ") }} endIcon={<SendRoundedIcon />}><Typography fontWeight={700}>Send</Typography></Button>
-
+                                <Stack direction="row" spacing={1} sx={{ mt: 2, mr:1 }}>
+                                  <Button variant="contained" sx={{ flex: "1 0 50%" }} color={"error"} onClick={handleMessageClose} startIcon={<ArrowBackIcon />}><Typography>Cancel</Typography></Button>
+                                  <Tooltip title={message_  ? "": "Comment cannot be blank"} arrow >
+                                  <span style={{ flex: "1 0 50%", display: "flex", justifyContent: "center" }}>
+                                    <Button variant="contained" sx={{ width: "100%" }} 
+                                      disabled={!message_} color={"primary"} 
+                                      onClick={() => {sendMessage(), handleMessageClose(),setMessage(" ") }} 
+                                      endIcon={<SendRoundedIcon />}>
+                                        <Typography fontWeight={700}>Send</Typography>
+                                    </Button>
+                                  </span>
+                                  </Tooltip>  
                                 </Stack>
                               </Box>
                             </Modal>
