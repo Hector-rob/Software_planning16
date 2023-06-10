@@ -256,6 +256,7 @@ export default function EmployeeView() {
           <Box display="flex-start" sx={{ height: 10, width: 0.4, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
         </Box>
         <Button endIcon={<NotificationsIcon />} size="large" onClick={() => {getMessage(employeeID)}}> </Button>
+        <Typography> {message} </Typography>
         <Button variant="contained" endIcon={<LogoutIcon />} onClick={() => logOut()} sx={{ height: 50, mt: 3, ml: 3, backgroundColor: "black" }}>LogOut</Button>
       </Stack>
       <br />
@@ -447,7 +448,7 @@ export default function EmployeeView() {
             </Tooltip>
 
             <br />
-            <Typography> {message} </Typography>
+            
 
           </Container>
         </Paper>
