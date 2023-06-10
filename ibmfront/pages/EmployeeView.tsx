@@ -28,6 +28,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import CssBaseline from '@mui/material/CssBaseline';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 export default function EmployeeView() {
 
@@ -254,6 +255,7 @@ export default function EmployeeView() {
           <Typography fontSize={30} fontWeight={600} sx={{ mt: 2, }}>Welcome back, <Typography component="span" fontSize={30} fontWeight={300}> {userName}</Typography></Typography>
           <Box display="flex-start" sx={{ height: 10, width: 0.4, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
         </Box>
+        <Button endIcon={<NotificationsIcon />} size="large" onClick={() => {getMessage(employeeID)}}> </Button>
         <Button variant="contained" endIcon={<LogoutIcon />} onClick={() => logOut()} sx={{ height: 50, mt: 3, ml: 3, backgroundColor: "black" }}>LogOut</Button>
       </Stack>
       <br />
@@ -445,7 +447,6 @@ export default function EmployeeView() {
             </Tooltip>
 
             <br />
-            <Button onClick={() => {getMessage(employeeID)}}> Show message </Button>
             <Typography> {message} </Typography>
 
           </Container>
