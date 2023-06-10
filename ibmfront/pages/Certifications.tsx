@@ -131,6 +131,7 @@ export default function Certifications(props: any) {
   const [showDeclineAlert, setShowDeclinesAlert] = useState(false); 
   const [message_, setMessage] = useState("");
   const [messageUid, setMessageUid] = useState("");
+  const[userName, setUserName] = useState("");
 
 
 
@@ -199,12 +200,19 @@ export default function Certifications(props: any) {
     const sendMessage = () => {
       console.log(messageUid);
       console.log(message_);
+      if(message_ == " "){
+        window.alert("Message can't be blank");
+        
+
+      }
       Axios.post("http://localhost:5000/send-message", {
           uid: messageUid,
           message: message_,
           
       }).then(() => {
+          setMessage(null);
           window.alert("Message Created");
+
 
       })
   };
@@ -292,6 +300,7 @@ export default function Certifications(props: any) {
 
   const handleMessageClose = () => {
     setCommentOpen(false);
+    setMessage(null);
   }
 
   const handleAcceptOpen = () => {
@@ -304,6 +313,10 @@ export default function Certifications(props: any) {
 
   const refreshPage = () => {
     window.location.reload();
+  }
+
+  const setUser = (name) => {
+    setUserName(name);
   }
 
   useEffect(() => {
@@ -594,7 +607,8 @@ export default function Certifications(props: any) {
                                 padding: "9px 18px"
                               }}
                               onClick={() => {
-                                handleMessageOpen(row[0])}}
+                                handleMessageOpen(row[0]),
+                              setUserName(row[0])}}
                               endIcon={<SendRoundedIcon />}>
                               Send comment
                             </Button>
@@ -609,12 +623,12 @@ export default function Certifications(props: any) {
                                 <Stack direction="column" spacing={2}>
                                   <Typography fontSize={14}>Send Message</Typography>
                                   <Typography fontSize={24} fontWeight={600}> Custom Message</Typography>
-                                  <Typography fontSize={14} >Message will be sent to: {messageUid}</Typography>
+                                  <Typography fontSize={14} >Message will be sent to: {userName}</Typography>
                                 </Stack>
                                 <TextField minRows={3} label="Message" defaultValue={""} variant="filled" onChange={(e) => { setMessage(e.target.value)}}multiline sx={{ mt: 3, mb: 3, width: "100%" }} />
                                 <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
                                   <Button variant="contained" sx={{ width: "50%" }} color={"error"} onClick={handleMessageClose} startIcon={<ArrowBackIcon />}><Typography>Cancel</Typography></Button>
-                                  <Button variant="contained" sx={{ width: "50%" }} color={"primary"} onClick={() => {sendMessage()}} endIcon={<SendRoundedIcon />}><Typography fontWeight={700}>Send</Typography></Button>
+                                  <Button variant="contained" sx={{ width: "50%" }} disabled={!message_} color={"primary"} onClick={() => {sendMessage(), handleMessageClose(),setMessage(" ") }} endIcon={<SendRoundedIcon />}><Typography fontWeight={700}>Send</Typography></Button>
 
                                 </Stack>
                               </Box>
