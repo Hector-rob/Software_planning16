@@ -97,7 +97,9 @@ router.get("/get-message/:uid", (req, res) => {
     .findOne({ "uid": req.params.uid }, { _id: 0, __v: 0 }) //Sin _id ni __v de mongo
     .then((data) => res.json(data))
     .catch((error) => res.json({ message: error }))
+    console.log("kk");
 });
+
 
 router.post("/login-user", async (req, res) => {
   const { email, password } = req.body;

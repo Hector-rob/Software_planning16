@@ -32,6 +32,7 @@ import useScrollTrigger from '@mui/material/useScrollTrigger';
 export default function EmployeeView() {
 
   const [userName, setUserName] = useState("");
+  const [userUid, setUserUid] = useState("");
   const [userEmail, setEmail] = useState("");
   const [employeeData, setEmployeeData] = useState([]);
   const [certifications, setEmployeeCertifications] = useState([]);
@@ -39,6 +40,8 @@ export default function EmployeeView() {
   const [file2, setFile2] = useState();
   const [fileName2, setFileName2] = useState("");
   const [fileSelected, setFileSelected] = useState(false);
+  const [message, setMessage] = useState("");
+
 
   const [similarDocumentsAll, setSimilarDocumentsAll] = useState([]);
   const [value, setValue] = React.useState(0);
@@ -109,6 +112,19 @@ export default function EmployeeView() {
 
   }
 
+  const getMessage = async (uid) => {
+    try {
+      const response = await Axios.get(`http://localhost:5000/get-message/${uid}`);
+      setMessage(response.data.message);
+      setUserUid(response.data.uid);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  
+  
   useEffect(() => {
     Axios.get("http://localhost:5000/employeeInfo").then((response) => {
       //console.log(response.data);
@@ -429,6 +445,8 @@ export default function EmployeeView() {
             </Tooltip>
 
             <br />
+            <Button onClick={() => {getMessage(employeeID)}}> Show message </Button>
+            <Typography> {message} </Typography>
 
           </Container>
         </Paper>
