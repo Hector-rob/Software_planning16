@@ -609,7 +609,7 @@ export default function Certifications(props: any) {
                                 <Stack direction="column" spacing={2}>
                                   <Typography fontSize={14}>Send Message</Typography>
                                   <Typography fontSize={24} fontWeight={600}> Custom Message</Typography>
-                                  <Typography fontSize={14} >Message will be sent to: {message</Typography>
+                                  <Typography fontSize={14} >Message will be sent to: {messageUid}</Typography>
                                 </Stack>
                                 <TextField minRows={3} label="Message" defaultValue={""} variant="filled" onChange={(e) => { setMessage(e.target.value)}}multiline sx={{ mt: 3, mb: 3, width: "100%" }} />
                                 <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
