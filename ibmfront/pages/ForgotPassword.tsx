@@ -1,14 +1,7 @@
 import { Box, Button, Container, Link, TextField, Typography } from '@mui/material'
 import React from 'react'
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Grid from "@mui/material/Grid";
-import { IconButton, InputAdornment } from "@mui/material";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useState } from "react";
-import Axios from "axios";
-import Cookies from "js-cookie";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
