@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require('mongoose');
 
 const userSchema = require('./models/user.js');
+const messageSchema = require('./models/message.js');
+
 const bcrypt = require("bcryptjs");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
@@ -16,6 +18,9 @@ const JWT_SECRET =
 
 //FILTER AND PARAMS ARE JUST BY NAME IMPORTANT NOTE
 const User = mongoose.model("Users");
+const Message = mongoose.model("Message");
+// const Employee = mongoose.model("Employee");
+
 //create user
 // router.post("/user", (req, res) => {
 //     const user = userSchema(req.body);
@@ -63,6 +68,38 @@ router.post("/user", async (req, res) => {
     res.send({ status: "error" });
   }
 });
+
+router.post("/send-message", async (req, res) => {
+  try{
+    const {uid, message} = req.body;
+    console.log(uid);
+    console.log(message);
+    //const employee = await Employee.findOne({ uid });
+    // await Message.create({
+    //   uid,
+    //   message
+    // });
+    messageSchema.create({
+      uid: uid,
+      message: message
+    });
+    res.send({ status: "ok" });
+
+  }
+  catch(error){
+    res.send({ status: "error" });
+
+  }
+});
+
+router.get("/get-message/:uid", (req, res) => {
+  messageSchema
+    .findOne({ "uid": req.params.uid }, { _id: 0, __v: 0 }) //Sin _id ni __v de mongo
+    .then((data) => res.json(data))
+    .catch((error) => res.json({ message: error }))
+    console.log("kk");
+});
+
 
 router.post("/login-user", async (req, res) => {
   const { email, password } = req.body;

@@ -28,10 +28,12 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import CssBaseline from '@mui/material/CssBaseline';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 export default function EmployeeView() {
 
   const [userName, setUserName] = useState("");
+  const [userUid, setUserUid] = useState("");
   const [userEmail, setEmail] = useState("");
   const [employeeData, setEmployeeData] = useState([]);
   const [certifications, setEmployeeCertifications] = useState([]);
@@ -39,6 +41,8 @@ export default function EmployeeView() {
   const [file2, setFile2] = useState();
   const [fileName2, setFileName2] = useState("");
   const [fileSelected, setFileSelected] = useState(false);
+  const [message, setMessage] = useState("");
+
 
   const [similarDocumentsAll, setSimilarDocumentsAll] = useState([]);
   const [value, setValue] = React.useState(0);
@@ -109,6 +113,19 @@ export default function EmployeeView() {
 
   }
 
+  const getMessage = async (uid) => {
+    try {
+      const response = await Axios.get(`http://localhost:5000/get-message/${uid}`);
+      setMessage(response.data.message);
+      setUserUid(response.data.uid);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  
+  
   useEffect(() => {
     Axios.get("http://localhost:5000/employeeInfo").then((response) => {
       //console.log(response.data);
@@ -238,6 +255,8 @@ export default function EmployeeView() {
           <Typography fontSize={30} fontWeight={600} sx={{ mt: 2, }}>Welcome back, <Typography component="span" fontSize={30} fontWeight={300}> {userName}</Typography></Typography>
           <Box display="flex-start" sx={{ height: 10, width: 0.4, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
         </Box>
+        <Button endIcon={<NotificationsIcon />} size="large" onClick={() => {getMessage(employeeID)}}> </Button>
+        <Typography> {message} </Typography>
         <Button variant="contained" endIcon={<LogoutIcon />} onClick={() => logOut()} sx={{ height: 50, mt: 3, ml: 3, backgroundColor: "black" }}>LogOut</Button>
       </Stack>
       <br />
@@ -429,6 +448,7 @@ export default function EmployeeView() {
             </Tooltip>
 
             <br />
+            
 
           </Container>
         </Paper>
