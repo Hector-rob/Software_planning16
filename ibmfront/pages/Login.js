@@ -11,8 +11,20 @@ import { IconButton, InputAdornment } from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useState } from "react";
+import Axios from "axios";
+import Cookies from "js-cookie";
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 export default function Login() {
+  const [_email, setEmail] = useState("");
+  const [_password, setPassword] = useState("");
+
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false); 
+  const [showErrorAlert, setShowErrorAlert] = useState(false); 
+
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -22,11 +34,121 @@ export default function Login() {
     });
   };
 
+  const ForgotPassword = () => {
+    window.location.href = "./ForgotPassword";
+
+
+  }
+
+  //   const Log = () => {
+  //     console.log("WTf");
+  //     const response = Axios.post("http://localhost:5000/login-user", {
+  //         email: _email,
+  //         password: _password
+  //     })
+  //     .then((res) => response.json(),console.log(response))
+  //     // .then((data) => {
+  //     //   if(data.status == "ok"){
+  //     //    alert("Login was succesful");
+  //     //    window.localStorage("token", data.data);
+
+
+  //     //   }
+
+  //     //     console.log(response);
+
+  //     // })
+  // };
+
+  const Log = async (e) => {
+    e.preventDefault();
+
+    console.log(_email, _password);
+
+    try {
+      const response = await Axios.post("http://localhost:5000/login-user", {
+        email: _email,
+        password: _password
+      });
+      console.log(response.data, "User");
+      if(response.data.status == "manager"){
+        //alert("Login Successful");
+        setShowSuccessAlert(true);
+       
+        window.localStorage.setItem("token", response.data.data);
+        window.localStorage.setItem("loggedIn", true);
+        Cookies.set("loggedin", true);
+        window.location.href = "./MainPage";
+
+      }
+      else if (response.data.status == "ok") {
+        //alert("Login Successful");
+        setShowSuccessAlert(true);
+        
+        window.localStorage.setItem("token", response.data.data);
+        window.localStorage.setItem("loggedIn", true);
+        Cookies.set("loggedin", true);
+        window.location.href = "./EmployeeView";
+
+      }
+      else {
+        //window.alert("Invalid data");
+        setShowErrorAlert(true);
+
+      }
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
+  // fetch("http://localhost:5000/login-user", {
+  //   method: "POST",
+  //   crossDomain: true,
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     Accept: "application/json",
+  //     "Access-Control-Allow-Origin": "*",
+  //   },
+  //   body: JSON.stringify({
+  //     _email,
+  //     _password,
+  //   }),
+  // })
+  // .then((response) => response.json())
+  // .then((data) => {
+  //   console.log(data, "User");
+  //   if (data.status == "ok") {
+  //     alert("login successful");
+  //     window.localStorage.setItem("token", data.data);
+  //     window.localStorage.setItem("loggedIn", true);
+
+  //    // window.location.href = "./userDetails";
+  //   }
+  // });
+  // }
+
   const [visiblePassword, toggleVisibility] = useState(false);
   const clickHandler = () => toggleVisibility(!visiblePassword);
 
   return (
     <Container component="main" maxWidth="sm">
+        {showSuccessAlert && (
+        <Box position="absolute" top={20} right={20} sx={{width: 300}}>
+          <Alert severity="success">
+            <AlertTitle>Success</AlertTitle>
+             Login Successful
+          </Alert>
+        </Box>
+        )} 
+        {showErrorAlert && !showSuccessAlert && (
+          <Box position="absolute" top={20} right={20} sx={{width: 300}}>
+            <Alert severity="error">
+              <AlertTitle>Error</AlertTitle>
+              Invalid Data
+            </Alert>
+            </Box>
+        )} 
       <Box
         sx={{
           boxShadow: 7,
@@ -70,6 +192,9 @@ export default function Login() {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={(e) => {
+              setEmail(e.target.value)
+            }}
           />
           <TextField
             margin="normal"
@@ -81,6 +206,12 @@ export default function Login() {
             type={visiblePassword ? "text" : "password"}
             id="password"
             autoComplete="current-password"
+            onChange={(e) => {
+              setPassword(e.target.value)
+              // console.log(email);
+              // console.log(password);
+
+            }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -98,25 +229,27 @@ export default function Login() {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          <Button href="/MainPage"
+          {/* <Button href="/MainPage" */}
+          <Button onClick={(e) => { Log(e) }}
             type="register"
             variant="contained"
             fullWidth
             sx={{ mt: 3, mb: 2, borderRadius: 0 }}
+
           >
             Sign In
           </Button>
           <Grid container>
             <Grid item xs>
               <Typography>
-               {/*  {<Link href="/PageNotFound" underline="hover">
+                {/*  {<Link href="/PageNotFound" underline="hover">
                   "Forgot password?"
-                </Link>} */} 
+                </Link>} */}
                 <br></br>
-                <Button href="/PageNotFound" variant="text" underline="hover">Forgot password?</Button>
+                <Button href="/ForgotPassword" variant="text" underline="hover">Forgot password?</Button>
               </Typography>
-               
-              
+
+
             </Grid>
             <Grid item>
               <Typography>
@@ -124,7 +257,7 @@ export default function Login() {
                   {"Don't have an account? Sign Up"}
                 </Link> */}
                 <br></br>
-                <Button href="/PageNotFound" variant="text" underline="hover">Don't have an account? Sign Up</Button>
+                <Button href="/Register" variant="text" underline="hover">Don't have an account? Sign Up</Button>
               </Typography>
             </Grid>
           </Grid>
