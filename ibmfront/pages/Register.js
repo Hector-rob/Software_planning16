@@ -170,13 +170,13 @@ export default function Register() {
                         Back
                     </Button>
                     <Typography component='div' fontSize={50} sx={{ mt: 3, ml: 2 }}>Create a new <Box fontWeight={800} display='inline'>account</Box></Typography>
-                    <Typography component='div' fontSize={30} sx={{ mt: 3, ml: 3, mb: 6 }}>Exclusive to <Box fontWeight={800} display='inline'>IBM managers</Box></Typography>
+                    <Typography component='div' fontSize={30} sx={{ mt: 3, ml: 3, mb: 6 }}>Exclusive to <Box fontWeight={800} display='inline'>IBM managers and employees</Box></Typography>
                     <img style={{ height: "50%", width: "50%", position: "absolute", bottom: 0 }} src="./Assets/images/pixelBG.webp" alt="Art"></img>
                 </Grid>
                 <Grid item xs={6} sm={6} md={6} lg={6} xl={6} sx={{ bgcolor: "white", mt: 5 }} textAlign={"center"}>
-                    <Typography component='div' fontSize={30} sx={{ mt: 2, }}>Create a new <Box fontWeight={800} display='inline'>IBM Dashboard Manager</Box> account</Typography>
+                    <Typography component='div' fontSize={30} sx={{ mt: 2, }}>Create a new <Box fontWeight={800} display='inline'>IBM Dashboard</Box> account</Typography>
                     <Box margin="auto" display="flex" sx={{ height: 10, width: 0.9, backgroundColor: "#0F62FE", mt: 3 }}></Box>
-                    <Typography fontSize={25} sx={{ mt: 5 }} textAlign={"center"}>1. General Information</Typography>
+                    <Typography fontSize={25} sx={{ mt: 4, mb:-2 }} textAlign={"center"}>General Information</Typography>
                     <Box component="RegisterForm" noValidate>
                         <Grid container sx={{ mt: 4 }} rowSpacing={2}>
                             <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
