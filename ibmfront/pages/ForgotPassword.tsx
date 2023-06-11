@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid";
 import { useState } from "react";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export default function ForgotPassword() {
     const [_email, setEmail] = useState("");
@@ -12,8 +12,6 @@ export default function ForgotPassword() {
   
     const [showSuccessAlert, setShowSuccessAlert] = useState(false); 
     const [showErrorAlert, setShowErrorAlert] = useState(false); 
-  
-  
   
     const handleSubmit = (event) => {
       event.preventDefault();
@@ -26,8 +24,6 @@ export default function ForgotPassword() {
   
     const ForgotPassword = () => {
       window.location.href = "./ForgotPassword";
-  
-  
     }
 
     const [visiblePassword, toggleVisibility] = useState(false);
@@ -84,6 +80,9 @@ return(
         </Grid>
       </Grid>
     </Box>
+    
+    <Typography fontSize={15} sx={{ mt: -4, mb:6 }} textAlign={"center"} variant='body2'>Please provide the registered email</Typography>
+    
     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: -5 }}>
       <TextField
         margin="normal"
@@ -102,25 +101,15 @@ return(
       
       {/* <Button href="/MainPage" */}
       <Button variant='contained' fullWidth sx={{ mt: 3, mb: 2, borderRadius: 0 }} >  Submit </Button>
-      <Grid container>
-        <Grid item xs>
-          <Typography>
-            {/*  {<Link href="/PageNotFound" underline="hover">
-              "Forgot password?"
-            </Link>} */}
-            <br></br>
-            <Link href="Login" underline="hover">Return to Login</Link>
-          </Typography>
-        </Grid>
-      </Grid>
+
+      <Button variant="outlined" color="primary" startIcon={<ArrowBackIcon />} sx={{ mt: 3  }} href="/Login">
+              Back
+      </Button>
+     
     </Box>
   </Box>
 </Container>
-
-
-
-
         
-    )
+)
 
 }
