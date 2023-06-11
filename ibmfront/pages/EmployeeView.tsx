@@ -24,11 +24,24 @@ import CardActions from '@mui/material/CardActions';
 import CardMedia from '@mui/material/CardMedia';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import CssBaseline from '@mui/material/CssBaseline';
-import useScrollTrigger from '@mui/material/useScrollTrigger';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import CircleIcon from '@mui/icons-material/Circle';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+import { TransitionProps } from '@mui/material/transitions';
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>,
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function EmployeeView() {
 
@@ -43,11 +56,20 @@ export default function EmployeeView() {
   const [fileSelected, setFileSelected] = useState(false);
   const [message, setMessage] = useState("");
 
-
   const [similarDocumentsAll, setSimilarDocumentsAll] = useState([]);
   const [value, setValue] = React.useState(0);
   const [startIndex, setStartIndex] = useState(0);
   const cardsPerPage = 3;
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -66,7 +88,6 @@ export default function EmployeeView() {
     else {
       setFileSelected(false);
     }
-
   };
 
   const uploadFile = async (e) => {
@@ -113,19 +134,7 @@ export default function EmployeeView() {
 
   }
 
-  const getMessage = async (uid) => {
-    try {
-      const response = await Axios.get(`http://localhost:5000/get-message/${uid}`);
-      setMessage(response.data.message);
-      setUserUid(response.data.uid);
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
-  
-  
   useEffect(() => {
     Axios.get("http://localhost:5000/employeeInfo").then((response) => {
       //console.log(response.data);
@@ -179,6 +188,19 @@ export default function EmployeeView() {
 
   const employeeID = employeeData.find(x => x.email === userEmail).uid;
   const employeeCertifications = certifications.filter(x => x.uid === employeeID);
+
+  const getMessage = async (uid) => {
+    try {
+      const response = await Axios.get(`http://localhost:5000/get-message/${uid}`);
+      setMessage(response.data.message);
+      setUserUid(response.data.uid);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  getMessage(employeeID);
 
    //recommendations
    const natural = require('natural');
@@ -241,8 +263,6 @@ export default function EmployeeView() {
     return { certificationId: certification.id, recommendations: similarities };
   });
 
-  //setSimilarDocumentsAll(similarDocuments[0]);
-
   //get first 12 recommendations 
   const recommendations = similarDocuments.length > 0 ? similarDocuments[0].recommendations.slice(0, 13) : [];
 
@@ -255,8 +275,46 @@ export default function EmployeeView() {
           <Typography fontSize={30} fontWeight={600} sx={{ mt: 2, }}>Welcome back, <Typography component="span" fontSize={30} fontWeight={300}> {userName}</Typography></Typography>
           <Box display="flex-start" sx={{ height: 10, width: 0.4, backgroundColor: "#0F62FE", mt: 3, marginLeft: 0, marginTop: 2 }}></Box>
         </Box>
-        <Button endIcon={<NotificationsIcon />} size="large" onClick={() => {getMessage(employeeID)}}> </Button>
-        <Typography> {message} </Typography>
+        
+        {/* getMessage(employeeID) */}
+        <Box sx={{ height: 50, mt: 3, ml: 3 }}>
+          <Tooltip title={message ? "View notifications": "No notifications"} arrow>
+            <span>
+              <Button disabled={!message} endIcon={<Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <NotificationsIcon style={{ color: message ? 'black': 'grey', fontSize: 30 }} />
+                {message && (
+                  <CircleIcon style={{ color: 'red', fontSize: 10, marginLeft: -13, marginTop:-11 }} />
+                )}
+              </Box> } size="large" onClick={handleClickOpen}> </Button>
+            </span>
+          </Tooltip>
+        </Box>
+        
+          <Box sx={{ opacity: 1, backdropFilter: 'blur(1px)' }}>
+            <Dialog
+              open={open}
+              TransitionComponent={Transition}
+              keepMounted
+              onClose={handleClose}
+              aria-describedby="alert-dialog-slide-description"          
+            >
+              <DialogTitle>
+                <Typography fontWeight={600} fontSize={20} color={'black'}>Your manager sent you a message</Typography>
+                <Box display="flex-start" sx={{ height: 5, width: 1, backgroundColor: "#0F62FE", mt: 2, marginLeft: 0, mb:0.3 }}></Box>
+
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-slide-description">
+                  <Typography  sx={{ fontWeight: 'bold' }} fontSize={16} >Content</Typography>
+                  <Typography fontSize={16}> "{message}" </Typography>
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Close</Button>
+              </DialogActions>
+            </Dialog>
+          </Box>
+
         <Button variant="contained" endIcon={<LogoutIcon />} onClick={() => logOut()} sx={{ height: 50, mt: 3, ml: 3, backgroundColor: "black" }}>LogOut</Button>
       </Stack>
       <br />
@@ -300,9 +358,9 @@ export default function EmployeeView() {
           </Box>
           <br />
 
-          <Grid sx={{ ml: 1 }} container spacing={1}>
+          <Grid sx={{ ml: 1 }} container spacing={1} >
             {recommendations.slice(startIndex, startIndex + cardsPerPage).map((recommendation) => (
-              <Grid item key={recommendation.id} xs={12} sm={6} md={4} lg={3} mr={5} ml={5}>
+              <Grid item key={recommendation.id} xs={12} sm={6} md={4} lg={3} mr={5} ml={6.5} mb={2}>
                 <Card sx={{ width: '100%', maxWidth: 500, minHeight: 450, marginBottom: 1, position: 'relative', display: 'flex', flexDirection: 'column' }}>
                   <CardMedia component="img" height="140" image={recommendation.image_url}  />
                   <CardContent sx={{ flex: '1 0 0', display: 'flex', flexDirection: 'column' }}>
@@ -322,7 +380,6 @@ export default function EmployeeView() {
           </Grid>
         </Paper>
       </Box>
-
 
       <Box sx={{ display: "flex", width: "100%" }}>
         <Paper elevation={12} sx={{ width: "50%", backgroundColor: "grey.300", maxHeight: "40%", mt: 3, mr: 2 }}>
@@ -415,7 +472,7 @@ export default function EmployeeView() {
 
             />
             <input id="select-button" type="file" onChange={saveFile} accept=".csv, .xlsx" style={{ display: 'none' }} />
-            <Tooltip title="Select a file to be uploaded">
+            <Tooltip title="Select a file to be uploaded" arrow>
               <label htmlFor="select-button">
                 <Button variant="contained" component="span"
                   style={{
@@ -446,10 +503,7 @@ export default function EmployeeView() {
               </Button>
 
             </Tooltip>
-
             <br />
-            
-
           </Container>
         </Paper>
       </Box>
